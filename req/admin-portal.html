@@ -657,7 +657,299 @@
                 </div>
             </div>
 
-            <!-- Add other sections similarly with modern design -->
+            <!-- Suppliers Section -->
+            <div id="suppliers" class="section hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Supplier Network</h2>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Supplier
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">89</p>
+                                <p class="text-sm text-gray-600">Active Suppliers</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-industry text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">4.6</p>
+                                <p class="text-sm text-gray-600">Avg Rating</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-star text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">98.5%</p>
+                                <p class="text-sm text-gray-600">Reliability</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-900">Supplier</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-900">Category</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-900">Location</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-900">Rating</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-900">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                                <i class="fas fa-leaf text-green-600"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-900">Fresh Farms Ltd</p>
+                                                <p class="text-sm text-gray-500">Organic Produce</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-gray-700">Vegetables</td>
+                                    <td class="py-4 px-4 text-gray-700">Punjab, India</td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span class="text-yellow-400">★★★★☆</span>
+                                            <span class="ml-1 text-sm text-gray-600">4.2</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fleet Section -->
+            <div id="fleet" class="section hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Fleet Management</h2>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Vehicle
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-truck text-green-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-green-600">18</p>
+                        <p class="text-sm text-gray-600">En Route</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-pause text-blue-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-blue-600">6</p>
+                        <p class="text-sm text-gray-600">Idle</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-wrench text-yellow-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-yellow-600">4</p>
+                        <p class="text-sm text-gray-600">Maintenance</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-ban text-gray-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-gray-600">2</p>
+                        <p class="text-sm text-gray-600">Offline</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Live Vehicle Tracking</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-medium text-gray-900">TRK-001</span>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">En Route</span>
+                            </div>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Driver:</span>
+                                    <span class="text-gray-900">Raj Kumar</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">ETA:</span>
+                                    <span class="text-gray-900">15 mins</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warehouses Section -->
+            <div id="warehouses" class="section hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Warehouse Operations</h2>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Warehouse
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">Central Hub</h3>
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Capacity:</span>
+                                <span class="font-medium text-gray-900">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Location:</span>
+                                <span class="text-gray-900">Gurgaon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="section hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+                    <p class="text-gray-600">Comprehensive insights and reports</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Delivery Success Rate</span>
+                                <span class="font-semibold text-green-600">94.2%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Average Response Time</span>
+                                <span class="font-semibold text-blue-600">18 min</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Customer Satisfaction</span>
+                                <span class="font-semibold text-purple-600">4.6/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stakeholders Section -->
+            <div id="stakeholders" class="section hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Network Partners</h2>
+                    <p class="text-gray-600">Manage your supply chain ecosystem</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-seedling text-green-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-green-600">156</p>
+                        <p class="text-sm text-gray-600">Farmers</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-store text-blue-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-blue-600">89</p>
+                        <p class="text-sm text-gray-600">Retailers</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-truck text-purple-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-purple-600">34</p>
+                        <p class="text-sm text-gray-600">Logistics</p>
+                    </div>
+                    <div class="metric-card text-center">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-users text-yellow-600 text-xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-yellow-600">12.5K</p>
+                        <p class="text-sm text-gray-600">Customers</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IoT Devices Section -->
+            <div id="iot" class="section hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">IoT Device Management</h2>
+                    <p class="text-gray-600">Monitor sensors and connected devices</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">73</p>
+                                <p class="text-sm text-gray-600">Active Sensors</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-microchip text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">99.2%</p>
+                                <p class="text-sm text-gray-600">Uptime</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-heartbeat text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">3</p>
+                                <p class="text-sm text-gray-600">Alerts</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -669,7 +961,10 @@
             sections.forEach(section => section.classList.add('hidden'));
             
             // Show selected section
-            document.getElementById(sectionId).classList.remove('hidden');
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
             
             // Update sidebar active state
             const sidebarItems = document.querySelectorAll('.sidebar-item');
@@ -679,116 +974,132 @@
             });
             
             // Set active item
-            event.target.closest('.sidebar-item').classList.add('active', 'bg-gradient-to-r', 'from-blue-600', 'to-blue-700', 'text-white', 'shadow-lg');
-            event.target.closest('.sidebar-item').classList.remove('text-gray-700');
+            const clickedItem = event ? event.target.closest('.sidebar-item') : document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (clickedItem) {
+                clickedItem.classList.add('active', 'bg-gradient-to-r', 'from-blue-600', 'to-blue-700', 'text-white', 'shadow-lg');
+                clickedItem.classList.remove('text-gray-700');
+            }
         }
 
         // Initialize charts
         function initCharts() {
-            // Orders Sparkline
-            const ordersCtx = document.getElementById('ordersSparkline').getContext('2d');
-            new Chart(ordersCtx, {
-                type: 'line',
-                data: {
-                    labels: ['', '', '', '', '', '', ''],
-                    datasets: [{
-                        data: [120, 190, 300, 500, 200, 300, 450],
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    },
-                    elements: { point: { radius: 0 } }
-                }
-            });
-
-            // Revenue Sparkline
-            const revenueCtx = document.getElementById('revenueSparkline').getContext('2d');
-            new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['', '', '', '', '', '', ''],
-                    datasets: [{
-                        data: [1200, 1900, 3000, 5000, 2000, 2400, 3200],
-                        backgroundColor: '#f59e0b',
-                        borderRadius: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    }
-                }
-            });
-
-            // Order Flow Chart
-            const orderFlowCtx = document.getElementById('orderFlowChart').getContext('2d');
-            new Chart(orderFlowCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [
-                        {
-                            label: 'Orders Received',
-                            data: [120, 190, 300, 500, 200, 300, 450],
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true
+            try {
+                // Orders Sparkline
+                const ordersCanvas = document.getElementById('ordersSparkline');
+                if (ordersCanvas) {
+                    const ordersCtx = ordersCanvas.getContext('2d');
+                    new Chart(ordersCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['', '', '', '', '', '', ''],
+                            datasets: [{
+                                data: [120, 190, 300, 500, 200, 300, 450],
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 0
+                            }]
                         },
-                        {
-                            label: 'Orders Delivered',
-                            data: [100, 180, 280, 480, 190, 290, 430],
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.4,
-                            fill: true
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { display: false },
+                                y: { display: false }
+                            },
+                            elements: { point: { radius: 0 } }
                         }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            align: 'end',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
+                    });
                 }
-            });
+
+                // Revenue Sparkline
+                const revenueCanvas = document.getElementById('revenueSparkline');
+                if (revenueCanvas) {
+                    const revenueCtx = revenueCanvas.getContext('2d');
+                    new Chart(revenueCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['', '', '', '', '', '', ''],
+                            datasets: [{
+                                data: [1200, 1900, 3000, 5000, 2000, 2400, 3200],
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { display: false },
+                                y: { display: false }
+                            }
+                        }
+                    });
+                }
+
+                // Order Flow Chart
+                const orderFlowCanvas = document.getElementById('orderFlowChart');
+                if (orderFlowCanvas) {
+                    const orderFlowCtx = orderFlowCanvas.getContext('2d');
+                    new Chart(orderFlowCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            datasets: [
+                                {
+                                    label: 'Orders Received',
+                                    data: [120, 190, 300, 500, 200, 300, 450],
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Orders Delivered',
+                                    data: [100, 180, 280, 480, 190, 290, 430],
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    align: 'end',
+                                    labels: {
+                                        usePointStyle: true,
+                                        padding: 20
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.05)'
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('Chart initialization error:', error);
+            }
         }
 
         // Initialize dashboard
@@ -796,5 +1107,5 @@
             initCharts();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96771e9404b77e93',t:'MTc1MzkwMjI0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96772b22c61d178d',t:'MTc1MzkwMjc1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
