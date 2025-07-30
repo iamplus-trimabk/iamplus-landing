@@ -1,115 +1,918 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iamplus – Intelligent Application Messaging</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simflo - The Collaborative Canvas for Every Operation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'jakarta': ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'simflo-purple': '#6433F9',
+                        'simflo-light': '#F8F9FF',
+                        'simflo-accent': '#E8E3FF',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #6433F9, #9333EA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  <!-- Inter Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- AOS CSS -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0; padding: 0;
-      background: white; color: #222;
-    }
-    section { padding: 80px 24px; text-align: center; }
-    .button {
-      background: #009999; color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-    }
-    .grid {
-      display: grid;
-      gap: 24px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      max-width: 960px; margin: 24px auto;
-    }
-    .card {
-      background: #f9f9f9;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-  </style>
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(100, 51, 249, 0.3);
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #6433F9;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: #6433F9
+            }
+        }
+    </style>
 </head>
-<body>
 
-<!-- HEADER -->
-<header style="padding: 16px 24px; background: white; border-bottom: 1px solid #eee;">
-  <strong style="color:#009999; font-size: 20px;">iamplus</strong>
-</header>
+<body class="font-jakarta bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-extrabold gradient-text animate-pulse-slow">Simflo</h1>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#features"
+                            class="nav-link text-gray-600 hover:text-simflo-purple px-3 py-2 text-sm font-medium transition-all duration-300 relative">Features</a>
+                        <a href="#domains"
+                            class="nav-link text-gray-600 hover:text-simflo-purple px-3 py-2 text-sm font-medium transition-all duration-300 relative">Domains</a>
+                        <a href="#about"
+                            class="nav-link text-gray-600 hover:text-simflo-purple px-3 py-2 text-sm font-medium transition-all duration-300 relative">About</a>
+                        <button
+                            class="bg-simflo-purple text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 hover-glow">Request
+                            Demo</button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button class="mobile-menu-btn text-gray-600 hover:text-simflo-purple transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<!-- HERO SECTION -->
-<section id="hero" data-aos="fade-up">
-  <h1 style="font-size: 2.5em; color:#009999;">Intelligent Application Messaging</h1>
-  <p>Reimagining workflows with a message-driven user experience</p>
-  <a href="#waitlist" class="button" data-aos="zoom-in">Get Early Access</a>
-</section>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-simflo-light via-white to-purple-50 py-20 overflow-hidden">
+        <!-- Animated background elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-simflo-purple/10 rounded-full animate-float"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-400/10 rounded-full animate-float"
+                style="animation-delay: -2s;"></div>
+            <div class="absolute top-1/2 left-1/4 w-32 h-32 bg-purple-300/20 rounded-full animate-bounce-slow"
+                style="animation-delay: -1s;"></div>
+        </div>
 
-<!-- PRODUCT HIGHLIGHTS -->
-<section id="product" data-aos="fade-up">
-  <h2 style="color:#009999;">Product Highlights</h2>
-  <div class="grid">
-    <div class="card" data-aos="fade-up" data-aos-delay="100">
-      <strong>AppChat UX</strong><br/>
-      Conversations replace forms and dashboards.
-    </div>
-    <div class="card" data-aos="fade-up" data-aos-delay="200">
-      <strong>Built for Scale</strong><br/>
-      Used by individuals to 1000+ person teams.
-    </div>
-    <div class="card" data-aos="fade-up" data-aos-delay="300">
-      <strong>Human-Centric</strong><br/>
-      Designed like real conversations — not forms.
-    </div>
-  </div>
-</section>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-fade-in">
+                    <div class="inline-flex items-center bg-simflo-accent/50 rounded-full px-4 py-2 mb-6">
+                        <span class="text-simflo-purple text-sm font-semibold">✨ New: Real-time Collaboration</span>
+                    </div>
+                    <h1 class="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                        Simflo: The <span class="gradient-text">Collaborative Canvas</span> for Every Operation
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 leading-relaxed animate-slide-up"
+                        style="animation-delay: 0.2s;">
+                        Transform your school, hostel, hotel, or corporate visitor management into living, real-time
+                        workflows.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 animate-slide-up" style="animation-delay: 0.4s;">
+                        <button
+                            class="bg-simflo-purple text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg hover-glow">
+                            Request a Demo
+                        </button>
+                        <button
+                            class="border-2 border-simflo-purple text-simflo-purple px-8 py-4 rounded-xl font-semibold text-lg hover:bg-simflo-purple hover:text-white transition-all">
+                            Watch Video
+                        </button>
+                    </div>
+                </div>
+                <div class="relative animate-scale-in" style="animation-delay: 0.6s;">
+                    <!-- Floating elements around the main demo -->
+                    <div class="absolute -top-8 -left-8 bg-white rounded-xl shadow-lg p-3 animate-float z-10">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-gray-600">5 users online</span>
+                        </div>
+                    </div>
 
-<!-- SIMFLO SECTION -->
-<section id="simflo" style="background:#f0fdfd;" data-aos="fade-up">
-  <h2 style="color:#009999;">Powered by Simflo</h2>
-  <p>Real-world impact in schools and factories.</p>
-  <div class="grid">
-    <div class="card">🏫 <strong>Education</strong><br/>Smart attendance, leave, communication.</div>
-    <div class="card">🏭 <strong>Factory Ops</strong><br/>Lunch queues, task alerts, safety broadcasts.</div>
-  </div>
-</section>
+                    <div class="absolute -top-4 -right-12 bg-white rounded-xl shadow-lg p-3 animate-float z-10"
+                        style="animation-delay: -1s;">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-lg">🚀</span>
+                            <span class="text-xs text-gray-600">Task completed</span>
+                        </div>
+                    </div>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials" data-aos="fade-up">
-  <h2 style="color:#009999;">What People Say</h2>
-  <div class="grid">
-    <div class="card">"Attendance in 30s via chat. Amazing!"<br/><strong>– Principal, Sunrise School</strong></div>
-    <div class="card">"70% less chaos in lunch queues."<br/><strong>– Factory Ops Manager</strong></div>
-    <div class="card">"4x more approvals — simpler, faster."<br/><strong>– Admin, LexEdge</strong></div>
-  </div>
-</section>
+                    <div class="absolute -bottom-8 -right-8 bg-white rounded-xl shadow-lg p-3 animate-float z-10"
+                        style="animation-delay: -2s;">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-lg">💬</span>
+                            <span class="text-xs text-gray-600">New message</span>
+                        </div>
+                    </div>
 
-<!-- WAITLIST -->
-<section id="waitlist" style="background:#e6f9f9;" data-aos="zoom-in-up">
-  <h2 style="color:#009999;">Join the Waitlist</h2>
-  <form style="margin-top: 20px;">
-    <input type="email" placeholder="Your email" required
-           style="padding:12px; width:260px; border:1px solid #ccc; border-radius:6px;" />
-    <button class="button" style="margin-left:8px;">Notify Me</button>
-  </form>
-</section>
+                    <!-- Main demo interface -->
+                    <div
+                        class="bg-white rounded-2xl shadow-2xl p-8 transform hover:rotate-0 transition-all duration-500 hover-glow">
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 bg-red-400 rounded-full animate-pulse"></div>
+                                <div class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"
+                                    style="animation-delay: 0.2s;"></div>
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"
+                                    style="animation-delay: 0.4s;"></div>
+                                <div class="ml-auto text-xs text-gray-500 typing-animation">Simflo Dashboard</div>
+                            </div>
+                            <div class="space-y-3">
+                                <div
+                                    class="bg-simflo-accent rounded-lg p-3 transform hover:scale-105 transition-transform cursor-pointer">
+                                    <div class="flex items-center space-x-2">
+                                        <div
+                                            class="w-8 h-8 bg-simflo-purple rounded-full flex items-center justify-center animate-bounce-slow">
+                                            <span class="text-white text-xs font-bold">💬</span>
+                                        </div>
+                                        <div class="text-sm text-gray-700">New visitor check-in request</div>
+                                        <div class="ml-auto w-2 h-2 bg-red-400 rounded-full animate-ping"></div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-blue-50 rounded-lg p-3 transform hover:scale-105 transition-transform cursor-pointer">
+                                    <div class="text-sm text-gray-700">📋 Task: Verify visitor credentials</div>
+                                    <div class="mt-2 flex space-x-2">
+                                        <button
+                                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs hover:bg-green-200 transition-colors">Approve</button>
+                                        <button
+                                            class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs hover:bg-red-200 transition-colors">Reject</button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-yellow-50 rounded-lg p-3 transform hover:scale-105 transition-transform cursor-pointer">
+                                    <div class="text-sm text-gray-700">⏰ Reminder: Meeting room booking expires in 15
+                                        min</div>
+                                    <div class="mt-2 w-full bg-gray-200 rounded-full h-1">
+                                        <div class="bg-yellow-400 h-1 rounded-full animate-pulse" style="width: 25%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- FOOTER -->
-<footer style="padding: 32px; text-align: center; font-size: 0.9em; border-top: 1px solid #eee;">
-  <span style="color:#009999; font-weight:bold;">iamplus</span> &nbsp;·&nbsp;
-  <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp;
-  <a href="mailto:hello@iamplus.app">Contact</a>
-  <p style="margin-top: 12px;">© 2025 iamplus. All rights reserved.</p>
-</footer>
+    <!-- Who Simflo Is For Section -->
+    <section id="domains" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Built for Every Operation. Designed for Your
+                    Domain.</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Simflo adapts to your specific needs, whether you're
+                    managing students, guests, or corporate visitors.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="domain-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 border border-gray-100 group cursor-pointer hover-glow"
+                    data-domain="schools">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-3xl group-hover:animate-bounce">🎓</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-simflo-purple transition-colors">
+                        Schools</h3>
+                    <p class="text-gray-600 group-hover:text-gray-700 transition-colors">Streamline student check-ins,
+                        parent communications, and campus visitor management with real-time collaboration.</p>
+                    <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="flex items-center text-simflo-purple text-sm font-semibold">
+                            Learn more <span
+                                class="ml-1 transform group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="domain-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 border border-gray-100 group cursor-pointer hover-glow"
+                    data-domain="hostels">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-3xl group-hover:animate-bounce">🏠</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-simflo-purple transition-colors">
+                        Hostels</h3>
+                    <p class="text-gray-600 group-hover:text-gray-700 transition-colors">Manage resident check-ins,
+                        maintenance requests, and facility bookings through collaborative workflows.</p>
+                    <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="flex items-center text-simflo-purple text-sm font-semibold">
+                            Learn more <span
+                                class="ml-1 transform group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="domain-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 border border-gray-100 group cursor-pointer hover-glow"
+                    data-domain="hotels">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-3xl group-hover:animate-bounce">🏨</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-simflo-purple transition-colors">
+                        Hotels</h3>
+                    <p class="text-gray-600 group-hover:text-gray-700 transition-colors">Coordinate guest services,
+                        housekeeping, and concierge requests with seamless team communication.</p>
+                    <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="flex items-center text-simflo-purple text-sm font-semibold">
+                            Learn more <span
+                                class="ml-1 transform group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="domain-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 border border-gray-100 group cursor-pointer hover-glow"
+                    data-domain="corporate">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-3xl group-hover:animate-bounce">🏢</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-simflo-purple transition-colors">
+                        Corporate</h3>
+                    <p class="text-gray-600 group-hover:text-gray-700 transition-colors">Enhance visitor management,
+                        meeting coordination, and office operations with intelligent workflows.</p>
+                    <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="flex items-center text-simflo-purple text-sm font-semibold">
+                            Learn more <span
+                                class="ml-1 transform group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- AOS Script -->
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>AOS.init({ once: true });</script>
+    <!-- How Simflo Works Section -->
+    <section id="features" class="py-20 bg-simflo-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Real-Time Collaboration. Simplified Workflows.
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Experience the power of chat-canvas integration that
+                    transforms how teams work together.</p>
+            </div>
+
+            <!-- Feature 1 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-6">Living Canvas</h3>
+                    <p class="text-lg text-gray-600 mb-6">Create dynamic documents that combine text, tasks, approvals,
+                        and media in one collaborative space. Your content evolves with your workflow.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Rich content blocks with drag-and-drop editing</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Embedded tasks and approval workflows</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Real-time collaborative editing</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-6 hover-glow">
+                    <!-- Interactive Canvas Demo -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-sm font-semibold text-gray-700">Living Canvas Editor</div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"
+                                    style="animation-delay: 0.2s;"></div>
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"
+                                    style="animation-delay: 0.4s;"></div>
+                                <span class="text-xs text-gray-500 ml-2">3 editing</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer group">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm font-semibold text-gray-700 mb-2">📝 Visitor Check-in Protocol</div>
+                                <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="text-gray-600 text-sm">Standard procedure for all visitor arrivals...</div>
+                            <div class="mt-2 flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold">JD</span>
+                                </div>
+                                <span class="text-xs text-gray-500">John editing now</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-simflo-accent rounded-lg p-4 hover:bg-purple-100 transition-colors cursor-pointer group">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm font-semibold text-gray-700 mb-2">✅ Task: Verify ID</div>
+                                <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        class="text-xs bg-white px-2 py-1 rounded-full text-gray-600 hover:bg-gray-50">Edit</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div
+                                    class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-bounce-slow">
+                                    <span class="text-white text-xs">✓</span>
+                                </div>
+                                <span class="text-sm text-gray-600">Completed by Sarah M.</span>
+                                <div class="ml-auto text-xs text-gray-400">2 min ago</div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-yellow-50 rounded-lg p-4 hover:bg-yellow-100 transition-colors cursor-pointer group">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm font-semibold text-gray-700 mb-2">⏳ Approval: Access Badge</div>
+                                <div class="w-2 h-2 bg-orange-400 rounded-full animate-ping"></div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button
+                                    class="bg-green-500 text-white px-3 py-1 rounded-full text-xs hover:bg-green-600 transition-colors transform hover:scale-105">Approve</button>
+                                <button
+                                    class="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-xs hover:bg-gray-400 transition-colors transform hover:scale-105">Deny</button>
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">Waiting for manager approval</div>
+                        </div>
+
+                        <!-- Add new block button -->
+                        <div
+                            class="border-2 border-dashed border-gray-200 rounded-lg p-4 hover:border-simflo-purple transition-colors cursor-pointer group">
+                            <div
+                                class="flex items-center justify-center space-x-2 text-gray-400 group-hover:text-simflo-purple">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                <span class="text-sm font-medium">Add new block</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                <div class="lg:order-2">
+                    <h3 class="text-3xl font-bold text-gray-900 mb-6">Real-time Chat</h3>
+                    <p class="text-lg text-gray-600 mb-6">Communicate instantly with threaded conversations, reactions,
+                        and context-aware notifications that keep everyone in sync.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Threaded conversations with context</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Smart notifications and mentions</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Emoji reactions and quick responses</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lg:order-1 bg-white rounded-2xl shadow-xl p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">JD</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-gray-100 rounded-lg p-3">
+                                    <div class="text-sm text-gray-900">VIP guest arriving in 10 minutes - need escort to
+                                        conference room</div>
+                                </div>
+                                <div class="flex items-center space-x-2 mt-2">
+                                    <span class="text-xs text-gray-500">2 min ago</span>
+                                    <div class="flex space-x-1">
+                                        <span class="text-sm">👍</span>
+                                        <span class="text-sm">✅</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">SM</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-simflo-accent rounded-lg p-3">
+                                    <div class="text-sm text-gray-900">On my way! Conference room B is ready 🚀</div>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-6">Adaptive Workflows</h3>
+                    <p class="text-lg text-gray-600 mb-6">Smart workflows that adapt based on user roles, status
+                        changes, and domain-specific requirements. Your process evolves automatically.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Role-based content and permissions</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Dynamic status-driven workflows</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs">✓</span>
+                            </div>
+                            <span class="text-gray-700">Automated task routing and escalation</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-700">Workflow Status</span>
+                            <span
+                                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">Active</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-xs">✓</span>
+                                </div>
+                                <span class="text-sm text-gray-700">Reception: Visitor registered</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-simflo-purple rounded-full flex items-center justify-center">
+                                    <span class="text-white text-xs">2</span>
+                                </div>
+                                <span class="text-sm text-gray-700">Security: ID verification in progress</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <span class="text-gray-500 text-xs">3</span>
+                                </div>
+                                <span class="text-sm text-gray-400">Host: Notification pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Simflo is Better Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Why Choose Simflo? The Future of Operational
+                    Management.</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Experience the advantages that make Simflo the
+                    preferred choice for modern operations.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">⚙️</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Modular & Flexible</h3>
+                    <p class="text-gray-600">Adapt to any workflow with customizable components that grow with your
+                        needs.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">📱</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Mobile-First Design</h3>
+                    <p class="text-gray-600">Work seamlessly across all devices with responsive, touch-optimized
+                        interfaces.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🔗</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Unified Experience</h3>
+                    <p class="text-gray-600">Eliminate tool switching with integrated chat, documents, and task
+                        management.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">📈</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Increased Productivity</h3>
+                    <p class="text-gray-600">Reduce response times and improve coordination with real-time
+                        collaboration.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🎯</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Domain-Specific</h3>
+                    <p class="text-gray-600">Pre-built templates and workflows tailored for your industry and use case.
+                    </p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-simflo-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🚀</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Quick Setup</h3>
+                    <p class="text-gray-600">Get started in minutes with intuitive onboarding and smart defaults.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-20 bg-simflo-light">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-extrabold text-gray-900 mb-8">About Simflo</h2>
+            <p class="text-xl text-gray-600 leading-relaxed">
+                At Simflo, we believe that operational management should be intuitive, collaborative, and adaptive. Our
+                mission is to transform how organizations coordinate their daily operations through innovative
+                chat-canvas technology that brings teams together in real-time, intelligent workflows.
+            </p>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-simflo-purple to-purple-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-extrabold text-white mb-6">Ready to Transform Your Operations?</h2>
+            <p class="text-xl text-purple-100 mb-8">Join forward-thinking organizations that have revolutionized their
+                workflows with Simflo.</p>
+            <button
+                class="bg-white text-simflo-purple px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+                Request a Demo Today
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Simflo</h3>
+                    <p class="text-gray-400">The collaborative canvas for every operation.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Integrations</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Solutions</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Schools</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Hotels</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Corporate</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Simflo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Demo request button functionality with enhanced animation
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.includes('Request') || button.textContent.includes('Demo')) {
+                button.addEventListener('click', function () {
+                    // Add click animation
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+
+                    // Show custom modal instead of alert
+                    showDemoModal();
+                });
+            }
+        });
+
+        // Enhanced navigation effects
+        window.addEventListener('scroll', function () {
+            const nav = document.querySelector('#navbar');
+            const scrolled = window.scrollY > 100;
+
+            if (scrolled) {
+                nav.classList.add('shadow-lg', 'bg-white/95');
+                nav.classList.remove('bg-white/90');
+            } else {
+                nav.classList.remove('shadow-lg', 'bg-white/95');
+                nav.classList.add('bg-white/90');
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add scroll animation to domain cards
+            document.querySelectorAll('.domain-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            // Add hover effects to navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                link.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Interactive domain cards
+            document.querySelectorAll('.domain-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const domain = this.dataset.domain;
+                    showDomainInfo(domain);
+                });
+            });
+
+            // Interactive canvas demo
+            const canvasDemo = document.querySelector('.bg-white.rounded-2xl.shadow-xl');
+            if (canvasDemo) {
+                canvasDemo.addEventListener('mouseenter', function () {
+                    this.style.transform = 'scale(1.02)';
+                });
+                canvasDemo.addEventListener('mouseleave', function () {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+        });
+
+        // Custom demo modal
+        function showDemoModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md mx-4 animate-scale-in">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-simflo-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl text-white">🚀</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Request Demo</h3>
+                        <p class="text-gray-600 mb-6">Thank you for your interest! A Simflo representative will contact you within 24 hours to schedule your personalized demo.</p>
+                        <div class="flex space-x-3">
+                            <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-simflo-purple text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                                Got it!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Close on backdrop click
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Domain info modal
+        function showDomainInfo(domain) {
+            const domainData = {
+                schools: {
+                    title: 'Schools & Educational Institutions',
+                    description: 'Streamline campus operations with integrated visitor management, student check-ins, and parent communication systems.',
+                    features: ['Student ID verification', 'Parent notification system', 'Campus security integration', 'Event management']
+                },
+                hostels: {
+                    title: 'Hostels & Residential Facilities',
+                    description: 'Manage resident lifecycles, maintenance requests, and facility bookings through collaborative workflows.',
+                    features: ['Resident check-in/out', 'Maintenance tracking', 'Room booking system', 'Community management']
+                },
+                hotels: {
+                    title: 'Hotels & Hospitality',
+                    description: 'Coordinate guest services, housekeeping, and concierge requests with seamless team communication.',
+                    features: ['Guest service requests', 'Housekeeping coordination', 'Concierge management', 'VIP guest handling']
+                },
+                corporate: {
+                    title: 'Corporate & Office Buildings',
+                    description: 'Enhance visitor management, meeting coordination, and office operations with intelligent workflows.',
+                    features: ['Visitor badge system', 'Meeting room booking', 'Security clearance', 'Contractor management']
+                }
+            };
+
+            const data = domainData[domain];
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-lg mx-4 animate-scale-in">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">${data.title}</h3>
+                    <p class="text-gray-600 mb-6">${data.description}</p>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-900 mb-3">Key Features:</h4>
+                        <ul class="space-y-2">
+                            ${data.features.map(feature => `
+                                <li class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-simflo-purple rounded-full"></div>
+                                    <span class="text-gray-700">${feature}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                            Close
+                        </button>
+                        <button onclick="showDemoModal(); this.closest('.fixed').remove()" class="flex-1 bg-simflo-purple text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                            Request Demo
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Parallax effect for background elements
+        window.addEventListener('scroll', function () {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.animate-float');
+
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add typing effect to hero
+        document.addEventListener('DOMContentLoaded', function () {
+            const typingElement = document.querySelector('.typing-animation');
+            if (typingElement) {
+                setTimeout(() => {
+                    typingElement.style.borderRight = 'none';
+                }, 4000);
+            }
+        });
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'96741c30b393ff72',t:'MTc1Mzg3MDY4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
 </body>
+
 </html>
