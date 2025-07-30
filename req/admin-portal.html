@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item:hover { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 fixed w-full top-0 z-50">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                    <i class="fas fa-truck text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">Supply Chain Admin</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <i class="fas fa-bell text-gray-500 text-lg cursor-pointer hover:text-blue-600"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </div>
+                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <span class="text-white text-sm font-medium">A</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg h-screen fixed left-0 overflow-y-auto">
+            <nav class="p-4 space-y-2">
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer bg-blue-600 text-white transition-all duration-200" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-line mr-3"></i>Dashboard
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('suppliers')">
+                    <i class="fas fa-industry mr-3"></i>Suppliers
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('transport')">
+                    <i class="fas fa-truck mr-3"></i>Transport
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('locations')">
+                    <i class="fas fa-map-marker-alt mr-3"></i>Locations
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('tracking')">
+                    <i class="fas fa-clock mr-3"></i>Time & Weight
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('stakeholders')">
+                    <i class="fas fa-users mr-3"></i>Stakeholders
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('devices')">
+                    <i class="fas fa-mobile-alt mr-3"></i>Devices
+                </div>
+                <div class="sidebar-item p-3 rounded-lg cursor-pointer text-gray-700 hover:text-white transition-all duration-200" onclick="showSection('analytics')">
+                    <i class="fas fa-chart-bar mr-3"></i>Analytics
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 flex-1 p-6">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Dashboard Overview</h2>
+                    <p class="text-gray-600">Monitor your supply chain operations in real-time</p>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Active Orders</p>
+                                <p class="text-2xl font-bold text-gray-900">1,247</p>
+                                <p class="text-green-600 text-sm"><i class="fas fa-arrow-up"></i> +12%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-shopping-cart text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Active Suppliers</p>
+                                <p class="text-2xl font-bold text-gray-900">89</p>
+                                <p class="text-green-600 text-sm"><i class="fas fa-arrow-up"></i> +5%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-industry text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Delivery Time</p>
+                                <p class="text-2xl font-bold text-gray-900">24 min</p>
+                                <p class="text-red-600 text-sm"><i class="fas fa-arrow-down"></i> -8%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-clock text-yellow-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Revenue</p>
+                                <p class="text-2xl font-bold text-gray-900">₹2.4M</p>
+                                <p class="text-green-600 text-sm"><i class="fas fa-arrow-up"></i> +18%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-rupee-sign text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Volume Trends</h3>
+                        <canvas id="orderChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Delivery Performance</h3>
+                        <canvas id="deliveryChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">New supplier "Fresh Farms Ltd" added to network</p>
+                                    <p class="text-xs text-gray-500">2 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">Order #12847 dispatched from Central Warehouse</p>
+                                    <p class="text-xs text-gray-500">5 minutes ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">Delivery delayed for Zone-A due to traffic</p>
+                                    <p class="text-xs text-gray-500">12 minutes ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suppliers Section -->
+            <div id="suppliers" class="section hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Supplier Management</h2>
+                        <p class="text-gray-600">Manage your supply chain partners</p>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors" onclick="openModal('supplierModal')">
+                        <i class="fas fa-plus mr-2"></i>Add Supplier
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Supplier</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Category</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Location</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Status</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Rating</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-4 px-4">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-leaf text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Fresh Farms Ltd</p>
+                                                    <p class="text-sm text-gray-500">ID: SUP001</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4 text-gray-700">Vegetables</td>
+                                        <td class="py-4 px-4 text-gray-700">Punjab, India</td>
+                                        <td class="py-4 px-4">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <div class="flex items-center">
+                                                <span class="text-yellow-400">★★★★☆</span>
+                                                <span class="ml-1 text-sm text-gray-600">4.2</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <button class="text-blue-600 hover:text-blue-800 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-4 px-4">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-fish text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-900">Ocean Fresh Co.</p>
+                                                    <p class="text-sm text-gray-500">ID: SUP002</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4 text-gray-700">Seafood</td>
+                                        <td class="py-4 px-4 text-gray-700">Kerala, India</td>
+                                        <td class="py-4 px-4">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <div class="flex items-center">
+                                                <span class="text-yellow-400">★★★★★</span>
+                                                <span class="ml-1 text-sm text-gray-600">4.8</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <button class="text-blue-600 hover:text-blue-800 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport Section -->
+            <div id="transport" class="section hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Transport Management</h2>
+                        <p class="text-gray-600">Monitor and manage delivery vehicles</p>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Vehicle
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">Fleet Status</h3>
+                            <i class="fas fa-truck text-blue-600"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Active</span>
+                                <span class="font-medium text-green-600">24</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">In Transit</span>
+                                <span class="font-medium text-blue-600">18</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Maintenance</span>
+                                <span class="font-medium text-yellow-600">3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">Delivery Performance</h3>
+                            <i class="fas fa-chart-line text-green-600"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">On Time</span>
+                                <span class="font-medium text-green-600">94%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Delayed</span>
+                                <span class="font-medium text-yellow-600">5%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Failed</span>
+                                <span class="font-medium text-red-600">1%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">Fuel Efficiency</h3>
+                            <i class="fas fa-gas-pump text-blue-600"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Average</span>
+                                <span class="font-medium text-blue-600">12.5 km/l</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Best</span>
+                                <span class="font-medium text-green-600">15.2 km/l</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">This Month</span>
+                                <span class="font-medium text-gray-900">₹45,230</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Live Vehicle Tracking</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-medium text-gray-900">TRK-001</span>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">En Route</span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Driver:</span>
+                                        <span class="text-gray-900">Raj Kumar</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="text-gray-900">Sector 18, Noida</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">ETA:</span>
+                                        <span class="text-gray-900">15 mins</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-medium text-gray-900">TRK-002</span>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Loading</span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Driver:</span>
+                                        <span class="text-gray-900">Amit Singh</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="text-gray-900">Central Warehouse</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Progress:</span>
+                                        <span class="text-gray-900">75%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-medium text-gray-900">TRK-003</span>
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Delayed</span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Driver:</span>
+                                        <span class="text-gray-900">Suresh Yadav</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="text-gray-900">Traffic Jam - NH1</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Delay:</span>
+                                        <span class="text-red-600">+25 mins</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locations Section -->
+            <div id="locations" class="section hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Location Management</h2>
+                        <p class="text-gray-600">Manage warehouses and delivery zones</p>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Location
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-900">Warehouses</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-warehouse text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Central Warehouse</p>
+                                            <p class="text-sm text-gray-500">Gurgaon, Haryana</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-gray-900">85% Capacity</p>
+                                        <p class="text-xs text-green-600">Active</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-warehouse text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">North Zone Hub</p>
+                                            <p class="text-sm text-gray-500">Delhi, NCR</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-gray-900">62% Capacity</p>
+                                        <p class="text-xs text-green-600">Active</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-warehouse text-yellow-600"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">South Zone Hub</p>
+                                            <p class="text-sm text-gray-500">Bangalore, Karnataka</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-gray-900">45% Capacity</p>
+                                        <p class="text-xs text-yellow-600">Maintenance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-900">Delivery Zones</h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Zone A - Central Delhi</p>
+                                        <p class="text-sm text-gray-500">15-20 min delivery</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-green-600">98% Coverage</p>
+                                        <p class="text-xs text-gray-500">24 Active Orders</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Zone B - Gurgaon</p>
+                                        <p class="text-sm text-gray-500">20-25 min delivery</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-green-600">95% Coverage</p>
+                                        <p class="text-xs text-gray-500">18 Active Orders</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Zone C - Noida</p>
+                                        <p class="text-sm text-gray-500">25-30 min delivery</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-yellow-600">87% Coverage</p>
+                                        <p class="text-xs text-gray-500">12 Active Orders</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Section -->
+            <div id="tracking" class="section hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Time & Weight Tracking</h2>
+                    <p class="text-gray-600">Monitor delivery times and cargo weights</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Delivery Time Analytics</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Average Delivery Time</span>
+                                <span class="font-semibold text-blue-600">24 minutes</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Fastest Delivery</span>
+                                <span class="font-semibold text-green-600">12 minutes</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Peak Hour Average</span>
+                                <span class="font-semibold text-yellow-600">32 minutes</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                            <p class="text-sm text-gray-500">78% of deliveries within target time</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Weight Distribution</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Total Cargo Today</span>
+                                <span class="font-semibold text-blue-600">2,450 kg</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Average Load</span>
+                                <span class="font-semibold text-green-600">85 kg</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Max Capacity Used</span>
+                                <span class="font-semibold text-yellow-600">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <p class="text-sm text-gray-500">85% average vehicle utilization</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Real-time Tracking</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Order ID</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Vehicle</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Weight</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Start Time</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">ETA</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-900">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-4 px-4 font-medium text-blue-600">#ORD-12847</td>
+                                        <td class="py-4 px-4 text-gray-700">TRK-001</td>
+                                        <td class="py-4 px-4 text-gray-700">45.2 kg</td>
+                                        <td class="py-4 px-4 text-gray-700">10:30 AM</td>
+                                        <td class="py-4 px-4 text-gray-700">11:15 AM</td>
+                                        <td class="py-4 px-4">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">In Transit</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-4 px-4 font-medium text-blue-600">#ORD-12848</td>
+                                        <td class="py-4 px-4 text-gray-700">TRK-002</td>
+                                        <td class="py-4 px-4 text-gray-700">32.8 kg</td>
+                                        <td class="py-4 px-4 text-gray-700">10:45 AM</td>
+                                        <td class="py-4 px-4 text-gray-700">11:30 AM</td>
+                                        <td class="py-4 px-4">
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Loading</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-4 px-4 font-medium text-blue-600">#ORD-12849</td>
+                                        <td class="py-4 px-4 text-gray-700">TRK-003</td>
+                                        <td class="py-4 px-4 text-gray-700">67.5 kg</td>
+                                        <td class="py-4 px-4 text-gray-700">09:15 AM</td>
+                                        <td class="py-4 px-4 text-gray-700">10:45 AM</td>
+                                        <td class="py-4 px-4">
+                                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Delayed</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stakeholders Section -->
+            <div id="stakeholders" class="section hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Stakeholder Management</h2>
+                        <p class="text-gray-600">Manage all supply chain participants</p>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Add Stakeholder
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-seedling text-green-600 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Farmers</h3>
+                            <p class="text-2xl font-bold text-green-600 mb-1">156</p>
+                            <p class="text-sm text-gray-500">Active Partners</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-store text-blue-600 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Retailers</h3>
+                            <p class="text-2xl font-bold text-blue-600 mb-1">89</p>
+                            <p class="text-sm text-gray-500">Active Partners</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-truck text-purple-600 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Logistics</h3>
+                            <p class="text-2xl font-bold text-purple-600 mb-1">34</p>
+                            <p class="text-sm text-gray-500">Partners</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover transition-all duration-300 border border-gray-100">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-users text-yellow-600 text-xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Customers</h3>
+                            <p class="text-2xl font-bold text-yellow-600 mb-1">12.5K</p>
+                            <p class="text-sm text-gray-500">Active Users</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Stakeholder Activity</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-seedling text-green-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-900">New farmer onboarded</p>
+                                    <p class="text-sm text-gray-500">Organic Farms Ltd joined the network - Punjab</p>
+                                    <p class="text-xs text-gray-400">2 hours ago</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">New</span>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-store text-blue-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-900">Retailer performance update</p>
+                                    <p class="text-sm text-gray-500">FreshMart achieved 98% delivery success rate</p>
+                                    <p class="text-xs text-gray-400">4 hours ago</p>
+                                </div>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Update</span>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-users text-yellow-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-900">Customer milestone reached</p>
+                                    <p class="text-sm text-gray-500">Crossed 12,500 active customers this month</p>
+                                    <p class="text-xs text-gray-400">1 day ago</p>
+                                </div>
+                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Milestone</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Devices Section -->
+            <div id="devices" class="section hidden">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Device Management</h2>
+                        <p class="text-gray-600">Monitor IoT devices and mobile apps</p>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Register Device
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">Mobile Apps</h3>
+                            <i class="fas fa-mobile-alt text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Driver Apps</span>
+                                <span class="font-medium text-blue-600">45 Active</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Customer Apps</span>
+                                <span class="font-medium text-green-600">2.3K Active</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Admin Apps</span>
+                                <span class="font-medium text-purple-600">12 Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">IoT Sensors</h3>
+                            <i class="fas fa-thermometer-half text-green-600 text-xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Temperature</span>
+                                <span class="font-medium text-green-600">24 Online</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Weight Sensors</span>
+                                <span class="font-medium text-blue-600">18 Online</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">GPS Trackers</span>
+                                <span class="font-medium text-purple-600">31 Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-900">System Health</h3>
+                            <i class="fas fa-heartbeat text-red-600 text-xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Uptime</span>
+                                <span class="font-medium text-green-600">99.8%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Response Time</span>
+                                <span class="font-medium text-blue-600">120ms</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Alerts</span>
+                                <span class="font-medium text-yellow-600">3 Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Device Status Monitor</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900">Vehicle Tracking Devices</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <span class="text-gray-900">TRK-001 GPS</span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">Last update: 2 min ago</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <span class="text-gray-900">TRK-002 GPS</span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">Last update: 1 min ago</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                            <span class="text-gray-900">TRK-003 GPS</span>
+                                        </div>
+                                        <span class="text-sm text-red-500">Offline - 15 min ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900">Warehouse Sensors</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <span class="text-gray-900">Temp Sensor WH-01</span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">4°C - Normal</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                            <span class="text-gray-900">Weight Sensor WH-01</span>
+                                        </div>
+                                        <span class="text-sm text-yellow-500">85% Capacity</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <span class="text-gray-900">Humidity Sensor WH-01</span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">65% - Optimal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="section hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Analytics & Reports</h2>
+                    <p class="text-gray-600">Comprehensive insights into your supply chain performance</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Revenue Trends</h3>
+                        <canvas id="revenueChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Supply Chain Efficiency</h3>
+                        <canvas id="efficiencyChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-gray-900 mb-4">Top Performing Suppliers</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Fresh Farms Ltd</span>
+                                <span class="font-medium text-green-600">98.5%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Ocean Fresh Co.</span>
+                                <span class="font-medium text-green-600">97.2%</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Green Valley Farms</span>
+                                <span class="font-medium text-green-600">96.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-gray-900 mb-4">Delivery Zones Performance</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Zone A</span>
+                                <span class="font-medium text-blue-600">18 min avg</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Zone B</span>
+                                <span class="font-medium text-blue-600">22 min avg</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Zone C</span>
+                                <span class="font-medium text-yellow-600">28 min avg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-gray-900 mb-4">Cost Analysis</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Fuel Costs</span>
+                                <span class="font-medium text-red-600">₹45,230</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Maintenance</span>
+                                <span class="font-medium text-yellow-600">₹12,450</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Storage</span>
+                                <span class="font-medium text-blue-600">₹8,900</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900">Predictive Analytics</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900">Demand Forecast</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                                        <span class="text-gray-700">Next Week</span>
+                                        <span class="font-medium text-blue-600">+15% increase expected</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                        <span class="text-gray-700">Peak Hours</span>
+                                        <span class="font-medium text-green-600">7-9 PM, 12-2 PM</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                                        <span class="text-gray-700">High Demand Items</span>
+                                        <span class="font-medium text-yellow-600">Fresh Vegetables</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="font-medium text-gray-900">Optimization Suggestions</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-blue-50 rounded-lg">
+                                        <p class="text-sm text-blue-800 font-medium">Route Optimization</p>
+                                        <p class="text-xs text-blue-600">Reduce Zone C delivery time by 12%</p>
+                                    </div>
+                                    <div class="p-3 bg-green-50 rounded-lg">
+                                        <p class="text-sm text-green-800 font-medium">Inventory Management</p>
+                                        <p class="text-xs text-green-600">Increase WH-02 capacity by 20%</p>
+                                    </div>
+                                    <div class="p-3 bg-purple-50 rounded-lg">
+                                        <p class="text-sm text-purple-800 font-medium">Supplier Diversification</p>
+                                        <p class="text-xs text-purple-600">Add 2 more suppliers in North region</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Supplier Modal -->
+    <div id="supplierModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Add New Supplier</h3>
+                <button onclick="closeModal('supplierModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Supplier Name</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter supplier name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option>Select category</option>
+                        <option>Vegetables</option>
+                        <option>Fruits</option>
+                        <option>Dairy</option>
+                        <option>Meat & Seafood</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter location">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contact Email</label>
+                    <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter email">
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('supplierModal')" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add Supplier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update sidebar active state
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('bg-blue-600', 'text-white');
+                item.classList.add('text-gray-700');
+            });
+            
+            // Set active item
+            event.target.classList.add('bg-blue-600', 'text-white');
+            event.target.classList.remove('text-gray-700');
+        }
+
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Order Volume Chart
+            const orderCtx = document.getElementById('orderChart').getContext('2d');
+            new Chart(orderCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Orders',
+                        data: [120, 190, 300, 500, 200, 300, 450],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Delivery Performance Chart
+            const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+            new Chart(deliveryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['On Time', 'Delayed', 'Failed'],
+                    datasets: [{
+                        data: [94, 5, 1],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Revenue (₹)',
+                        data: [1200000, 1900000, 3000000, 5000000, 2000000, 2400000],
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + (value / 1000000) + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Efficiency Chart
+            const efficiencyCtx = document.getElementById('efficiencyChart').getContext('2d');
+            new Chart(efficiencyCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Delivery Speed', 'Cost Efficiency', 'Quality', 'Customer Satisfaction', 'Sustainability'],
+                    datasets: [{
+                        label: 'Current Performance',
+                        data: [85, 78, 92, 88, 75],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modals = document.querySelectorAll('[id$="Modal"]');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9676f45fc7067f50',t:'MTc1MzkwMDUxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
