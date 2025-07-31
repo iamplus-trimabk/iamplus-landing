@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Admin Portal - Supply Chain Management</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-link:hover {
+            background-color: rgb(59 130 246 / 0.1);
+        }
+        .sidebar-link.active {
+            background-color: rgb(59 130 246);
+            color: white;
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Sample data
+        const recentOrders = [
+            { id: 'ORD-001', customer: 'John Doe', status: 'Delivered', amount: '$125.50' },
+            { id: 'ORD-002', customer: 'Jane Smith', status: 'In Transit', amount: '$89.25' },
+            { id: 'ORD-003', customer: 'Mike Johnson', status: 'Processing', amount: '$156.75' },
+            { id: 'ORD-004', customer: 'Sarah Wilson', status: 'Pending', amount: '$203.00' },
+            { id: 'ORD-005', customer: 'Tom Brown', status: 'Delivered', amount: '$67.80' }
+        ];
+
+        const allOrders = [
+            { id: 'ORD-001', date: '2024-01-15', customer: 'John Doe', supplier: 'FreshFarms Co.', status: 'Delivered', total: '$125.50' },
+            { id: 'ORD-002', date: '2024-01-14', customer: 'Jane Smith', supplier: 'QuickSupply Ltd.', status: 'In Transit', total: '$89.25' },
+            { id: 'ORD-003', date: '2024-01-14', customer: 'Mike Johnson', supplier: 'GreenVeggies Inc.', status: 'Processing', total: '$156.75' },
+            { id: 'ORD-004', date: '2024-01-13', customer: 'Sarah Wilson', supplier: 'FreshFarms Co.', status: 'Pending', total: '$203.00' },
+            { id: 'ORD-005', date: '2024-01-13', customer: 'Tom Brown', supplier: 'LocalProduce LLC', status: 'Delivered', total: '$67.80' },
+            { id: 'ORD-006', date: '2024-01-12', customer: 'Lisa Davis', supplier: 'FastDelivery Corp.', status: 'In Transit', total: '$145.30' },
+            { id: 'ORD-007', date: '2024-01-12', customer: 'Robert Miller', supplier: 'QuickSupply Ltd.', status: 'Delivered', total: '$98.60' },
+            { id: 'ORD-008', date: '2024-01-11', customer: 'Emily Garcia', supplier: 'GreenVeggies Inc.', status: 'Processing', total: '$178.90' }
+        ];
+
+        const suppliers = [
+            { id: 1, name: 'FreshFarms Co.', category: 'Vegetables', rating: 95, contact: 'contact@freshfarms.com' },
+            { id: 2, name: 'QuickSupply Ltd.', category: 'Dairy', rating: 88, contact: 'info@quicksupply.com' },
+            { id: 3, name: 'GreenVeggies Inc.', category: 'Organic', rating: 92, contact: 'sales@greenveggies.com' },
+            { id: 4, name: 'FastDelivery Corp.', category: 'Frozen', rating: 85, contact: 'support@fastdelivery.com' },
+            { id: 5, name: 'LocalProduce LLC', category: 'Fruits', rating: 90, contact: 'orders@localproduce.com' }
+        ];
+
+        // Simple icon components using Unicode symbols
+        const HomeIcon = () => <span className="text-lg">🏠</span>;
+        const ShoppingCartIcon = () => <span className="text-lg">🛒</span>;
+        const TruckIcon = () => <span className="text-lg">🚚</span>;
+        const WarehouseIcon = () => <span className="text-lg">🏭</span>;
+        const UsersIcon = () => <span className="text-lg">👥</span>;
+        const CarIcon = () => <span className="text-lg">🚗</span>;
+        const BarChartIcon = () => <span className="text-lg">📊</span>;
+        const SettingsIcon = () => <span className="text-lg">⚙️</span>;
+        const EyeIcon = () => <span className="text-sm">👁️</span>;
+        const EditIcon = () => <span className="text-sm">✏️</span>;
+        const PlusIcon = () => <span className="text-sm">➕</span>;
+        const DownloadIcon = () => <span className="text-sm">⬇️</span>;
+        const XIcon = () => <span className="text-lg">❌</span>;
+
+        // Badge component
+        const Badge = ({ children, variant = 'default' }) => {
+            const variants = {
+                default: 'bg-slate-100 text-slate-800',
+                success: 'bg-green-100 text-green-800',
+                warning: 'bg-yellow-100 text-yellow-800',
+                danger: 'bg-red-100 text-red-800',
+                info: 'bg-blue-100 text-blue-800'
+            };
+            
+            return (
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variants[variant]}`}>
+                    {children}
+                </span>
+            );
+        };
+
+        // Card component
+        const Card = ({ children, className = '' }) => (
+            <div className={`bg-white rounded-lg border border-slate-200 card-shadow ${className}`}>
+                {children}
+            </div>
+        );
+
+        const CardHeader = ({ children }) => (
+            <div className="px-6 py-4 border-b border-slate-200">
+                {children}
+            </div>
+        );
+
+        const CardContent = ({ children }) => (
+            <div className="px-6 py-4">
+                {children}
+            </div>
+        );
+
+        const CardTitle = ({ children }) => (
+            <h3 className="text-lg font-semibold text-slate-900">
+                {children}
+            </h3>
+        );
+
+        // Button component
+        const Button = ({ children, onClick, variant = 'primary', size = 'md', className = '' }) => {
+            const variants = {
+                primary: 'bg-blue-600 hover:bg-blue-700 text-white',
+                secondary: 'bg-slate-200 hover:bg-slate-300 text-slate-900',
+                outline: 'border border-slate-300 hover:bg-slate-50 text-slate-700'
+            };
+            
+            const sizes = {
+                sm: 'px-3 py-1.5 text-sm',
+                md: 'px-4 py-2 text-sm',
+                lg: 'px-6 py-3 text-base'
+            };
+            
+            return (
+                <button
+                    onClick={onClick}
+                    className={`inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${variants[variant]} ${sizes[size]} ${className}`}
+                >
+                    {children}
+                </button>
+            );
+        };
+
+        // Modal component
+        const Modal = ({ isOpen, onClose, title, children }) => {
+            if (!isOpen) return null;
+            
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="fixed inset-0 bg-black bg-opacity-50 modal-backdrop" onClick={onClose}></div>
+                    <div className="relative bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+                            <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+                            <button
+                                onClick={onClose}
+                                className="text-slate-400 hover:text-slate-600 transition-colors"
+                            >
+                                <XIcon />
+                            </button>
+                        </div>
+                        <div className="p-6">
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Table component
+        const Table = ({ children }) => (
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-slate-200">
+                    {children}
+                </table>
+            </div>
+        );
+
+        const TableHeader = ({ children }) => (
+            <thead className="bg-slate-50">
+                {children}
+            </thead>
+        );
+
+        const TableBody = ({ children }) => (
+            <tbody className="bg-white divide-y divide-slate-200">
+                {children}
+            </tbody>
+        );
+
+        const TableRow = ({ children }) => (
+            <tr className="hover:bg-slate-50">
+                {children}
+            </tr>
+        );
+
+        const TableHead = ({ children }) => (
+            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                {children}
+            </th>
+        );
+
+        const TableCell = ({ children, className = '' }) => (
+            <td className={`px-6 py-4 whitespace-nowrap text-sm text-slate-900 ${className}`}>
+                {children}
+            </td>
+        );
+
+        // Simple Chart placeholder
+        const SimpleChart = ({ type = 'line', title = 'Chart' }) => {
+            return (
+                <div className="flex items-center justify-center h-64 bg-slate-100 rounded-lg border-2 border-dashed border-slate-300">
+                    <div className="text-center">
+                        <div className="text-4xl mb-2">📈</div>
+                        <p className="text-slate-500 font-medium">{title}</p>
+                        <p className="text-slate-400 text-sm">Interactive {type} chart would appear here</p>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [selectedOrder, setSelectedOrder] = useState(null);
+            const [selectedSupplier, setSelectedSupplier] = useState(null);
+            const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+            const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
+            const [isAddSupplierModalOpen, setIsAddSupplierModalOpen] = useState(false);
+
+            const getStatusBadge = (status) => {
+                const statusMap = {
+                    'Delivered': 'success',
+                    'In Transit': 'info',
+                    'Processing': 'warning',
+                    'Pending': 'warning',
+                    'Delayed': 'danger'
+                };
+                return <Badge variant={statusMap[status] || 'default'}>{status}</Badge>;
+            };
+
+            const openOrderModal = (order) => {
+                setSelectedOrder(order);
+                setIsOrderModalOpen(true);
+            };
+
+            const openSupplierModal = (supplier) => {
+                setSelectedSupplier(supplier);
+                setIsSupplierModalOpen(true);
+            };
+
+            const sidebarItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: HomeIcon },
+                { id: 'orders', label: 'Orders', icon: ShoppingCartIcon },
+                { id: 'shipments', label: 'Shipments', icon: TruckIcon },
+                { id: 'inventory', label: 'Inventory', icon: WarehouseIcon },
+                { id: 'suppliers', label: 'Suppliers', icon: UsersIcon },
+                { id: 'fleet', label: 'Fleet', icon: CarIcon },
+                { id: 'reports', label: 'Reports', icon: BarChartIcon },
+                { id: 'settings', label: 'Settings', icon: SettingsIcon }
+            ];
+
+            return (
+                <div className="flex h-screen bg-slate-50">
+                    {/* Sidebar */}
+                    <div className="w-64 bg-white border-r border-slate-200 flex flex-col">
+                        {/* Logo */}
+                        <div className="p-6 border-b border-slate-200">
+                            <h1 className="text-xl font-bold text-blue-600">SupplyChain Pro</h1>
+                        </div>
+                        
+                        {/* Navigation */}
+                        <nav className="flex-1 p-4 space-y-2">
+                            {sidebarItems.map((item) => {
+                                const IconComponent = item.icon;
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => setActiveTab(item.id)}
+                                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg sidebar-link ${
+                                            activeTab === item.id ? 'active' : 'text-slate-700'
+                                        }`}
+                                    >
+                                        <IconComponent />
+                                        <span className="font-medium">{item.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </nav>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="flex-1 overflow-auto">
+                        <div className="p-8">
+                            {/* Dashboard Tab */}
+                            {activeTab === 'dashboard' && (
+                                <div className="space-y-8">
+                                    <div>
+                                        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+                                        <p className="text-slate-600 mt-2">Welcome to your supply chain management portal</p>
+                                    </div>
+
+                                    {/* KPI Cards */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                        <Card>
+                                            <CardContent>
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-600">Total Orders</p>
+                                                        <p className="text-2xl font-bold text-slate-900">1,247</p>
+                                                    </div>
+                                                    <div className="p-3 bg-blue-100 rounded-full">
+                                                        <ShoppingCartIcon />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-green-600 mt-2">+12% from last month</p>
+                                            </CardContent>
+                                        </Card>
+
+                                        <Card>
+                                            <CardContent>
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-600">Revenue</p>
+                                                        <p className="text-2xl font-bold text-slate-900">$89,432</p>
+                                                    </div>
+                                                    <div className="p-3 bg-green-100 rounded-full">
+                                                        <BarChartIcon />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-green-600 mt-2">+8% from last month</p>
+                                            </CardContent>
+                                        </Card>
+
+                                        <Card>
+                                            <CardContent>
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-600">On-Time Shipments</p>
+                                                        <p className="text-2xl font-bold text-slate-900">94.2%</p>
+                                                    </div>
+                                                    <div className="p-3 bg-yellow-100 rounded-full">
+                                                        <TruckIcon />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-red-600 mt-2">-2% from last month</p>
+                                            </CardContent>
+                                        </Card>
+
+                                        <Card>
+                                            <CardContent>
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-slate-600">Low Stock Alerts</p>
+                                                        <p className="text-2xl font-bold text-slate-900">23</p>
+                                                    </div>
+                                                    <div className="p-3 bg-red-100 rounded-full">
+                                                        <WarehouseIcon />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-red-600 mt-2">Requires attention</p>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+
+                                    {/* Charts and Recent Orders */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        {/* Orders Over Time Chart */}
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle>Orders Over Time</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <SimpleChart type="line" title="Orders Trend" />
+                                            </CardContent>
+                                        </Card>
+
+                                        {/* Recent Orders */}
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle>Recent Orders</CardTitle>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <Table>
+                                                    <TableHeader>
+                                                        <TableRow>
+                                                            <TableHead>Order ID</TableHead>
+                                                            <TableHead>Customer</TableHead>
+                                                            <TableHead>Status</TableHead>
+                                                            <TableHead>Amount</TableHead>
+                                                        </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                        {recentOrders.map((order) => (
+                                                            <TableRow key={order.id}>
+                                                                <TableCell className="font-medium">{order.id}</TableCell>
+                                                                <TableCell>{order.customer}</TableCell>
+                                                                <TableCell>{getStatusBadge(order.status)}</TableCell>
+                                                                <TableCell className="font-medium">{order.amount}</TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Orders Tab */}
+                            {activeTab === 'orders' && (
+                                <div className="space-y-6">
+                                    <div>
+                                        <h1 className="text-3xl font-bold text-slate-900">Orders Management</h1>
+                                        <p className="text-slate-600 mt-2">Manage and track all orders</p>
+                                    </div>
+
+                                    <Card>
+                                        <CardContent>
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Order ID</TableHead>
+                                                        <TableHead>Date</TableHead>
+                                                        <TableHead>Customer</TableHead>
+                                                        <TableHead>Supplier</TableHead>
+                                                        <TableHead>Status</TableHead>
+                                                        <TableHead>Total</TableHead>
+                                                        <TableHead>Actions</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {allOrders.map((order) => (
+                                                        <TableRow key={order.id}>
+                                                            <TableCell className="font-medium">{order.id}</TableCell>
+                                                            <TableCell>{order.date}</TableCell>
+                                                            <TableCell>{order.customer}</TableCell>
+                                                            <TableCell>{order.supplier}</TableCell>
+                                                            <TableCell>{getStatusBadge(order.status)}</TableCell>
+                                                            <TableCell className="font-medium">{order.total}</TableCell>
+                                                            <TableCell>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    onClick={() => openOrderModal(order)}
+                                                                    className="flex items-center space-x-1"
+                                                                >
+                                                                    <EyeIcon />
+                                                                    <span>View Details</span>
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            )}
+
+                            {/* Suppliers Tab */}
+                            {activeTab === 'suppliers' && (
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h1 className="text-3xl font-bold text-slate-900">Suppliers Management</h1>
+                                            <p className="text-slate-600 mt-2">Manage your supplier network</p>
+                                        </div>
+                                        <Button
+                                            onClick={() => setIsAddSupplierModalOpen(true)}
+                                            className="flex items-center space-x-2"
+                                        >
+                                            <PlusIcon />
+                                            <span>Add New Supplier</span>
+                                        </Button>
+                                    </div>
+
+                                    <Card>
+                                        <CardContent>
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Supplier Name</TableHead>
+                                                        <TableHead>Category</TableHead>
+                                                        <TableHead>Performance Rating</TableHead>
+                                                        <TableHead>Contact</TableHead>
+                                                        <TableHead>Actions</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {suppliers.map((supplier) => (
+                                                        <TableRow key={supplier.id}>
+                                                            <TableCell className="font-medium">{supplier.name}</TableCell>
+                                                            <TableCell>{supplier.category}</TableCell>
+                                                            <TableCell>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="font-medium">{supplier.rating}%</span>
+                                                                    <div className="w-16 bg-slate-200 rounded-full h-2">
+                                                                        <div
+                                                                            className="bg-blue-600 h-2 rounded-full"
+                                                                            style={{ width: `${supplier.rating}%` }}
+                                                                        ></div>
+                                                                    </div>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>{supplier.contact}</TableCell>
+                                                            <TableCell>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    onClick={() => openSupplierModal(supplier)}
+                                                                    className="flex items-center space-x-1"
+                                                                >
+                                                                    <EditIcon />
+                                                                    <span>Edit</span>
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            )}
+
+                            {/* Reports Tab */}
+                            {activeTab === 'reports' && (
+                                <div className="space-y-8">
+                                    <div>
+                                        <h1 className="text-3xl font-bold text-slate-900">Analytics & Reports</h1>
+                                        <p className="text-slate-600 mt-2">Comprehensive insights into your supply chain</p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        {/* Supplier Performance Chart */}
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between">
+                                                <CardTitle>Supplier Performance</CardTitle>
+                                                <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                                                    <DownloadIcon />
+                                                    <span>Download PDF</span>
+                                                </Button>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <SimpleChart type="bar" title="Performance Metrics" />
+                                            </CardContent>
+                                        </Card>
+
+                                        {/* Shipment Status Breakdown */}
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between">
+                                                <CardTitle>Shipment Status Breakdown</CardTitle>
+                                                <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                                                    <DownloadIcon />
+                                                    <span>Download PDF</span>
+                                                </Button>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <SimpleChart type="pie" title="Status Distribution" />
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+
+                                    {/* Additional Reports Section */}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <Card>
+                                            <CardContent>
+                                                <h3 className="font-semibold text-slate-900 mb-2">Inventory Report</h3>
+                                                <p className="text-sm text-slate-600 mb-4">Current stock levels across all warehouses</p>
+                                                <Button variant="outline" size="sm" className="w-full flex items-center justify-center space-x-1">
+                                                    <DownloadIcon />
+                                                    <span>Download PDF</span>
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+
+                                        <Card>
+                                            <CardContent>
+                                                <h3 className="font-semibold text-slate-900 mb-2">Delivery Performance</h3>
+                                                <p className="text-sm text-slate-600 mb-4">On-time delivery metrics and trends</p>
+                                                <Button variant="outline" size="sm" className="w-full flex items-center justify-center space-x-1">
+                                                    <DownloadIcon />
+                                                    <span>Download PDF</span>
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+
+                                        <Card>
+                                            <CardContent>
+                                                <h3 className="font-semibold text-slate-900 mb-2">Cost Analysis</h3>
+                                                <p className="text-sm text-slate-600 mb-4">Transportation and operational costs</p>
+                                                <Button variant="outline" size="sm" className="w-full flex items-center justify-center space-x-1">
+                                                    <DownloadIcon />
+                                                    <span>Download PDF</span>
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Placeholder tabs for other sections */}
+                            {['shipments', 'inventory', 'fleet', 'settings'].includes(activeTab) && (
+                                <div className="space-y-6">
+                                    <div>
+                                        <h1 className="text-3xl font-bold text-slate-900 capitalize">{activeTab}</h1>
+                                        <p className="text-slate-600 mt-2">This section is under development</p>
+                                    </div>
+                                    <Card>
+                                        <CardContent>
+                                            <div className="text-center py-12">
+                                                <div className="text-6xl mb-4">🚧</div>
+                                                <p className="text-slate-500">Content for {activeTab} will be available soon.</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Order Details Modal */}
+                    <Modal
+                        isOpen={isOrderModalOpen}
+                        onClose={() => setIsOrderModalOpen(false)}
+                        title="Order Details"
+                    >
+                        {selectedOrder && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Order ID</label>
+                                        <p className="mt-1 text-sm text-slate-900">{selectedOrder.id}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Date</label>
+                                        <p className="mt-1 text-sm text-slate-900">{selectedOrder.date}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Customer</label>
+                                        <p className="mt-1 text-sm text-slate-900">{selectedOrder.customer}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Supplier</label>
+                                        <p className="mt-1 text-sm text-slate-900">{selectedOrder.supplier}</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Status</label>
+                                        <div className="mt-1">{getStatusBadge(selectedOrder.status)}</div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700">Total</label>
+                                        <p className="mt-1 text-sm font-semibold text-slate-900">{selectedOrder.total}</p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">Order Timeline</label>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <div>
+                                                <p className="text-sm font-medium text-slate-900">Order Placed</p>
+                                                <p className="text-xs text-slate-500">{selectedOrder.date} 10:30 AM</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <div>
+                                                <p className="text-sm font-medium text-slate-900">Order Confirmed</p>
+                                                <p className="text-xs text-slate-500">{selectedOrder.date} 11:15 AM</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                            <div>
+                                                <p className="text-sm font-medium text-slate-900">In Transit</p>
+                                                <p className="text-xs text-slate-500">{selectedOrder.date} 2:45 PM</p>
+                                            </div>
+                                        </div>
+                                        {selectedOrder.status === 'Delivered' && (
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-slate-900">Delivered</p>
+                                                    <p className="text-xs text-slate-500">{selectedOrder.date} 4:20 PM</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </Modal>
+
+                    {/* Supplier Edit Modal */}
+                    <Modal
+                        isOpen={isSupplierModalOpen}
+                        onClose={() => setIsSupplierModalOpen(false)}
+                        title="Edit Supplier"
+                    >
+                        {selectedSupplier && (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Supplier Name</label>
+                                    <input
+                                        type="text"
+                                        defaultValue={selectedSupplier.name}
+                                        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                                    <input
+                                        type="text"
+                                        defaultValue={selectedSupplier.category}
+                                        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Contact Email</label>
+                                    <input
+                                        type="email"
+                                        defaultValue={selectedSupplier.contact}
+                                        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div className="flex justify-end space-x-3 pt-4">
+                                    <Button variant="secondary" onClick={() => setIsSupplierModalOpen(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={() => setIsSupplierModalOpen(false)}>
+                                        Save Changes
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </Modal>
+
+                    {/* Add Supplier Modal */}
+                    <Modal
+                        isOpen={isAddSupplierModalOpen}
+                        onClose={() => setIsAddSupplierModalOpen(false)}
+                        title="Add New Supplier"
+                    >
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Supplier Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter supplier name"
+                                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                                <select className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select category</option>
+                                    <option value="Vegetables">Vegetables</option>
+                                    <option value="Fruits">Fruits</option>
+                                    <option value="Dairy">Dairy</option>
+                                    <option value="Organic">Organic</option>
+                                    <option value="Frozen">Frozen</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Contact Email</label>
+                                <input
+                                    type="email"
+                                    placeholder="Enter contact email"
+                                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    placeholder="Enter phone number"
+                                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="flex justify-end space-x-3 pt-4">
+                                <Button variant="secondary" onClick={() => setIsAddSupplierModalOpen(false)}>
+                                    Cancel
+                                </Button>
+                                <Button onClick={() => setIsAddSupplierModalOpen(false)}>
+                                    Add Supplier
+                                </Button>
+                            </div>
+                        </div>
+                    </Modal>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
