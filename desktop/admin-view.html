@@ -1,0 +1,2557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simflo School | Admissions Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 262.1 83.3% 57.8%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 262.1 83.3% 57.8%;
+            --radius: 0.5rem;
+            --success: 142.1 76.2% 36.3%;
+            --success-foreground: 355.7 100% 97.3%;
+            --warning: 47.9 95.8% 53.1%;
+            --warning-foreground: 26 83.3% 14.1%;
+            --info: 199 89% 48%;
+            --info-foreground: 202 80% 96%;
+        }
+
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --card: 222.2 84% 4.9%;
+            --card-foreground: 210 40% 98%;
+            --popover: 222.2 84% 4.9%;
+            --popover-foreground: 210 40% 98%;
+            --primary: 262.1 83.3% 57.8%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 262.1 83.3% 57.8%;
+        }
+
+        * {
+            border-color: hsl(var(--border));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Shadcn-like component styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .btn-primary:hover {
+            background-color: hsl(var(--primary) / 0.9);
+        }
+
+        .btn-secondary {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .btn-secondary:hover {
+            background-color: hsl(var(--secondary) / 0.8);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
+        }
+
+        .btn-outline:hover {
+            background-color: hsl(var(--secondary));
+        }
+
+        .btn-success {
+            background-color: hsl(var(--success));
+            color: hsl(var(--success-foreground));
+        }
+
+        .btn-success:hover {
+            background-color: hsl(var(--success) / 0.9);
+        }
+
+        .btn-destructive {
+            background-color: hsl(var(--destructive));
+            color: hsl(var(--destructive-foreground));
+        }
+
+        .btn-destructive:hover {
+            background-color: hsl(var(--destructive) / 0.9);
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: hsl(var(--foreground));
+        }
+
+        .btn-ghost:hover {
+            background-color: hsl(var(--secondary));
+        }
+
+        .btn-sm {
+            height: 2rem;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-md {
+            height: 2.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-lg {
+            height: 2.75rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-icon {
+            height: 2.5rem;
+            width: 2.5rem;
+            padding: 0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Card styles */
+        .card {
+            border-radius: var(--radius);
+            background-color: hsl(var(--card));
+            color: hsl(var(--card-foreground));
+            border: 1px solid hsl(var(--border));
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1.5rem 0.75rem 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            margin-top: 0.25rem;
+        }
+
+        .card-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            border-top: 1px solid hsl(var(--border));
+        }
+
+        /* Input styles */
+        .input {
+            display: flex;
+            height: 2.5rem;
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--input));
+            background-color: transparent;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px hsl(var(--ring) / 0.3);
+            border-color: hsl(var(--ring));
+        }
+
+        .input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Select styles */
+        .select {
+            display: flex;
+            height: 2.5rem;
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--input));
+            background-color: transparent;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1rem;
+            padding-right: 2rem;
+        }
+
+        .select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px hsl(var(--ring) / 0.3);
+            border-color: hsl(var(--ring));
+        }
+
+        /* Label styles */
+        .label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.25rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.125rem 0.625rem;
+            font-weight: 500;
+            font-size: 0.75rem;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .badge-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .badge-secondary {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
+        }
+
+        .badge-success {
+            background-color: hsl(var(--success) / 0.2);
+            color: hsl(var(--success));
+        }
+
+        .badge-warning {
+            background-color: hsl(var(--warning) / 0.2);
+            color: hsl(var(--warning));
+        }
+
+        .badge-destructive {
+            background-color: hsl(var(--destructive) / 0.2);
+            color: hsl(var(--destructive));
+        }
+
+        .badge-info {
+            background-color: hsl(var(--info) / 0.2);
+            color: hsl(var(--info));
+        }
+
+        /* Avatar styles */
+        .avatar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 9999px;
+            background-color: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
+            font-weight: 500;
+        }
+
+        .avatar-sm {
+            width: 1.5rem;
+            height: 1.5rem;
+            font-size: 0.75rem;
+        }
+
+        .avatar-md {
+            width: 2rem;
+            height: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .avatar-lg {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1rem;
+        }
+
+        .avatar-xl {
+            width: 4rem;
+            height: 4rem;
+            font-size: 1.5rem;
+        }
+
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .tab {
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .tab:hover {
+            color: hsl(var(--foreground));
+        }
+
+        .tab.active {
+            color: hsl(var(--primary));
+            border-bottom-color: hsl(var(--primary));
+        }
+
+        /* Dialog/Modal styles */
+        .dialog-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: hsl(var(--foreground) / 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .dialog-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dialog {
+            background-color: hsl(var(--background));
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--border));
+            box-shadow: 0 10px 15px -3px hsl(var(--foreground) / 0.1), 0 4px 6px -4px hsl(var(--foreground) / 0.1);
+            width: 90%;
+            max-width: 28rem;
+            max-height: 85vh;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: all 0.2s ease;
+        }
+
+        .dialog-overlay.show .dialog {
+            transform: scale(1);
+        }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .dialog-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            line-height: 1.5;
+        }
+
+        .dialog-description {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            margin-top: 0.25rem;
+        }
+
+        .dialog-content {
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: calc(85vh - 10rem);
+        }
+
+        .dialog-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid hsl(var(--border));
+        }
+
+        /* Toast styles */
+        .toast-container {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .toast {
+            background-color: hsl(var(--background));
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--border));
+            box-shadow: 0 4px 12px hsl(var(--foreground) / 0.1);
+            padding: 1rem;
+            display: flex;
+            width: 350px;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            border-left: 4px solid hsl(var(--success));
+        }
+
+        .toast-warning {
+            border-left: 4px solid hsl(var(--warning));
+        }
+
+        .toast-destructive {
+            border-left: 4px solid hsl(var(--destructive));
+        }
+
+        .toast-info {
+            border-left: 4px solid hsl(var(--info));
+        }
+
+        /* Status badge styles */
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+        }
+
+        .status-pending {
+            background-color: hsl(var(--warning) / 0.2);
+            color: hsl(var(--warning));
+        }
+
+        .status-approved {
+            background-color: hsl(var(--success) / 0.2);
+            color: hsl(var(--success));
+        }
+
+        .status-rejected {
+            background-color: hsl(var(--destructive) / 0.2);
+            color: hsl(var(--destructive));
+        }
+
+        .status-interview {
+            background-color: hsl(var(--primary) / 0.2);
+            color: hsl(var(--primary));
+        }
+
+        .status-review {
+            background-color: hsl(var(--info) / 0.2);
+            color: hsl(var(--info));
+        }
+
+        /* Process flow styles */
+        .process-step {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .process-step:before {
+            content: '';
+            position: absolute;
+            left: 0.625rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: hsl(var(--border));
+        }
+
+        .process-step:last-child:before {
+            bottom: 50%;
+        }
+
+        .process-step-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background-color: hsl(var(--muted));
+            border: 2px solid hsl(var(--border));
+            z-index: 1;
+        }
+
+        .process-step.active .process-step-icon {
+            background-color: hsl(var(--primary));
+            border-color: hsl(var(--primary) / 0.2);
+        }
+
+        .process-step.completed .process-step-icon {
+            background-color: hsl(var(--success));
+            border-color: hsl(var(--success) / 0.2);
+        }
+
+        /* Calendar styles */
+        .calendar-day {
+            width: 2.25rem;
+            height: 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day:hover {
+            background-color: hsl(var(--secondary));
+        }
+
+        .calendar-day.selected {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .calendar-day.has-event {
+            border: 2px solid hsl(var(--primary));
+        }
+
+        .calendar-day.today {
+            font-weight: 700;
+        }
+
+        .calendar-day.disabled {
+            color: hsl(var(--muted-foreground) / 0.5);
+            cursor: not-allowed;
+        }
+
+        /* Time slot styles */
+        .time-slot {
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .time-slot:hover {
+            background-color: hsl(var(--secondary));
+        }
+
+        .time-slot.selected {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .time-slot.disabled {
+            color: hsl(var(--muted-foreground) / 0.5);
+            cursor: not-allowed;
+        }
+
+        /* Document card styles */
+        .document-card {
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .document-card:hover {
+            border-color: hsl(var(--primary));
+            background-color: hsl(var(--secondary));
+        }
+
+        /* Message bubble styles */
+        .message-bubble {
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            max-width: 80%;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-bubble.admin {
+            background-color: hsl(var(--primary) / 0.1);
+            color: hsl(var(--foreground));
+            margin-right: auto;
+        }
+
+        .message-bubble.principal {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--foreground));
+            margin-left: auto;
+        }
+
+        .message-bubble.system {
+            background-color: hsl(var(--info) / 0.1);
+            color: hsl(var(--foreground));
+            margin: 0.5rem auto;
+            max-width: 90%;
+            font-size: 0.875rem;
+        }
+
+        /* Process card styles */
+        .process-card {
+            border-radius: var(--radius);
+            border: 1px solid hsl(var(--border));
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .process-card.active {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 4px 12px hsl(var(--primary) / 0.15);
+        }
+
+        .process-card.completed {
+            border-color: hsl(var(--success));
+        }
+
+        .process-card-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid hsl(var(--border));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .process-card-body {
+            padding: 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .process-card.active .process-card-body {
+            max-height: 500px;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 240px;
+            background-color: hsl(var(--background));
+            border-right: 1px solid hsl(var(--border));
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 40;
+        }
+
+        .sidebar-collapsed {
+            width: 70px;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            transition: all 0.3s ease;
+        }
+
+        .main-content-expanded {
+            margin-left: 70px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: hsl(var(--muted-foreground));
+            transition: all 0.2s ease;
+            border-radius: var(--radius);
+            margin: 0.25rem 0.5rem;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--foreground));
+        }
+
+        .nav-item.active {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .nav-item-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-text {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        /* Animation classes */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+
+        /* SVG animation styles */
+        .svg-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke 0.5s ease;
+        }
+
+        .svg-path.animate {
+            animation: dash 2s linear forwards;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .svg-node {
+            transform-origin: center;
+            transform: scale(0);
+            transition: fill 0.5s ease;
+        }
+
+        .svg-node.animate {
+            animation: scaleIn 0.5s ease-out forwards;
+        }
+
+        @keyframes scaleIn {
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Utility functions
+        const cn = (...classes) => classes.filter(Boolean).join(' ');
+
+        // Icons Component
+        const Icons = {
+            Home: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+            ),
+            Admissions: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+            ),
+            Students: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            ),
+            Staff: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            ),
+            Activity: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
+            ),
+            Settings: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            ),
+            Search: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            ),
+            Notification: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                </svg>
+            ),
+            Menu: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            ),
+            Close: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            ),
+            View: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+            ),
+            Check: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            ),
+            Document: (props) => (
+                <svg className={cn("w-6 h-6", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            ),
+            Clock: (props) => (
+                <svg className={cn("w-6 h-6", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            ),
+            Calendar: (props) => (
+                <svg className={cn("w-6 h-6", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            ),
+            Add: (props) => (
+                <svg className={cn("w-4 h-4", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            ),
+            ChevronLeft: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            ),
+            ChevronRight: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            ),
+            Info: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            ),
+            Logo: (props) => (
+                <svg className={cn("w-8 h-8", props.className)} viewBox="0 0 24 24" fill="currentColor" {...props}>
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            ),
+            Hamburger: (props) => (
+                <svg className={cn("w-5 h-5", props.className)} fill="none" stroke="currentColor" viewBox="0 0 24 24" {...props}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            )
+        };
+
+        // Reusable Components
+        const Avatar = ({ initials, size = "md", bgColor, className }) => {
+            return (
+                <div
+                    className={cn(`avatar avatar-${size}`, className)}
+                    style={{ backgroundColor: bgColor }}
+                >
+                    {initials}
+                </div>
+            );
+        };
+
+        const Button = ({
+            children,
+            variant = "primary",
+            size = "md",
+            disabled = false,
+            onClick,
+            className,
+            ...props
+        }) => {
+            return (
+                <button
+                    className={cn(`btn btn-${variant} btn-${size}`, className)}
+                    disabled={disabled}
+                    onClick={onClick}
+                    {...props}
+                >
+                    {children}
+                </button>
+            );
+        };
+
+        const Card = ({ children, className, ...props }) => {
+            return (
+                <div className={cn("card", className)} {...props}>
+                    {children}
+                </div>
+            );
+        };
+
+        const CardHeader = ({ children, className, ...props }) => {
+            return (
+                <div className={cn("card-header", className)} {...props}>
+                    {children}
+                </div>
+            );
+        };
+
+        const CardTitle = ({ children, className, ...props }) => {
+            return (
+                <h3 className={cn("card-title", className)} {...props}>
+                    {children}
+                </h3>
+            );
+        };
+
+        const CardDescription = ({ children, className, ...props }) => {
+            return (
+                <p className={cn("card-description", className)} {...props}>
+                    {children}
+                </p>
+            );
+        };
+
+        const CardContent = ({ children, className, ...props }) => {
+            return (
+                <div className={cn("card-content", className)} {...props}>
+                    {children}
+                </div>
+            );
+        };
+
+        const CardFooter = ({ children, className, ...props }) => {
+            return (
+                <div className={cn("card-footer", className)} {...props}>
+                    {children}
+                </div>
+            );
+        };
+
+        const Input = ({ className, ...props }) => {
+            return (
+                <input className={cn("input", className)} {...props} />
+            );
+        };
+
+        const Label = ({ children, className, ...props }) => {
+            return (
+                <label className={cn("label", className)} {...props}>
+                    {children}
+                </label>
+            );
+        };
+
+        const Select = ({ children, className, ...props }) => {
+            return (
+                <select className={cn("select", className)} {...props}>
+                    {children}
+                </select>
+            );
+        };
+
+        const Badge = ({ children, variant = "primary", className, ...props }) => {
+            return (
+                <span className={cn(`badge badge-${variant}`, className)} {...props}>
+                    {children}
+                </span>
+            );
+        };
+
+        const StatusBadge = ({ status, className, ...props }) => {
+            const statusMap = {
+                "Document Review": "status-review",
+                "Interview Scheduled": "status-interview",
+                "Approved": "status-approved",
+                "Rejected": "status-rejected",
+                "Pending": "status-pending",
+                "In Progress": "status-review"
+            };
+
+            return (
+                <span className={cn(`status-badge ${statusMap[status] || "status-pending"}`, className)} {...props}>
+                    {status}
+                </span>
+            );
+        };
+
+        const Tabs = ({ children, className, ...props }) => {
+            return (
+                <div className={cn("tabs", className)} {...props}>
+                    {children}
+                </div>
+            );
+        };
+
+        const Tab = ({ label, active, onClick, className, ...props }) => {
+            return (
+                <button
+                    className={cn("tab", active && "active", className)}
+                    onClick={onClick}
+                    {...props}
+                >
+                    {label}
+                </button>
+            );
+        };
+
+        const Dialog = ({
+            isOpen,
+            onClose,
+            title,
+            description,
+            children,
+            footer,
+            maxWidth,
+            className,
+            ...props
+        }) => {
+            return (
+                <div className={cn("dialog-overlay", isOpen && "show")} onClick={onClose}>
+                    <div
+                        className={cn("dialog", className)}
+                        style={{ maxWidth }}
+                        onClick={e => e.stopPropagation()}
+                        {...props}
+                    >
+                        <div className="dialog-header">
+                            <div>
+                                <h2 className="dialog-title">{title}</h2>
+                                {description && <p className="dialog-description">{description}</p>}
+                            </div>
+                            <button onClick={onClose} className="btn btn-ghost btn-sm btn-icon">
+                                <Icons.Close />
+                            </button>
+                        </div>
+
+                        <div className="dialog-content">
+                            {children}
+                        </div>
+
+                        {footer && (
+                            <div className="dialog-footer">
+                                {footer}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const Toast = ({ type = "success", title, message, isVisible, onClose }) => {
+            return (
+                <div className={cn(`toast toast-${type}`, isVisible && "show")}>
+                    <div className="mr-3 p-2 rounded-full" style={{ backgroundColor: `hsl(var(--${type}) / 0.1)`, color: `hsl(var(--${type}))` }}>
+                        <Icons.Check />
+                    </div>
+                    <div className="flex-1">
+                        <h4 className="font-medium mb-1">{title}</h4>
+                        <p className="text-sm text-muted-foreground">{message}</p>
+                    </div>
+                    <button className="ml-4 text-muted-foreground hover:text-foreground" onClick={onClose}>
+                        <Icons.Close />
+                    </button>
+                </div>
+            );
+        };
+
+        const ToastContainer = ({ children }) => {
+            return (
+                <div className="toast-container">
+                    {children}
+                </div>
+            );
+        };
+
+        // Application-specific components
+        const DocumentCard = ({
+            name,
+            type,
+            icon,
+            verified = false,
+            onView,
+            onVerify,
+            className,
+            ...props
+        }) => {
+            return (
+                <div className={cn("document-card p-3 flex items-center", className)} {...props}>
+                    <div className="p-2 rounded-md mr-3" style={{
+                        backgroundColor: 'hsl(var(--primary) / 0.1)',
+                        borderRadius: 'var(--radius)'
+                    }}>
+                        {icon}
+                    </div>
+                    <div className="flex-1">
+                        <p className="font-medium text-sm">{name}</p>
+                        <p className="text-xs text-muted-foreground">{type}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                        <button
+                            className="text-muted-foreground hover:text-primary"
+                            onClick={onView}
+                        >
+                            <Icons.View />
+                        </button>
+                        <button
+                            className={cn("text-muted-foreground hover:text-success", verified && "text-success")}
+                            onClick={onVerify}
+                        >
+                            <Icons.Check />
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const ProcessCard = ({
+            title,
+            status,
+            icon,
+            active = false,
+            completed = false,
+            onClick,
+            children,
+            className,
+            ...props
+        }) => {
+            return (
+                <div
+                    className={cn(
+                        "process-card",
+                        active && "active",
+                        completed && "completed",
+                        className
+                    )}
+                    onClick={onClick}
+                    {...props}
+                >
+                    <div className="process-card-header">
+                        <div className="flex items-center">
+                            <div className={cn(
+                                "p-2 rounded-full mr-3",
+                                active ? "bg-primary/10" : "bg-secondary"
+                            )}>
+                                {icon}
+                            </div>
+                            <h3 className="font-medium">{title}</h3>
+                        </div>
+                        <StatusBadge status={status} />
+                    </div>
+                    <div className="process-card-body">
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+
+        const ProcessStep = ({ title, date, description, status }) => {
+            return (
+                <div className={cn("process-step", status)}>
+                    <div className="process-step-icon"></div>
+                    <div className="ml-6">
+                        <h5 className="font-medium">{title}</h5>
+                        <p className="text-sm text-muted-foreground">{date}</p>
+                        {description && (
+                            <p className="text-sm mt-1">{description}</p>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const Message = ({ sender, content, time, type }) => {
+            return (
+                <div className={cn("message-bubble", type)}>
+                    <div className="flex items-center mb-1">
+                        <Avatar
+                            initials={sender.initials}
+                            size="sm"
+                            bgColor={sender.avatarColor}
+                        />
+                        <span className="font-medium text-sm ml-2">{sender.name}</span>
+                    </div>
+                    <p className="text-sm">{content}</p>
+                    <p className="text-xs mt-1 text-muted-foreground">{time}</p>
+                </div>
+            );
+        };
+
+        const StatsCard = ({ title, value, change, icon, iconBgColor, iconColor }) => {
+            const isPositive = change.startsWith('↑');
+
+            return (
+                <Card className="p-5">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className="text-sm text-muted-foreground">{title}</p>
+                            <h3 className="text-2xl font-bold mt-1">{value}</h3>
+                            <p className="text-xs mt-1">
+                                <span className="inline-block mr-1" style={{ color: isPositive ? 'hsl(var(--success))' : 'hsl(var(--destructive))' }}>
+                                    {change}
+                                </span>
+                                <span className="text-muted-foreground">vs last month</span>
+                            </p>
+                        </div>
+                        <div className="p-3 rounded-lg" style={{ backgroundColor: iconBgColor, color: iconColor }}>
+                            {icon}
+                        </div>
+                    </div>
+                </Card>
+            );
+        };
+
+        const ProcessFlow = ({ activeStep }) => {
+            const steps = [
+                { id: 1, label: "Application\nSubmission", active: true, completed: true },
+                { id: 2, label: "Document\nVerification", active: true, completed: false },
+                { id: 3, label: "Interview\nScheduling", active: false, completed: false },
+                { id: 4, label: "Interview\nCompletion", active: false, completed: false },
+                { id: 5, label: "Principal\nApproval", active: false, completed: false },
+                { id: 6, label: "Enrollment\nConfirmation", active: false, completed: false }
+            ];
+
+            return (
+                <svg id="processFlowSVG" width="100%" height="200" className="mb-6">
+                    {/* Connector Lines */}
+                    {[1, 2, 3, 4, 5].map((i) => (
+                        <path
+                            key={`path${i}`}
+                            className={cn("svg-path", i <= activeStep && "animate")}
+                            d={`M${60 + (i - 1) * 180},100 L${60 + (i - 1) * 180 + 120},100`}
+                            stroke={i <= activeStep ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
+                            strokeWidth="3"
+                            fill="none"
+                        />
+                    ))}
+
+                    {/* Process Nodes */}
+                    {steps.map((step, index) => (
+                        <g
+                            key={`node${step.id}`}
+                            className={cn("svg-node", step.active && "animate")}
+                        >
+                            <circle
+                                cx={60 + index * 180}
+                                cy="100"
+                                r="30"
+                                fill={step.active ? 'hsl(var(--primary))' : 'hsl(var(--border))'}
+                            />
+                            <text
+                                x={60 + index * 180}
+                                y="104"
+                                textAnchor="middle"
+                                fill="white"
+                                fontSize="12"
+                            >
+                                {step.id}
+                            </text>
+
+                            {/* Node Labels */}
+                            {step.label.split('\n').map((line, i) => (
+                                <text
+                                    key={`label-${step.id}-${i}`}
+                                    x={60 + index * 180}
+                                    y={150 + i * 15}
+                                    textAnchor="middle"
+                                    fill="currentColor"
+                                    fontSize="12"
+                                    fontWeight="500"
+                                >
+                                    {line}
+                                </text>
+                            ))}
+                        </g>
+                    ))}
+                </svg>
+            );
+        };
+
+        const ApplicationTable = ({ applications, onViewApplication }) => {
+            return (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                        <thead>
+                            <tr className="border-b">
+                                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Student Name</th>
+                                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Class</th>
+                                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Submission Date</th>
+                                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Status</th>
+                                <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Assigned To</th>
+                                <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {applications.map(app => (
+                                <tr
+                                    key={app.id}
+                                    className="border-b hover:bg-secondary cursor-pointer"
+                                    onClick={() => onViewApplication(app.id)}
+                                >
+                                    <td className="py-3 px-4">
+                                        <div className="flex items-center">
+                                            <Avatar
+                                                initials={app.initials}
+                                                bgColor={app.avatarColor}
+                                            />
+                                            <span className="font-medium ml-3">{app.name}</span>
+                                        </div>
+                                    </td>
+                                    <td className="py-3 px-4">{app.class}</td>
+                                    <td className="py-3 px-4">{app.submissionDate}</td>
+                                    <td className="py-3 px-4">
+                                        <StatusBadge status={app.status} />
+                                    </td>
+                                    <td className="py-3 px-4">
+                                        <div className="flex items-center">
+                                            <Avatar
+                                                initials={app.assignedTo.initials}
+                                                size="sm"
+                                                bgColor={app.assignedTo.avatarColor}
+                                            />
+                                            <span className="ml-2">{app.assignedTo.name}</span>
+                                        </div>
+                                    </td>
+                                    <td className="py-3 px-4 text-right">
+                                        <button
+                                            className="text-muted-foreground hover:text-primary"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onViewApplication(app.id);
+                                            }}
+                                        >
+                                            <Icons.View />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        };
+
+        const Calendar = ({ selectedDate, onSelectDate }) => {
+            const daysWithEvents = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29];
+
+            return (
+                <div>
+                    {/* Month Navigation */}
+                    <div className="flex justify-between items-center mb-4">
+                        <button className="text-muted-foreground hover:text-foreground">
+                            <Icons.ChevronLeft />
+                        </button>
+                        <h4 className="font-medium">August 2025</h4>
+                        <button className="text-muted-foreground hover:text-foreground">
+                            <Icons.ChevronRight />
+                        </button>
+                    </div>
+
+                    {/* Days of Week */}
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                            <div key={day} className="text-center text-xs font-medium text-muted-foreground">
+                                {day}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Calendar Days */}
+                    <div className="grid grid-cols-7 gap-1">
+                        {/* Previous Month */}
+                        {[28, 29, 30, 31].map(day => (
+                            <div key={`prev-${day}`} className="calendar-day disabled">{day}</div>
+                        ))}
+
+                        {/* Current Month */}
+                        {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                            <div
+                                key={`day-${day}`}
+                                className={cn(
+                                    "calendar-day",
+                                    daysWithEvents.includes(day) && "has-event",
+                                    selectedDate === day && "selected"
+                                )}
+                                onClick={() => daysWithEvents.includes(day) && onSelectDate(day)}
+                            >
+                                {day}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-3 text-xs text-muted-foreground">
+                        <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full mr-2 border-2" style={{ borderColor: 'hsl(var(--primary))' }}></div>
+                            <span>Available slots</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const TimeSlots = ({ selectedDate, selectedTime, onSelectTime }) => {
+            const timeSlots = [
+                { time: "10:00 AM", disabled: false },
+                { time: "11:00 AM", disabled: false },
+                { time: "12:00 PM", disabled: true, reason: "Conflict" },
+                { time: "2:00 PM", disabled: false },
+                { time: "3:00 PM", disabled: false }
+            ];
+
+            return (
+                <div>
+                    <h5 className="text-sm font-medium mb-3">
+                        Available Slots for August {selectedDate}
+                    </h5>
+
+                    <div className="space-y-2 mb-4">
+                        {timeSlots.map(slot => (
+                            <div
+                                key={slot.time}
+                                className={cn(
+                                    "time-slot",
+                                    selectedTime === slot.time && "selected",
+                                    slot.disabled && "disabled"
+                                )}
+                                onClick={() => !slot.disabled && onSelectTime(slot.time)}
+                            >
+                                {slot.time}{slot.disabled ? ` (${slot.reason})` : ''}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="text-xs text-muted-foreground">
+                        <p>Each interview slot is 45 minutes long.</p>
+                    </div>
+                </div>
+            );
+        };
+
+        // Layout Components
+        const Sidebar = ({ collapsed, toggleSidebar, activeView, setActiveView }) => {
+            const navItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: <Icons.Home /> },
+                { id: 'admissions', label: 'Admissions', icon: <Icons.Admissions /> },
+                { id: 'students', label: 'Students', icon: <Icons.Students /> },
+                { id: 'staff', label: 'Staff', icon: <Icons.Staff /> },
+                { id: 'activity', label: 'Activity', icon: <Icons.Activity />, badge: 2 },
+                { id: 'settings', label: 'Settings', icon: <Icons.Settings /> }
+            ];
+
+            return (
+                <div className={cn("sidebar", collapsed && "sidebar-collapsed")}>
+                    <div className="p-4 flex items-center justify-between">
+                        <div className="flex items-center">
+                            <Icons.Logo className="text-primary" />
+                            {!collapsed && <span className="ml-2 font-bold sidebar-text">Simflo School</span>}
+                        </div>
+                        <button onClick={toggleSidebar} className="text-muted-foreground hover:text-foreground">
+                            <Icons.Hamburger />
+                        </button>
+                    </div>
+
+                    <div className="mt-6">
+                        {navItems.map(item => (
+                            <div
+                                key={item.id}
+                                className={cn("nav-item", activeView === item.id && "active")}
+                                onClick={() => setActiveView(item.id)}
+                            >
+                                {item.icon}
+                                {!collapsed && (
+                                    item.badge ? (
+                                        <div className="flex justify-between items-center w-full">
+                                            <span className="sidebar-text">{item.label}</span>
+                                            <Badge variant="destructive" className="sidebar-text">{item.badge}</Badge>
+                                        </div>
+                                    ) : (
+                                        <span className="sidebar-text">{item.label}</span>
+                                    )
+                                )}
+                                {collapsed && item.badge && (
+                                    <Badge variant="destructive" className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">{item.badge}</Badge>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-auto p-4 border-t border-border flex items-center">
+                        <Avatar initials="P" bgColor="hsl(var(--success))" />
+                        {!collapsed && (
+                            <div className="ml-3 sidebar-text">
+                                <div className="font-medium text-sm">Principal</div>
+                                <div className="text-xs text-muted-foreground">principal@simflo.edu</div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const Header = ({ title }) => {
+            return (
+                <header className="bg-background border-b p-4 flex justify-between items-center">
+                    <h1 className="text-xl font-semibold">{title}</h1>
+                    <div className="flex items-center space-x-4">
+                        <div className="relative">
+                            <Input
+                                type="text"
+                                placeholder="Search applications..."
+                                className="pl-10 pr-4 py-2"
+                            />
+                            <div className="absolute left-3 top-2.5 text-muted-foreground">
+                                <Icons.Search />
+                            </div>
+                        </div>
+                        <button className="p-2 rounded-full hover:bg-secondary relative bg-secondary">
+                            <Icons.Notification />
+                            <span className="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full"></span>
+                        </button>
+                        <button className="p-2 rounded-full hover:bg-secondary bg-secondary">
+                            <Icons.Menu />
+                        </button>
+                    </div>
+                </header>
+            );
+        };
+
+        // Main Application
+        const App = () => {
+            // State
+            const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+            const [activeView, setActiveView] = React.useState('admissions');
+            const [activeTab, setActiveTab] = React.useState('overview');
+            const [activeAppTab, setActiveAppTab] = React.useState('details');
+            const [showApplicationModal, setShowApplicationModal] = React.useState(false);
+            const [showInterviewModal, setShowInterviewModal] = React.useState(false);
+            const [showApprovalModal, setShowApprovalModal] = React.useState(false);
+            const [selectedDate, setSelectedDate] = React.useState(6);
+            const [selectedTime, setSelectedTime] = React.useState("11:00 AM");
+            const [verifiedDocuments, setVerifiedDocuments] = React.useState({});
+            const [showDocsVerifiedToast, setShowDocsVerifiedToast] = React.useState(false);
+            const [showInterviewScheduledToast, setShowInterviewScheduledToast] = React.useState(false);
+            const [applicationStatus, setApplicationStatus] = React.useState("Document Review");
+            const [discussionMessages, setDiscussionMessages] = React.useState([
+                {
+                    id: 1,
+                    sender: { name: "Admissions Officer", initials: "AO", avatarColor: "hsl(var(--primary))" },
+                    content: "Documents for Aarav Sharma are ready for verification. The student has excellent grades from his previous school.",
+                    time: "Today, 10:45 AM",
+                    type: "admin"
+                }
+            ]);
+            const [discussionInput, setDiscussionInput] = React.useState("");
+            const [interviewScheduled, setInterviewScheduled] = React.useState(false);
+            const [documentsVerified, setDocumentsVerified] = React.useState(false);
+
+            // Sample data
+            const applications = [
+                {
+                    id: 1,
+                    name: "Aarav Sharma",
+                    initials: "AS",
+                    avatarColor: "hsl(var(--primary))",
+                    class: "Class 5",
+                    submissionDate: "Today, 10:30 AM",
+                    status: "Document Review",
+                    assignedTo: { name: "Admissions Officer", initials: "AO", avatarColor: "hsl(var(--primary))" }
+                },
+                {
+                    id: 2,
+                    name: "Priya Patel",
+                    initials: "PP",
+                    avatarColor: "hsl(var(--info))",
+                    class: "Class 3",
+                    submissionDate: "Yesterday, 2:15 PM",
+                    status: "Interview Scheduled",
+                    assignedTo: { name: "Ms. Davis", initials: "MD", avatarColor: "hsl(var(--warning))" }
+                },
+                {
+                    id: 3,
+                    name: "Ravi Kumar",
+                    initials: "RK",
+                    avatarColor: "hsl(var(--success))",
+                    class: "Class 7",
+                    submissionDate: "Jul 18, 2025",
+                    status: "Approved",
+                    assignedTo: { name: "Principal", initials: "P", avatarColor: "hsl(var(--success))" }
+                }
+            ];
+
+            const documents = [
+                { id: "birth-certificate", name: "Aarav-BC.pdf", type: "Birth Certificate", iconColor: "hsl(var(--primary))" },
+                { id: "marksheet", name: "Aarav-Marksheet.pdf", type: "Previous Marksheet", iconColor: "hsl(var(--success))" },
+                { id: "photo", name: "Aarav-Photo.jpg", type: "Passport Size Photo", iconColor: "hsl(var(--warning))" },
+                { id: "tc", name: "Aarav-TC.pdf", type: "Transfer Certificate", iconColor: "hsl(var(--info))" }
+            ];
+
+            // Handlers
+            const toggleSidebar = () => {
+                setSidebarCollapsed(!sidebarCollapsed);
+            };
+
+            const handleVerifyDocument = (docId) => {
+                setVerifiedDocuments(prev => ({
+                    ...prev,
+                    [docId]: !prev[docId]
+                }));
+
+                // Check if all documents are verified
+                const updatedDocs = {
+                    ...verifiedDocuments,
+                    [docId]: !verifiedDocuments[docId]
+                };
+
+                const allVerified = documents.every(doc => updatedDocs[doc.id]);
+                if (allVerified) {
+                    setDocumentsVerified(true);
+                    setShowDocsVerifiedToast(true);
+                    setTimeout(() => setShowDocsVerifiedToast(false), 5000);
+                }
+            };
+
+            const handleVerifyAllDocuments = () => {
+                const allVerified = {};
+                documents.forEach(doc => {
+                    allVerified[doc.id] = true;
+                });
+                setVerifiedDocuments(allVerified);
+                setDocumentsVerified(true);
+                setShowDocsVerifiedToast(true);
+                setTimeout(() => setShowDocsVerifiedToast(false), 5000);
+            };
+
+            const handleScheduleInterview = () => {
+                setShowInterviewModal(false);
+                setInterviewScheduled(true);
+                setApplicationStatus("Interview Scheduled");
+                setShowInterviewScheduledToast(true);
+                setTimeout(() => setShowInterviewScheduledToast(false), 5000);
+
+                // Add a message to the discussion
+                setDiscussionMessages(prev => [
+                    ...prev,
+                    {
+                        id: prev.length + 1,
+                        sender: { name: "System", initials: "S", avatarColor: "hsl(var(--info))" },
+                        content: `Interview scheduled for August ${selectedDate}, ${selectedTime} with Principal and Ms. Davis.`,
+                        time: "Just now",
+                        type: "system"
+                    }
+                ]);
+            };
+
+            const handleSendDiscussion = () => {
+                if (!discussionInput.trim()) return;
+
+                setDiscussionMessages(prev => [
+                    ...prev,
+                    {
+                        id: prev.length + 1,
+                        sender: { name: "Principal", initials: "P", avatarColor: "hsl(var(--success))" },
+                        content: discussionInput,
+                        time: "Just now",
+                        type: "principal"
+                    }
+                ]);
+
+                setDiscussionInput("");
+            };
+
+            const handleApproveApplication = () => {
+                setShowApprovalModal(false);
+                setApplicationStatus("Approved");
+
+                // Add a message to the discussion
+                setDiscussionMessages(prev => [
+                    ...prev,
+                    {
+                        id: prev.length + 1,
+                        sender: { name: "System", initials: "S", avatarColor: "hsl(var(--info))" },
+                        content: "Application approved by Principal. Student profile created.",
+                        time: "Just now",
+                        type: "system"
+                    }
+                ]);
+            };
+
+            // Tab content components
+            const OverviewTab = () => (
+                <>
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <StatsCard
+                            title="Total Applications"
+                            value="124"
+                            change="↑ 12%"
+                            icon={<Icons.Document />}
+                            iconBgColor="hsl(var(--primary) / 0.1)"
+                            iconColor="hsl(var(--primary))"
+                        />
+                        <StatsCard
+                            title="Pending Review"
+                            value="28"
+                            change="↑ 5%"
+                            icon={<Icons.Clock />}
+                            iconBgColor="hsl(var(--warning) / 0.1)"
+                            iconColor="hsl(var(--warning))"
+                        />
+                        <StatsCard
+                            title="Interviews Scheduled"
+                            value="42"
+                            change="↑ 8%"
+                            icon={<Icons.Calendar />}
+                            iconBgColor="hsl(var(--info) / 0.1)"
+                            iconColor="hsl(var(--info))"
+                        />
+                        <StatsCard
+                            title="Approved"
+                            value="86"
+                            change="↑ 15%"
+                            icon={<Icons.Check />}
+                            iconBgColor="hsl(var(--success) / 0.1)"
+                            iconColor="hsl(var(--success))"
+                        />
+                    </div>
+
+                    {/* Interactive Admission Process Flow */}
+                    <Card className="mb-8">
+                        <CardHeader>
+                            <CardTitle>Admission Process Flow</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="process-flow-container relative">
+                                {/* SVG Process Flow Diagram */}
+                                <ProcessFlow activeStep={documentsVerified ? 2 : 1} />
+
+                                {/* Process Cards */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {/* Application Review Card */}
+                                    <ProcessCard
+                                        title="Application Review"
+                                        status="In Progress"
+                                        icon={<Icons.Document style={{ color: 'hsl(var(--primary))' }} />}
+                                        active={true}
+                                    >
+                                        <div className="mb-4">
+                                            <p className="text-sm mb-3 text-muted-foreground">
+                                                Review the application details and verify submitted documents.
+                                            </p>
+
+                                            <div className="bg-secondary p-3 rounded-lg mb-3">
+                                                <div className="flex justify-between items-center mb-2">
+                                                    <span className="font-medium text-sm">Aarav Sharma</span>
+                                                    <span className="text-xs text-muted-foreground">Class 5</span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-muted-foreground">Submitted: Today, 10:30 AM</span>
+                                                    <span
+                                                        className="text-xs font-medium cursor-pointer text-primary"
+                                                        onClick={() => setShowApplicationModal(true)}
+                                                    >
+                                                        View Details
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="primary"
+                                                    size="sm"
+                                                    onClick={() => setShowApplicationModal(true)}
+                                                >
+                                                    Verify Documents
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                >
+                                                    Request More Info
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </ProcessCard>
+
+                                    {/* Interview Scheduling Card */}
+                                    <ProcessCard
+                                        title="Interview Scheduling"
+                                        status={interviewScheduled ? "In Progress" : "Pending"}
+                                        icon={<Icons.Calendar style={{ color: interviewScheduled ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))' }} />}
+                                        active={interviewScheduled}
+                                    >
+                                        <div className="mb-4">
+                                            <p className="text-sm mb-3 text-muted-foreground">
+                                                Schedule an interview with the applicant and relevant staff members.
+                                            </p>
+
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    disabled={!documentsVerified}
+                                                    onClick={() => setShowInterviewModal(true)}
+                                                >
+                                                    Schedule Interview
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </ProcessCard>
+
+                                    {/* Principal Approval Card */}
+                                    <ProcessCard
+                                        title="Principal Approval"
+                                        status="Pending"
+                                        icon={<Icons.Check style={{ color: 'hsl(var(--muted-foreground))' }} />}
+                                        active={false}
+                                    >
+                                        <div className="mb-4">
+                                            <p className="text-sm mb-3 text-muted-foreground">
+                                                Final review and approval by the Principal after interview completion.
+                                            </p>
+
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    disabled={!interviewScheduled}
+                                                    onClick={() => setShowApprovalModal(true)}
+                                                >
+                                                    Approve Application
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </ProcessCard>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Recent Applications */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle>Recent Applications</CardTitle>
+                            <Button variant="outline" size="sm">View All</Button>
+                        </CardHeader>
+                        <CardContent>
+                            <ApplicationTable
+                                applications={applications}
+                                onViewApplication={() => setShowApplicationModal(true)}
+                            />
+                        </CardContent>
+                    </Card>
+                </>
+            );
+
+            const ApplicationsTab = () => (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>All Applications</CardTitle>
+                        <CardDescription>View and manage all student applications</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-wrap gap-4 mb-6">
+                            <div className="relative">
+                                <Input
+                                    type="text"
+                                    placeholder="Search applications..."
+                                    className="pl-10 pr-4 py-2"
+                                />
+                                <div className="absolute left-3 top-2.5 text-muted-foreground">
+                                    <Icons.Search />
+                                </div>
+                            </div>
+
+                            <Select className="w-auto">
+                                <option>All Classes</option>
+                                <option>Class 1</option>
+                                <option>Class 2</option>
+                                <option>Class 3</option>
+                                <option>Class 4</option>
+                                <option>Class 5</option>
+                            </Select>
+
+                            <Select className="w-auto">
+                                <option>All Statuses</option>
+                                <option>Document Review</option>
+                                <option>Interview Scheduled</option>
+                                <option>Approved</option>
+                                <option>Rejected</option>
+                            </Select>
+
+                            <Button variant="outline" size="sm" className="ml-auto">
+                                <Icons.Add className="mr-1" />
+                                New Application
+                            </Button>
+                        </div>
+
+                        <ApplicationTable
+                            applications={applications}
+                            onViewApplication={() => setShowApplicationModal(true)}
+                        />
+                    </CardContent>
+                </Card>
+            );
+
+            const InterviewsTab = () => (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Scheduled Interviews</CardTitle>
+                        <CardDescription>View and manage upcoming interviews</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {/* Calendar view would go here */}
+                        <div className="text-center py-8 text-muted-foreground">
+                            <Icons.Calendar style={{ width: '48px', height: '48px', margin: '0 auto 16px' }} />
+                            <p>No interviews scheduled yet</p>
+                            <p className="text-sm mt-2">Complete document verification to schedule interviews</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            );
+
+            const ReportsTab = () => (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Admission Reports</CardTitle>
+                        <CardDescription>View analytics and generate reports</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {/* Reports content would go here */}
+                        <div className="text-center py-8 text-muted-foreground">
+                            <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <p>Reports will be available once more applications are processed</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            );
+
+            // Application Detail Tab Components
+            const ApplicationDetailsTab = () => (
+                <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Student Details */}
+                        <div>
+                            <h5 className="font-medium mb-3">Student Details</h5>
+                            <div className="space-y-3">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Full Name</p>
+                                        <p className="font-medium">Aarav Sharma</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Date of Birth</p>
+                                        <p className="font-medium">January 15, 2016</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Gender</p>
+                                        <p className="font-medium">Male</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Applying for</p>
+                                        <p className="font-medium">Class 5</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Previous School</p>
+                                    <p className="font-medium">Delhi Public School</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Parent/Guardian Details */}
+                        <div>
+                            <h5 className="font-medium mb-3">Parent/Guardian Details</h5>
+                            <div className="space-y-3">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Parent Name</p>
+                                        <p className="font-medium">Rajesh Sharma</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Relationship</p>
+                                        <p className="font-medium">Father</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Email Address</p>
+                                        <p className="font-medium">rajesh.sharma@example.com</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-muted-foreground">Phone Number</p>
+                                        <p className="font-medium">+91 98765 43210</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Residential Address</p>
+                                    <p className="font-medium">123 Green Park, New Delhi, 110016</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-6">
+                        <h5 className="font-medium mb-3">Additional Information</h5>
+                        <div className="space-y-3">
+                            <div>
+                                <p className="text-sm text-muted-foreground">Reason for Applying</p>
+                                <p>We are looking for a school with strong academic programs and extracurricular activities. Simflo School's reputation for excellence in both areas makes it our top choice for Aarav's education.</p>
+                            </div>
+                            <div>
+                                <p className="text-sm text-muted-foreground">Special Needs or Requirements</p>
+                                <p>None</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const ApplicationDocumentsTab = () => (
+                <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {documents.map(doc => (
+                            <DocumentCard
+                                key={doc.id}
+                                name={doc.name}
+                                type={doc.type}
+                                icon={<Icons.Document style={{ color: doc.iconColor }} />}
+                                verified={verifiedDocuments[doc.id]}
+                                onView={() => { }}
+                                onVerify={() => handleVerifyDocument(doc.id)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="mt-6 flex justify-between items-center">
+                        <div>
+                            <span className="text-sm font-medium">Document Verification: </span>
+                            <span className="text-sm text-muted-foreground">
+                                {Object.values(verifiedDocuments).filter(Boolean).length} of {documents.length} verified
+                            </span>
+                        </div>
+                        <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={handleVerifyAllDocuments}
+                        >
+                            Verify All Documents
+                        </Button>
+                    </div>
+                </div>
+            );
+
+            const ApplicationDiscussionTab = () => (
+                <div>
+                    <div className="discussion-thread mb-4 max-h-[300px] overflow-y-auto">
+                        {discussionMessages.map(message => (
+                            <Message
+                                key={message.id}
+                                sender={message.sender}
+                                content={message.content}
+                                time={message.time}
+                                type={message.type}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="relative">
+                        <textarea
+                            className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:border-transparent"
+                            rows="3"
+                            placeholder="Type an internal note or @mention..."
+                            style={{
+                                borderColor: 'hsl(var(--border))',
+                                borderRadius: 'var(--radius)',
+                                '--tw-ring-color': 'hsl(var(--ring))'
+                            }}
+                            value={discussionInput}
+                            onChange={(e) => setDiscussionInput(e.target.value)}
+                        />
+
+                        <div className="flex justify-end mt-2">
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={handleSendDiscussion}
+                            >
+                                Send
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const ApplicationTimelineTab = () => (
+                <div className="space-y-4">
+                    <ProcessStep
+                        title="Application Submitted"
+                        date="Today, 10:30 AM"
+                        description="Application for Aarav Sharma was submitted by Rajesh Sharma (Father)"
+                        status="completed"
+                    />
+
+                    <ProcessStep
+                        title="Document Verification"
+                        date={documentsVerified ? "Today, 11:15 AM - Completed" : "Today, 10:45 AM - In Progress"}
+                        description="Admissions Officer started document verification process"
+                        status={documentsVerified ? "completed" : "active"}
+                    />
+
+                    <ProcessStep
+                        title="Interview"
+                        date={interviewScheduled ? "Scheduled for August 6, 11:00 AM" : "Not Scheduled"}
+                        description={interviewScheduled ? "Interview scheduled with Principal and Ms. Davis" : null}
+                        status={interviewScheduled ? "active" : ""}
+                    />
+
+                    <ProcessStep
+                        title="Final Decision"
+                        date="Pending"
+                        status=""
+                    />
+                </div>
+            );
+
+            return (
+                <div className="flex">
+                    {/* Sidebar */}
+                    <Sidebar
+                        collapsed={sidebarCollapsed}
+                        toggleSidebar={toggleSidebar}
+                        activeView={activeView}
+                        setActiveView={setActiveView}
+                    />
+
+                    {/* Main Content */}
+                    <div className={cn("main-content min-h-screen", sidebarCollapsed && "main-content-expanded")}>
+                        <Header title="Admissions Dashboard" />
+
+                        <div className="p-6">
+                            {/* Tabs */}
+                            <Tabs className="mb-6">
+                                <Tab
+                                    label="Overview"
+                                    active={activeTab === 'overview'}
+                                    onClick={() => setActiveTab('overview')}
+                                />
+                                <Tab
+                                    label="Applications"
+                                    active={activeTab === 'applications'}
+                                    onClick={() => setActiveTab('applications')}
+                                />
+                                <Tab
+                                    label="Interviews"
+                                    active={activeTab === 'interviews'}
+                                    onClick={() => setActiveTab('interviews')}
+                                />
+                                <Tab
+                                    label="Reports"
+                                    active={activeTab === 'reports'}
+                                    onClick={() => setActiveTab('reports')}
+                                />
+                            </Tabs>
+
+                            {/* Tab Content */}
+                            {activeTab === 'overview' && <OverviewTab />}
+                            {activeTab === 'applications' && <ApplicationsTab />}
+                            {activeTab === 'interviews' && <InterviewsTab />}
+                            {activeTab === 'reports' && <ReportsTab />}
+                        </div>
+                    </div>
+
+                    {/* Application Detail Modal */}
+                    <Dialog
+                        isOpen={showApplicationModal}
+                        onClose={() => setShowApplicationModal(false)}
+                        title="Application: Aarav Sharma"
+                        maxWidth="900px"
+                        footer={
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setShowApplicationModal(false)}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    disabled={!documentsVerified}
+                                    onClick={() => {
+                                        setShowApplicationModal(false);
+                                        setShowInterviewModal(true);
+                                    }}
+                                >
+                                    Proceed to Interview
+                                </Button>
+                            </>
+                        }
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <div className="flex items-center">
+                                <Avatar initials="AS" size="lg" bgColor="hsl(var(--primary))" />
+                                <div className="ml-3">
+                                    <h4 className="font-medium">Aarav Sharma</h4>
+                                    <p className="text-sm text-muted-foreground">Class 5 Application</p>
+                                </div>
+                            </div>
+                            <StatusBadge status={applicationStatus} />
+                        </div>
+
+                        {/* Application Tabs */}
+                        <Tabs className="mb-4">
+                            <Tab
+                                label="Details"
+                                active={activeAppTab === 'details'}
+                                onClick={() => setActiveAppTab('details')}
+                            />
+                            <Tab
+                                label="Documents"
+                                active={activeAppTab === 'documents'}
+                                onClick={() => setActiveAppTab('documents')}
+                            />
+                            <Tab
+                                label="Discussion"
+                                active={activeAppTab === 'discussion'}
+                                onClick={() => setActiveAppTab('discussion')}
+                            />
+                            <Tab
+                                label="Timeline"
+                                active={activeAppTab === 'timeline'}
+                                onClick={() => setActiveAppTab('timeline')}
+                            />
+                        </Tabs>
+
+                        {/* Application Tab Content */}
+                        {activeAppTab === 'details' && <ApplicationDetailsTab />}
+                        {activeAppTab === 'documents' && <ApplicationDocumentsTab />}
+                        {activeAppTab === 'discussion' && <ApplicationDiscussionTab />}
+                        {activeAppTab === 'timeline' && <ApplicationTimelineTab />}
+                    </Dialog>
+
+                    {/* Schedule Interview Modal */}
+                    <Dialog
+                        isOpen={showInterviewModal}
+                        onClose={() => setShowInterviewModal(false)}
+                        title="Schedule Interview"
+                        footer={
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setShowInterviewModal(false)}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    onClick={handleScheduleInterview}
+                                >
+                                    Confirm & Schedule
+                                </Button>
+                            </>
+                        }
+                    >
+                        <div className="mb-6">
+                            <p className="mb-2">
+                                Scheduling interview for <span className="font-medium">Aarav Sharma</span> (Class 5)
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Parent: Rajesh Sharma | Contact: +91 98765 43210
+                            </p>
+                        </div>
+
+                        <div className="mb-4">
+                            <p className="text-sm font-medium mb-2">Interview Panel</p>
+                            <div className="flex space-x-2">
+                                <div className="flex items-center bg-secondary rounded-full px-3 py-1">
+                                    <Avatar initials="P" size="sm" bgColor="hsl(var(--success))" />
+                                    <span className="text-sm ml-2">Principal</span>
+                                </div>
+                                <div className="flex items-center bg-secondary rounded-full px-3 py-1">
+                                    <Avatar initials="MD" size="sm" bgColor="hsl(var(--warning))" />
+                                    <span className="text-sm ml-2">Ms. Davis</span>
+                                </div>
+                                <button className="flex items-center bg-secondary rounded-full px-2 py-1">
+                                    <Icons.Add />
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Calendar */}
+                            <div>
+                                <Label>Select Date</Label>
+                                <Card className="p-4">
+                                    <Calendar
+                                        selectedDate={selectedDate}
+                                        onSelectDate={setSelectedDate}
+                                    />
+                                </Card>
+                            </div>
+
+                            {/* Time Slots */}
+                            <div>
+                                <Label>Select Time</Label>
+                                <Card className="p-4">
+                                    <TimeSlots
+                                        selectedDate={selectedDate}
+                                        selectedTime={selectedTime}
+                                        onSelectTime={setSelectedTime}
+                                    />
+                                </Card>
+                            </div>
+                        </div>
+
+                        {/* Interview Details */}
+                        <div className="mt-6">
+                            <Label>Interview Type</Label>
+                            <div className="flex space-x-4 mb-4">
+                                <label className="flex items-center">
+                                    <input type="radio" name="interviewType" className="mr-2" defaultChecked />
+                                    <span>In-Person</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <input type="radio" name="interviewType" className="mr-2" />
+                                    <span>Virtual</span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <Label>Location</Label>
+                                <Select className="mb-4">
+                                    <option>Principal's Office</option>
+                                    <option>Conference Room A</option>
+                                    <option>Conference Room B</option>
+                                    <option>Admissions Office</option>
+                                </Select>
+                            </div>
+
+                            <div>
+                                <Label>Notes</Label>
+                                <textarea
+                                    className="input h-auto"
+                                    rows="2"
+                                    placeholder="Add any specific instructions or notes..."
+                                />
+                            </div>
+                        </div>
+                    </Dialog>
+
+                    {/* Approval Confirmation Modal */}
+                    <Dialog
+                        isOpen={showApprovalModal}
+                        onClose={() => setShowApprovalModal(false)}
+                        title="Approve Application"
+                        maxWidth="480px"
+                        footer={
+                            <>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setShowApprovalModal(false)}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="success"
+                                    onClick={handleApproveApplication}
+                                >
+                                    Confirm & Approve
+                                </Button>
+                            </>
+                        }
+                    >
+                        <div className="flex items-center mb-4">
+                            <div className="bg-success/10 p-3 rounded-full mr-4">
+                                <Icons.Check className="text-success w-6 h-6" />
+                            </div>
+                            <div>
+                                <h4 className="font-medium mb-1">Approve Application</h4>
+                                <p className="text-sm text-muted-foreground">
+                                    Are you sure you want to approve this application? This will create a new student profile.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="bg-secondary p-4 rounded-lg mb-4">
+                            <div className="flex items-center mb-2">
+                                <Icons.Info className="mr-2" />
+                                <span className="font-medium text-sm">What happens next?</span>
+                            </div>
+                            <ul className="text-sm space-y-2 pl-7 list-disc text-muted-foreground">
+                                <li>A new student profile will be created for Aarav Sharma</li>
+                                <li>Student will be enrolled in Class 5 for 2026-2027</li>
+                                <li>An automated welcome email will be sent to the parent</li>
+                                <li>This application will be marked as "Closed"</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <Label>Additional Notes (Optional)</Label>
+                            <textarea
+                                className="input h-auto"
+                                rows="2"
+                                placeholder="Add any notes about this approval..."
+                            />
+                        </div>
+                    </Dialog>
+
+                    {/* Toast Notifications */}
+                    <ToastContainer>
+                        <Toast
+                            type="success"
+                            title="Documents Verified"
+                            message="All documents for Aarav Sharma have been verified."
+                            isVisible={showDocsVerifiedToast}
+                            onClose={() => setShowDocsVerifiedToast(false)}
+                        />
+
+                        <Toast
+                            type="success"
+                            title="Interview Scheduled"
+                            message={`Interview for Aarav Sharma scheduled for Aug ${selectedDate}, ${selectedTime}.`}
+                            isVisible={showInterviewScheduledToast}
+                            onClose={() => setShowInterviewScheduledToast(false)}
+                        />
+                    </ToastContainer>
+                </div>
+            );
+        };
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9655ec9fe135a90b',t:'MTc1MzU1NDE2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
