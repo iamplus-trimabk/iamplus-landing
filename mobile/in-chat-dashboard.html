@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simflo - Interactive Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-purple': '#7B54FA',
+                        'light-lavender': '#F7F7F7',
+                        'text-primary': '#1E1E1E',
+                        'text-secondary': '#606060',
+                        'success': '#28A745',
+                        'warning': '#FFC107',
+                        'error': '#DC3545',
+                        'light-gray': '#F7F7F7',
+                        'border-light': '#E0E0E0',
+                        'green-accent': '#34C759',
+                        'red-accent': '#FF3B30',
+                        'blue-accent': '#007AFF',
+                        'orange-accent': '#FF9500'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .card-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .widget-hover:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .dotted-divider {
+            border-left: 2px dotted #E0E0E0;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .page-transition {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .container {
+            max-width: 390px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px;
+            }
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            z-index: 50;
+            min-width: 150px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            min-width: 280px;
+            max-width: 90vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Centered Modal Component
+        const CenteredModal = ({ isOpen, onClose, title, options }) => {
+            const modalRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (modalRef.current && !modalRef.current.contains(event.target)) {
+                        onClose();
+                    }
+                };
+
+                if (isOpen) {
+                    document.addEventListener('mousedown', handleClickOutside);
+                    document.body.style.overflow = 'hidden';
+                }
+
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                    document.body.style.overflow = 'unset';
+                };
+            }, [isOpen, onClose]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div className="modal-overlay">
+                    <div ref={modalRef} className="modal-content">
+                        <div className="p-6">
+                            <h3 className="text-xl font-semibold text-text-primary mb-6 text-center">{title}</h3>
+                            <div className="space-y-2">
+                                {options.map((option, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            option.onClick();
+                                            onClose();
+                                        }}
+                                        className="w-full flex items-center space-x-3 p-4 text-left hover:bg-light-gray rounded-lg transition-colors"
+                                    >
+                                        <div className={`w-10 h-10 ${option.bgColor} rounded-full flex items-center justify-center`}>
+                                            <i className={`${option.icon} text-white`}></i>
+                                        </div>
+                                        <span className="text-text-primary font-medium">{option.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                            <button
+                                onClick={onClose}
+                                className="w-full mt-6 p-3 text-text-secondary hover:text-text-primary border border-border-light rounded-lg transition-colors"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Dropdown Menu Component
+        const DropdownMenu = ({ isOpen, onClose, options }) => {
+            const dropdownRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                        onClose();
+                    }
+                };
+
+                if (isOpen) {
+                    document.addEventListener('mousedown', handleClickOutside);
+                }
+
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                };
+            }, [isOpen, onClose]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div ref={dropdownRef} className="dropdown-menu">
+                    {options.map((option, index) => (
+                        <button
+                            key={index}
+                            onClick={() => {
+                                option.onClick();
+                                onClose();
+                            }}
+                            className="w-full text-left px-4 py-3 text-sm text-text-primary hover:bg-light-gray first:rounded-t-xl last:rounded-b-xl"
+                        >
+                            <i className={`${option.icon} mr-2`}></i>
+                            {option.label}
+                        </button>
+                    ))}
+                </div>
+            );
+        };
+
+        // Progress Ring Component
+        const ProgressRing = ({ percentage, size = 48 }) => {
+            const radius = 15.915;
+            const circumference = 2 * Math.PI * radius;
+            const strokeDasharray = `${percentage} ${100 - percentage}`;
+
+            return (
+                <svg className={`w-12 h-12 progress-ring`} viewBox="0 0 42 42">
+                    <circle cx="21" cy="21" r={radius} fill="transparent" stroke="#e5e7eb" strokeWidth="3" />
+                    <circle
+                        cx="21" cy="21" r={radius} fill="transparent" stroke="#34c759" strokeWidth="3"
+                        strokeDasharray={strokeDasharray} strokeLinecap="round"
+                    />
+                    <text x="21" y="21" textAnchor="middle" dy="0.3em" className="text-xs font-bold fill-current text-text-primary">
+                        {percentage}%
+                    </text>
+                </svg>
+            );
+        };
+
+        // Reusable Dashboard Widget Component
+        const DashboardWidget = ({ icon, title, iconBg, mainStat, mainLabel, subStats, onClick, showMenu = false, menuOptions = [] }) => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            return (
+                <div
+                    className="bg-white rounded-xl card-shadow widget-hover transition-all duration-300 cursor-pointer"
+                    onClick={onClick}
+                >
+                    <div className="p-4">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-3">
+                                <div className={`w-8 h-8 ${iconBg} rounded-lg flex items-center justify-center`}>
+                                    <i className={`${icon} text-sm`}></i>
+                                </div>
+                                <h3 className="font-semibold text-text-primary text-sm">{title}</h3>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                {showMenu && (
+                                    <div className="relative">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsMenuOpen(!isMenuOpen);
+                                            }}
+                                            className="text-text-secondary hover:text-text-primary p-1"
+                                        >
+                                            <i className="fas fa-ellipsis-v text-xs"></i>
+                                        </button>
+                                        <DropdownMenu
+                                            isOpen={isMenuOpen}
+                                            onClose={() => setIsMenuOpen(false)}
+                                            options={menuOptions}
+                                        />
+                                    </div>
+                                )}
+                                <i className="fas fa-arrow-right text-text-secondary text-xs"></i>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center">
+                            <div className="w-2/5">
+                                <p className="text-xs text-text-secondary mb-1">{mainLabel}</p>
+                                <p className="text-lg font-bold text-text-primary">{mainStat}</p>
+                            </div>
+
+                            <div className="dotted-divider h-8 mx-3"></div>
+
+                            <div className="flex-1 flex items-center space-x-3">
+                                {subStats.map((stat, index) => (
+                                    <React.Fragment key={index}>
+                                        <div className="flex-1">
+                                            <p className="text-xs text-text-secondary mb-1">{stat.label}</p>
+                                            <p className={`text-sm font-bold ${stat.color}`}>{stat.value}</p>
+                                        </div>
+                                        {index < subStats.length - 1 && <div className="dotted-divider h-6"></div>}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Header Component
+        const Header = () => (
+            <div className="bg-light-lavender px-4 py-3 flex items-center justify-between">
+                <button className="text-text-primary">
+                    <i className="fas fa-arrow-left text-lg"></i>
+                </button>
+
+                <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-brand-purple rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                        ST
+                    </div>
+                    <div className="text-center">
+                        <h1 className="font-semibold text-sm text-text-primary">Simflo UX Team</h1>
+                        <p className="text-xs text-text-secondary">10 Members</p>
+                    </div>
+                </div>
+
+                <div className="flex space-x-3">
+                    <button className="text-text-primary">
+                        <i className="fas fa-video text-lg"></i>
+                    </button>
+                    <button className="text-text-primary">
+                        <i className="fas fa-phone text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        );
+
+        // Navigation Tabs Component
+        const NavigationTabs = ({ activeTab, onTabChange }) => (
+            <div className="px-4 py-3 flex justify-center space-x-3">
+                {['chats', 'dashboard', 'members'].map(tab => (
+                    <button
+                        key={tab}
+                        onClick={() => onTabChange(tab)}
+                        className={`px-4 py-2 rounded-full font-medium text-sm ${activeTab === tab
+                                ? 'bg-brand-purple text-white'
+                                : 'bg-white text-text-secondary'
+                            }`}
+                    >
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </button>
+                ))}
+            </div>
+        );
+
+        // Toast Component
+        const Toast = ({ message, isVisible, onClose }) => (
+            <div className={`fixed top-4 right-4 bg-green-accent text-white px-4 py-3 rounded-lg card-shadow transform transition-transform duration-300 z-50 ${isVisible ? 'translate-x-0' : 'translate-x-full'
+                }`}>
+                <div className="flex items-center space-x-2">
+                    <i className="fas fa-check-circle"></i>
+                    <span className="text-sm">{message}</span>
+                </div>
+            </div>
+        );
+
+        // Main App Component
+        const SimfloApp = () => {
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [currentView, setCurrentView] = useState('main');
+            const [toast, setToast] = useState({ message: '', isVisible: false });
+            const [modalState, setModalState] = useState({ isOpen: false, title: '', options: [] });
+
+            const showToast = (message) => {
+                setToast({ message, isVisible: true });
+                setTimeout(() => setToast({ message: '', isVisible: false }), 3000);
+            };
+
+            const showModal = (title, options) => {
+                setModalState({ isOpen: true, title, options });
+            };
+
+            const closeModal = () => {
+                setModalState({ isOpen: false, title: '', options: [] });
+            };
+
+            const handleWidgetClick = (widgetType) => {
+                setCurrentView(widgetType);
+                showToast(`Opening ${widgetType} details`);
+            };
+
+            const handleBackClick = () => {
+                setCurrentView('main');
+            };
+
+            const handleMemberAction = (memberName, action) => {
+                const actionOptions = [
+                    {
+                        icon: 'fas fa-bell',
+                        label: 'Remind/Settle',
+                        bgColor: 'bg-brand-purple',
+                        onClick: () => showToast(`Reminded ${memberName}`)
+                    },
+                    {
+                        icon: 'fas fa-phone',
+                        label: 'Call',
+                        bgColor: 'bg-green-accent',
+                        onClick: () => showToast(`Calling ${memberName}`)
+                    },
+                    {
+                        icon: 'fas fa-comment',
+                        label: 'Message',
+                        bgColor: 'bg-orange-accent',
+                        onClick: () => showToast(`Messaging ${memberName}`)
+                    }
+                ];
+
+                showModal(`Actions for ${memberName}`, actionOptions);
+            };
+
+            // Widget configurations
+            const widgets = [
+                {
+                    id: 'split-money',
+                    icon: 'fas fa-receipt text-brand-purple',
+                    title: 'Split Money',
+                    iconBg: 'bg-brand-purple bg-opacity-10',
+                    mainStat: '₹12,450',
+                    mainLabel: 'Total',
+                    subStats: [
+                        { label: 'Will Get', value: '₹3,200', color: 'text-green-accent' },
+                        { label: 'Will Pay', value: '₹1,850', color: 'text-red-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-plus', label: 'Add Expense', onClick: () => showToast('Add expense clicked') },
+                        { icon: 'fas fa-download', label: 'Export', onClick: () => showToast('Export clicked') },
+                        { icon: 'fas fa-cog', label: 'Settings', onClick: () => showToast('Settings clicked') }
+                    ]
+                },
+                {
+                    id: 'tasks',
+                    icon: 'fas fa-tasks text-blue-600',
+                    title: 'Task Management',
+                    iconBg: 'bg-blue-50',
+                    mainStat: '30',
+                    mainLabel: 'Total',
+                    subStats: [
+                        { label: 'Pending', value: '15', color: 'text-orange-accent' },
+                        { label: 'Overdue', value: '01', color: 'text-red-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-plus', label: 'New Task', onClick: () => showToast('New task clicked') },
+                        { icon: 'fas fa-filter', label: 'Filter', onClick: () => showToast('Filter clicked') },
+                        { icon: 'fas fa-chart-bar', label: 'Reports', onClick: () => showToast('Reports clicked') }
+                    ]
+                },
+                {
+                    id: 'calendar',
+                    icon: 'fas fa-calendar text-green-600',
+                    title: 'Calendar',
+                    iconBg: 'bg-green-50',
+                    mainStat: '8',
+                    mainLabel: 'Events',
+                    subStats: [
+                        { label: 'Today', value: '2', color: 'text-brand-purple' },
+                        { label: 'This Week', value: '5', color: 'text-blue-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-plus', label: 'New Event', onClick: () => showToast('New event clicked') },
+                        { icon: 'fas fa-sync', label: 'Sync', onClick: () => showToast('Sync clicked') },
+                        { icon: 'fas fa-bell', label: 'Notifications', onClick: () => showToast('Notifications clicked') }
+                    ]
+                },
+                {
+                    id: 'budget',
+                    icon: 'fas fa-wallet text-purple-600',
+                    title: 'Budget',
+                    iconBg: 'bg-purple-50',
+                    mainStat: '₹45,000',
+                    mainLabel: 'Total',
+                    subStats: [
+                        { label: 'Spent', value: '₹28,500', color: 'text-red-accent' },
+                        { label: 'Remaining', value: '₹16,500', color: 'text-green-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-plus', label: 'Add Category', onClick: () => showToast('Add category clicked') },
+                        { icon: 'fas fa-chart-pie', label: 'Analytics', onClick: () => showToast('Analytics clicked') },
+                        { icon: 'fas fa-edit', label: 'Edit Budget', onClick: () => showToast('Edit budget clicked') }
+                    ]
+                },
+                {
+                    id: 'attendance',
+                    icon: 'fas fa-user-check text-indigo-600',
+                    title: 'Attendance',
+                    iconBg: 'bg-indigo-50',
+                    mainStat: '85%',
+                    mainLabel: 'Average',
+                    subStats: [
+                        { label: 'Present', value: '8', color: 'text-green-accent' },
+                        { label: 'Absent', value: '2', color: 'text-red-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-clock', label: 'Check In/Out', onClick: () => showToast('Check in/out clicked') },
+                        { icon: 'fas fa-calendar-alt', label: 'View History', onClick: () => showToast('View history clicked') },
+                        { icon: 'fas fa-file-export', label: 'Export Report', onClick: () => showToast('Export report clicked') }
+                    ]
+                },
+                {
+                    id: 'bills',
+                    icon: 'fas fa-file-invoice text-orange-600',
+                    title: 'Bill Payments',
+                    iconBg: 'bg-orange-50',
+                    mainStat: '₹8,750',
+                    mainLabel: 'Pending',
+                    subStats: [
+                        { label: 'Due Today', value: '3', color: 'text-red-accent' },
+                        { label: 'Paid', value: '12', color: 'text-green-accent' }
+                    ],
+                    showMenu: true,
+                    menuOptions: [
+                        { icon: 'fas fa-plus', label: 'Add Bill', onClick: () => showToast('Add bill clicked') },
+                        { icon: 'fas fa-credit-card', label: 'Pay Now', onClick: () => showToast('Pay now clicked') },
+                        { icon: 'fas fa-bell', label: 'Reminders', onClick: () => showToast('Reminders clicked') }
+                    ]
+                }
+            ];
+
+            // Detail view data
+            const getDetailData = (viewType) => {
+                const detailData = {
+                    'split-money': {
+                        title: 'Split Money',
+                        icon: 'fas fa-receipt text-brand-purple',
+                        iconBg: 'bg-brand-purple bg-opacity-10',
+                        items: [
+                            { name: 'Arjun Sharma', avatar: 'A', bg: 'bg-blue-500', amount: '₹1,200', status: 'owes', date: 'Dec 20' },
+                            { name: 'Sneha Patel', avatar: 'S', bg: 'bg-green-500', amount: '₹850', status: 'lends', date: 'Dec 22' },
+                            { name: 'Rahul Kumar', avatar: 'R', bg: 'bg-red-500', amount: '₹650', status: 'owes', date: 'Dec 25' },
+                            { name: 'Priya Singh', avatar: 'P', bg: 'bg-purple-500', amount: '₹0', status: 'settled', date: 'Settled' }
+                        ]
+                    },
+                    'tasks': {
+                        title: 'Task Management',
+                        icon: 'fas fa-tasks text-blue-600',
+                        iconBg: 'bg-blue-50',
+                        items: [
+                            { name: 'TM 101. Prepare Wireframe', members: '4 Members', due: 'Due: 17 July', priority: 'High', progress: 75, priorityColor: 'text-red-accent' },
+                            { name: 'TM 102. Design System Setup', members: '3 Members', due: 'Due: 20 July', priority: 'Low', progress: 65, priorityColor: 'text-green-accent' },
+                            { name: 'TM 103. User Research Analysis', members: '2 Members', due: 'Due: 22 July', priority: 'High', progress: 50, priorityColor: 'text-red-accent' },
+                            { name: 'TM 104. Prototype Testing', members: '5 Members', due: 'Due: 25 July', priority: 'Low', progress: 95, priorityColor: 'text-green-accent' }
+                        ]
+                    },
+                    'calendar': {
+                        title: 'Calendar Events',
+                        icon: 'fas fa-calendar text-green-600',
+                        iconBg: 'bg-green-50',
+                        items: [
+                            { name: 'Team Standup', time: '9:00 AM - 9:30 AM', date: 'Today', type: 'meeting', color: 'border-brand-purple' },
+                            { name: 'Design Review', time: '2:00 PM - 3:00 PM', date: 'Today', type: 'review', color: 'border-blue-accent' },
+                            { name: 'Client Presentation', time: '10:00 AM - 11:00 AM', date: 'Tomorrow', type: 'presentation', color: 'border-red-accent' },
+                            { name: 'Sprint Planning', time: '3:00 PM - 4:00 PM', date: 'Dec 25', type: 'planning', color: 'border-green-accent' }
+                        ]
+                    },
+                    'budget': {
+                        title: 'Budget Overview',
+                        icon: 'fas fa-wallet text-purple-600',
+                        iconBg: 'bg-purple-50',
+                        items: [
+                            { name: 'Software Licenses', amount: '₹12,000', spent: '₹8,500', category: 'Tools', progress: 71 },
+                            { name: 'Marketing Campaign', amount: '₹15,000', spent: '₹12,000', category: 'Marketing', progress: 80 },
+                            { name: 'Office Supplies', amount: '₹8,000', spent: '₹3,500', category: 'Operations', progress: 44 },
+                            { name: 'Team Events', amount: '₹10,000', spent: '₹4,500', category: 'HR', progress: 45 }
+                        ]
+                    },
+                    'attendance': {
+                        title: 'Team Attendance',
+                        icon: 'fas fa-user-check text-indigo-600',
+                        iconBg: 'bg-indigo-50',
+                        items: [
+                            { name: 'Arjun Sharma', avatar: 'A', bg: 'bg-blue-500', status: 'present', time: '9:15 AM', hours: '8.5h' },
+                            { name: 'Sneha Patel', avatar: 'S', bg: 'bg-green-500', status: 'present', time: '9:00 AM', hours: '8.0h' },
+                            { name: 'Rahul Kumar', avatar: 'R', bg: 'bg-red-500', status: 'absent', time: '-', hours: '0h' },
+                            { name: 'Priya Singh', avatar: 'P', bg: 'bg-purple-500', status: 'late', time: '10:30 AM', hours: '6.5h' }
+                        ]
+                    },
+                    'bills': {
+                        title: 'Bill Payments',
+                        icon: 'fas fa-file-invoice text-orange-600',
+                        iconBg: 'bg-orange-50',
+                        items: [
+                            { name: 'Office Rent', amount: '₹25,000', due: 'Due Today', status: 'pending', vendor: 'Property Manager' },
+                            { name: 'Internet Bill', amount: '₹2,500', due: 'Due in 2 days', status: 'pending', vendor: 'Airtel Business' },
+                            { name: 'Software License', amount: '₹15,000', due: 'Paid', status: 'paid', vendor: 'Adobe Creative' },
+                            { name: 'Electricity Bill', amount: '₹3,200', due: 'Due in 5 days', status: 'pending', vendor: 'BESCOM' }
+                        ]
+                    }
+                };
+                return detailData[viewType] || { title: '', icon: '', iconBg: '', items: [] };
+            };
+
+            const renderDetailView = () => {
+                const data = getDetailData(currentView);
+                const widget = widgets.find(w => w.id === currentView);
+
+                return (
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        <div className="p-4">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <button onClick={handleBackClick} className="text-text-secondary hover:text-text-primary">
+                                    <i className="fas fa-arrow-left text-lg"></i>
+                                </button>
+                                <div className={`w-8 h-8 ${data.iconBg} rounded-lg flex items-center justify-center`}>
+                                    <i className={`${data.icon} text-sm`}></i>
+                                </div>
+                                <h2 className="text-lg font-semibold text-text-primary">{data.title}</h2>
+                            </div>
+
+                            {/* Widget Summary */}
+                            <div className="mb-4">
+                                <DashboardWidget
+                                    {...widget}
+                                    onClick={() => { }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Scrollable List */}
+                        <div className="flex-1 overflow-y-auto px-4 pb-4">
+                            <div className="space-y-3">
+                                {data.items.map((item, index) => (
+                                    <div key={index} className="bg-white rounded-xl p-4 card-shadow">
+                                        <div className="flex items-center justify-between">
+                                            {currentView === 'split-money' && (
+                                                <>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className={`w-8 h-8 ${item.bg} rounded-full flex items-center justify-center text-white font-semibold text-xs`}>
+                                                            {item.avatar}
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-semibold text-text-primary text-sm">{item.name}</h4>
+                                                            <p className="text-xs text-text-secondary">Last settled: {item.date}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="text-right">
+                                                            <p className={`font-semibold text-sm ${item.status === 'owes' ? 'text-green-600' : item.status === 'lends' ? 'text-red-500' : 'text-gray-600'}`}>
+                                                                {item.amount}
+                                                            </p>
+                                                            <p className="text-xs text-text-secondary">{item.date}</p>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleMemberAction(item.name, 'action')}
+                                                            className="text-text-secondary hover:text-text-primary p-1"
+                                                        >
+                                                            <i className="fas fa-ellipsis-v text-xs"></i>
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                            {currentView === 'tasks' && (
+                                                <>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-bold text-text-primary mb-1 text-sm">{item.name}</h4>
+                                                        <div className="flex items-center space-x-2 text-xs">
+                                                            <span className="text-text-secondary">{item.members}</span>
+                                                            <span className="text-text-secondary">|</span>
+                                                            <span className="text-text-primary">{item.due}</span>
+                                                            <span className="text-text-secondary">|</span>
+                                                            <span className={`${item.priorityColor} font-medium`}>Priority: {item.priority}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-3">
+                                                        <ProgressRing percentage={item.progress} />
+                                                        <button
+                                                            onClick={() => handleMemberAction(item.name, 'task')}
+                                                            className="text-text-secondary hover:text-text-primary p-1"
+                                                        >
+                                                            <i className="fas fa-ellipsis-v text-xs"></i>
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                            {currentView === 'calendar' && (
+                                                <>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="text-center">
+                                                            <p className="text-xs text-brand-purple font-medium">
+                                                                {item.date === 'Today' ? 'TODAY' : item.date === 'Tomorrow' ? 'TMR' : 'DEC'}
+                                                            </p>
+                                                            <p className="text-sm font-bold text-brand-purple">
+                                                                {item.date === 'Today' || item.date === 'Tomorrow' ? new Date().getDate() : '25'}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-semibold text-text-primary text-sm">{item.name}</h4>
+                                                            <p className="text-xs text-text-secondary">{item.time}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleMemberAction(item.name, 'event')}
+                                                        className="text-text-secondary hover:text-text-primary p-1"
+                                                    >
+                                                        <i className="fas fa-ellipsis-v text-xs"></i>
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {currentView === 'budget' && (
+                                                <>
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div>
+                                                                <h4 className="font-semibold text-text-primary text-sm">{item.name}</h4>
+                                                                <p className="text-xs text-text-secondary">{item.category}</p>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="font-semibold text-text-primary text-sm">{item.spent} / {item.amount}</p>
+                                                                <p className="text-xs text-text-secondary">{item.progress}% used</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="w-full h-2 bg-gray-200 rounded-full">
+                                                            <div
+                                                                className={`h-2 rounded-full ${item.progress > 80 ? 'bg-red-accent' : item.progress > 60 ? 'bg-orange-accent' : 'bg-green-accent'}`}
+                                                                style={{ width: `${item.progress}%` }}
+                                                            ></div>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleMemberAction(item.name, 'budget')}
+                                                        className="text-text-secondary hover:text-text-primary p-1 ml-3"
+                                                    >
+                                                        <i className="fas fa-ellipsis-v text-xs"></i>
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {currentView === 'attendance' && (
+                                                <>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className={`w-8 h-8 ${item.bg} rounded-full flex items-center justify-center text-white font-semibold text-xs`}>
+                                                            {item.avatar}
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-semibold text-text-primary text-sm">{item.name}</h4>
+                                                            <p className="text-xs text-text-secondary">Check-in: {item.time}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="text-right">
+                                                            <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${item.status === 'present' ? 'bg-green-100 text-green-700' :
+                                                                    item.status === 'absent' ? 'bg-red-100 text-red-700' :
+                                                                        'bg-orange-100 text-orange-700'
+                                                                }`}>
+                                                                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                                                            </span>
+                                                            <p className="text-xs text-text-secondary mt-1">{item.hours}</p>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleMemberAction(item.name, 'attendance')}
+                                                            className="text-text-secondary hover:text-text-primary p-1"
+                                                        >
+                                                            <i className="fas fa-ellipsis-v text-xs"></i>
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+
+                                            {currentView === 'bills' && (
+                                                <>
+                                                    <div>
+                                                        <h4 className="font-semibold text-text-primary text-sm">{item.name}</h4>
+                                                        <p className="text-xs text-text-secondary">{item.vendor}</p>
+                                                        <p className={`text-xs font-medium ${item.status === 'pending' ? 'text-red-accent' : 'text-green-accent'}`}>
+                                                            {item.due}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="text-right">
+                                                            <p className="font-semibold text-text-primary text-sm">{item.amount}</p>
+                                                            <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${item.status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                                                }`}>
+                                                                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                                                            </span>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleMemberAction(item.name, 'bill')}
+                                                            className="text-text-secondary hover:text-text-primary p-1"
+                                                        >
+                                                            <i className="fas fa-ellipsis-v text-xs"></i>
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const renderMainDashboard = () => (
+                <div className="flex-1 overflow-y-auto p-4">
+                    <div className="space-y-4">
+                        {widgets.map(widget => (
+                            <DashboardWidget
+                                key={widget.id}
+                                {...widget}
+                                onClick={() => handleWidgetClick(widget.id)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="container bg-white h-screen flex flex-col">
+                    <Header />
+                    <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+                    <div className="flex-1 overflow-hidden">
+                        {activeTab === 'dashboard' && (
+                            currentView === 'main' ? renderMainDashboard() : renderDetailView()
+                        )}
+
+                        {activeTab === 'chats' && (
+                            <div className="p-4 text-center text-text-secondary">
+                                <i className="fas fa-comments text-4xl mb-4"></i>
+                                <p>Chat functionality coming soon...</p>
+                            </div>
+                        )}
+
+                        {activeTab === 'members' && (
+                            <div className="p-4 text-center text-text-secondary">
+                                <i className="fas fa-users text-4xl mb-4"></i>
+                                <p>Members view coming soon...</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Chat Input Bar */}
+                    <div className="bg-light-gray p-3">
+                        <div className="flex items-center space-x-2">
+                            <button className="text-text-secondary p-1">
+                                <i className="fas fa-plus text-sm"></i>
+                            </button>
+                            <input
+                                type="text"
+                                placeholder="Type a message..."
+                                className="flex-1 bg-white border-0 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-purple text-sm"
+                            />
+                            <button className="text-text-secondary p-1">
+                                <i className="fas fa-smile text-sm"></i>
+                            </button>
+                            <button className="text-text-secondary p-1">
+                                <i className="fas fa-camera text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <Toast {...toast} />
+                    <CenteredModal {...modalState} onClose={closeModal} />
+                </div>
+            );
+        };
+
+        ReactDOM.render(<SimfloApp />, document.getElementById('root'));
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'967a0db055c9aa6a',t:'MTc1MzkzMzAwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
