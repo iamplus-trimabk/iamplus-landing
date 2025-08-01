@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP: Secure Message-Based Admission System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2563eb',
+                        'secondary': '#1e40af',
+                        'accent': '#3b82f6',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'error': '#ef4444',
+                        'dark': '#1f2937',
+                        'light': '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .slide {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .workflow-step {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+
+        .workflow-step.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .progress-bar {
+            transition: width 0.4s ease;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .architecture-flow {
+            position: relative;
+        }
+
+        .flow-arrow {
+            position: absolute;
+            font-size: 2rem;
+            color: #3b82f6;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .benefit-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+        }
+
+        .tech-stack-item {
+            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-dark">School ERP: Secure Admission System Architecture</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-200 rounded-full h-2 w-64">
+                        <div id="progressBar" class="progress-bar bg-primary h-2 rounded-full" style="width: 8.33%">
+                        </div>
+                    </div>
+                    <span id="slideCounter" class="text-sm text-gray-600">1 / 12</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Slides Container -->
+    <div class="pt-20">
+        <!-- Slide 1: Title -->
+        <div class="slide active items-center justify-center gradient-bg" id="slide1">
+            <div class="text-center text-white px-6 max-w-6xl mx-auto">
+                <div class="fade-in">
+                    <div class="mb-8">
+                        <div class="text-6xl mb-4">🏫</div>
+                        <h1 class="text-5xl font-bold mb-6 leading-tight">School ERP System</h1>
+                        <h2 class="text-3xl font-semibold mb-4 text-blue-100">Secure Message-Based Admission
+                            Architecture</h2>
+                        <p class="text-xl opacity-90 mb-8">A Revolutionary Approach to Controlled Application Processing
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6 mt-12">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6">
+                            <div class="text-3xl mb-3">🔒</div>
+                            <h3 class="font-semibold mb-2">Secure</h3>
+                            <p class="text-sm opacity-90">RBAC-controlled access</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6">
+                            <div class="text-3xl mb-3">📨</div>
+                            <h3 class="font-semibold mb-2">Message-Based</h3>
+                            <p class="text-sm opacity-90">Structured data transmission</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6">
+                            <div class="text-3xl mb-3">⚡</div>
+                            <h3 class="font-semibold mb-2">Scalable</h3>
+                            <p class="text-sm opacity-90">Enterprise-ready architecture</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem Statement -->
+        <div class="slide items-center justify-center bg-white" id="slide2">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">The Challenge</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6">
+                        <div class="card-hover bg-red-50 border-l-4 border-error p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-error mb-3 flex items-center">
+                                <span class="text-2xl mr-3">⚠️</span>
+                                Current Problems
+                            </h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-error mr-2 mt-1">•</span>
+                                    Uncontrolled admission applications
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-error mr-2 mt-1">•</span>
+                                    No timing control for application windows
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-error mr-2 mt-1">•</span>
+                                    Security vulnerabilities in data handling
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-error mr-2 mt-1">•</span>
+                                    Lack of proper access control
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="card-hover bg-green-50 border-l-4 border-success p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-success mb-3 flex items-center">
+                                <span class="text-2xl mr-3">💡</span>
+                                Our Solution
+                            </h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-success mr-2 mt-1">✓</span>
+                                    Message-based secure transmission
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-success mr-2 mt-1">✓</span>
+                                    Conversation-controlled application windows
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-success mr-2 mt-1">✓</span>
+                                    RBAC middleware for access control
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-success mr-2 mt-1">✓</span>
+                                    Admin-controlled admission gates
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <div class="inline-flex items-center bg-blue-50 rounded-full px-8 py-4 shadow-lg">
+                        <span class="text-2xl mr-3">🎯</span>
+                        <span class="text-lg font-semibold text-primary">Controlled, Secure, and Scalable Admission
+                            Process</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Architecture Overview -->
+        <div class="slide items-center justify-center bg-light" id="slide3">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Core Architecture Components</h2>
+
+                <div class="architecture-flow grid md:grid-cols-3 gap-8 relative">
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8 text-center">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl">💬</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary mb-4">Conversation</h3>
+                        <p class="text-gray-600 mb-4">The admission window controller</p>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm font-mono text-primary">school-id_year_class-id</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 mt-4 space-y-1">
+                            <li>• Admin-only creation</li>
+                            <li>• Unique identifier</li>
+                            <li>• Time-controlled</li>
+                        </ul>
+                    </div>
+
+                    <div class="flow-arrow hidden md:block" style="top: 50%; left: 30%; transform: translateY(-50%);">→
+                    </div>
+
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8 text-center">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl">📨</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-success mb-4">Message</h3>
+                        <p class="text-gray-600 mb-4">Application data container</p>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <p class="text-sm font-mono text-success">Structured JSON payload</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 mt-4 space-y-1">
+                            <li>• Student information</li>
+                            <li>• Conversation ID tagged</li>
+                            <li>• Validation ready</li>
+                        </ul>
+                    </div>
+
+                    <div class="flow-arrow hidden md:block" style="top: 50%; left: 63%; transform: translateY(-50%);">→
+                    </div>
+
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8 text-center">
+                        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl">🛡️</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-600 mb-4">RBAC Middleware</h3>
+                        <p class="text-gray-600 mb-4">Access control layer</p>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <p class="text-sm font-mono text-purple-600">Role-based validation</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 mt-4 space-y-1">
+                            <li>• Admin verification</li>
+                            <li>• Permission checking</li>
+                            <li>• Security enforcement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Data Flow Architecture -->
+        <div class="slide items-center justify-center bg-white" id="slide4">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Data Flow Architecture</h2>
+
+                <div class="space-y-8">
+                    <div class="workflow-step bg-blue-50 rounded-xl p-6 border-l-4 border-primary">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                1</div>
+                            <h3 class="text-xl font-semibold text-dark">Admin Creates Conversation</h3>
+                        </div>
+                        <div class="ml-14 grid md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-gray-700 mb-3">Admin initiates admission window through secure portal</p>
+                                <div class="code-block text-green-400">
+                                    <div class="text-gray-400">// RBAC Middleware Check</div>
+                                    <div>if (user.role === 'admin') {</div>
+                                    <div class="ml-4">createConversation(schoolId, year, classId)</div>
+                                    <div>}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-3">Generated Conversation ID:</p>
+                                <div class="bg-white p-4 rounded-lg border">
+                                    <p class="font-mono text-primary text-lg">SCHOOL-123_2024_C6</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step bg-green-50 rounded-xl p-6 border-l-4 border-success">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-10 h-10 bg-success rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                2</div>
+                            <h3 class="text-xl font-semibold text-dark">Parent Submits Application</h3>
+                        </div>
+                        <div class="ml-14 grid md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-gray-700 mb-3">Application data sent as structured message</p>
+                                <div class="code-block text-green-400">
+                                    <div class="text-gray-400">// Message Structure</div>
+                                    <div>{</div>
+                                    <div class="ml-4">"conversationId": "SCHOOL-123_2024_C6",</div>
+                                    <div class="ml-4">"studentData": { ... }</div>
+                                    <div>}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-3">Application Fields:</p>
+                                <ul class="space-y-1 text-sm">
+                                    <li class="flex items-center"><span class="text-success mr-2">•</span>Student Name
+                                    </li>
+                                    <li class="flex items-center"><span class="text-success mr-2">•</span>Date of Birth
+                                    </li>
+                                    <li class="flex items-center"><span class="text-success mr-2">•</span>Gender</li>
+                                    <li class="flex items-center"><span class="text-success mr-2">•</span>Class</li>
+                                    <li class="flex items-center"><span class="text-success mr-2">•</span>Document</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step bg-purple-50 rounded-xl p-6 border-l-4 border-purple-600">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                3</div>
+                            <h3 class="text-xl font-semibold text-dark">Server Validation & Storage</h3>
+                        </div>
+                        <div class="ml-14 grid md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-gray-700 mb-3">Conversation ID validation and data processing</p>
+                                <div class="code-block text-green-400">
+                                    <div class="text-gray-400">// Validation Logic</div>
+                                    <div>if (conversationExists(message.conversationId)) {</div>
+                                    <div class="ml-4">storeApplication(message.studentData)</div>
+                                    <div class="ml-4">notifyAdmin()</div>
+                                    <div>} else {</div>
+                                    <div class="ml-4">rejectApplication()</div>
+                                    <div>}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-700 mb-3">Admin Portal Update:</p>
+                                <div class="bg-white p-4 rounded-lg border">
+                                    <p class="text-sm text-gray-600">✅ New application received</p>
+                                    <p class="text-sm text-gray-600">📊 Dashboard updated</p>
+                                    <p class="text-sm text-gray-600">📧 Notification sent</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Application Form Structure -->
+        <div class="slide items-center justify-center bg-light" id="slide5">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Application Form Structure</h2>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-6 flex items-center">
+                            <span class="text-3xl mr-3">📝</span>
+                            Form Fields
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center p-3 bg-blue-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    1</div>
+                                <div>
+                                    <p class="font-semibold">Student Name</p>
+                                    <p class="text-sm text-gray-600">Full legal name</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-success rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    2</div>
+                                <div>
+                                    <p class="font-semibold">Date of Birth</p>
+                                    <p class="text-sm text-gray-600">DD/MM/YYYY format</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-3 bg-purple-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    3</div>
+                                <div>
+                                    <p class="font-semibold">Gender</p>
+                                    <p class="text-sm text-gray-600">Male/Female/Other</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-3 bg-orange-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    4</div>
+                                <div>
+                                    <p class="font-semibold">Class</p>
+                                    <p class="text-sm text-gray-600">Target admission class</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-3 bg-red-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-error rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    5</div>
+                                <div>
+                                    <p class="font-semibold">Document</p>
+                                    <p class="text-sm text-gray-600">Birth certificate/ID proof</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-success mb-6 flex items-center">
+                            <span class="text-3xl mr-3">🔧</span>
+                            Message Structure
+                        </h3>
+
+                        <div class="code-block text-green-400 text-sm">
+                            <div class="text-gray-400 mb-2">// Application Message JSON</div>
+                            <div>{</div>
+                            <div class="ml-4">"conversationId": "SCHOOL-123_2024_C6",</div>
+                            <div class="ml-4">"timestamp": "2024-01-15T10:30:00Z",</div>
+                            <div class="ml-4">"studentData": {</div>
+                            <div class="ml-8">"name": "John Doe",</div>
+                            <div class="ml-8">"dateOfBirth": "2010-05-15",</div>
+                            <div class="ml-8">"gender": "Male",</div>
+                            <div class="ml-8">"class": "6",</div>
+                            <div class="ml-8">"document": "Birth Certificate"</div>
+                            <div class="ml-4">},</div>
+                            <div class="ml-4">"parentInfo": {</div>
+                            <div class="ml-8">"parentId": "P123456",</div>
+                            <div class="ml-8">"contactEmail": "parent@email.com"</div>
+                            <div class="ml-4">}</div>
+                            <div>}</div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-yellow-50 rounded-lg border-l-4 border-warning">
+                            <p class="text-sm text-gray-700">
+                                <strong>Note:</strong> All messages are validated against the conversation ID before
+                                processing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: RBAC Security Model -->
+        <div class="slide items-center justify-center bg-white" id="slide6">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">RBAC Security Model</h2>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="card-hover bg-red-50 rounded-xl p-6 text-center border-2 border-red-200">
+                        <div class="w-16 h-16 bg-error rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl text-white">👨‍👩‍👧‍👦</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-error mb-3">Parent Role</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center justify-center">
+                                <span class="text-error mr-2">✗</span>
+                                <span>Cannot create conversations</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Can send messages</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Can view own applications</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-green-50 rounded-xl p-6 text-center border-2 border-green-200">
+                        <div class="w-16 h-16 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl text-white">👨‍💼</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-success mb-3">Admin Role</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Can create conversations</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Can view all applications</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Can manage admission windows</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-blue-50 rounded-xl p-6 text-center border-2 border-blue-200">
+                        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl text-white">🛡️</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-primary mb-3">Middleware</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Role verification</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Permission checking</span>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <span class="text-success mr-2">✓</span>
+                                <span>Access control enforcement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-gray-50 rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-dark">Security Flow</h3>
+                    <div class="grid md:grid-cols-4 gap-4">
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">
+                                1</div>
+                            <p class="text-sm font-semibold">Request Received</p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-warning rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">
+                                2</div>
+                            <p class="text-sm font-semibold">Token Validation</p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">
+                                3</div>
+                            <p class="text-sm font-semibold">Role Verification</p>
+                        </div>
+                        <div class="text-center">
+                            <div
+                                class="w-12 h-12 bg-success rounded-full flex items-center justify-center mx-auto mb-3 text-white font-bold">
+                                4</div>
+                            <p class="text-sm font-semibold">Access Granted/Denied</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Conversation Management -->
+        <div class="slide items-center justify-center bg-light" id="slide7">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Conversation Management System</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-6 flex items-center">
+                            <span class="text-3xl mr-3">🔑</span>
+                            Conversation ID Structure
+                        </h3>
+
+                        <div class="space-y-6">
+                            <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-primary">
+                                <p class="font-mono text-lg text-primary mb-3">SCHOOL-123_2024_C6</p>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center">
+                                        <span class="w-20 font-semibold">SCHOOL-123:</span>
+                                        <span class="text-gray-600">Unique school identifier</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-20 font-semibold">2024:</span>
+                                        <span class="text-gray-600">Academic year</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-20 font-semibold">C6:</span>
+                                        <span class="text-gray-600">Class identifier</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-success mb-2">Benefits:</h4>
+                                <ul class="space-y-1 text-sm text-gray-700">
+                                    <li>• Unique identification per admission window</li>
+                                    <li>• Easy filtering and organization</li>
+                                    <li>• Scalable across multiple schools</li>
+                                    <li>• Year and class-specific control</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-success mb-6 flex items-center">
+                            <span class="text-3xl mr-3">⚙️</span>
+                            Lifecycle Management
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center p-4 bg-blue-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold mr-4">
+                                    1</div>
+                                <div>
+                                    <p class="font-semibold">Creation</p>
+                                    <p class="text-sm text-gray-600">Admin initiates admission window</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-4 bg-green-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-success rounded-full flex items-center justify-center text-white text-sm font-bold mr-4">
+                                    2</div>
+                                <div>
+                                    <p class="font-semibold">Active</p>
+                                    <p class="text-sm text-gray-600">Accepting applications</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-4 bg-yellow-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-warning rounded-full flex items-center justify-center text-white text-sm font-bold mr-4">
+                                    3</div>
+                                <div>
+                                    <p class="font-semibold">Closed</p>
+                                    <p class="text-sm text-gray-600">No longer accepting applications</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                <div
+                                    class="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4">
+                                    4</div>
+                                <div>
+                                    <p class="font-semibold">Archived</p>
+                                    <p class="text-sm text-gray-600">Historical record maintained</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-dark">Database Schema</h3>
+                    <div class="code-block text-green-400">
+                        <div class="text-gray-400">// Conversations Table</div>
+                        <div>CREATE TABLE conversations (</div>
+                        <div class="ml-4">id VARCHAR(50) PRIMARY KEY, -- SCHOOL-123_2024_C6</div>
+                        <div class="ml-4">school_id VARCHAR(20) NOT NULL,</div>
+                        <div class="ml-4">academic_year INT NOT NULL,</div>
+                        <div class="ml-4">class_id VARCHAR(10) NOT NULL,</div>
+                        <div class="ml-4">status ENUM('active', 'closed', 'archived') DEFAULT 'active',</div>
+                        <div class="ml-4">created_by INT NOT NULL, -- Admin user ID</div>
+                        <div class="ml-4">created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</div>
+                        <div class="ml-4">closed_at TIMESTAMP NULL</div>
+                        <div>);</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Message Validation System -->
+        <div class="slide items-center justify-center bg-white" id="slide8">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Message Validation System</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card-hover bg-green-50 rounded-xl p-8 border-l-4 border-success">
+                        <h3 class="text-2xl font-bold text-success mb-6 flex items-center">
+                            <span class="text-3xl mr-3">✅</span>
+                            Validation Success Flow
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-success rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        1</div>
+                                    <p class="font-semibold">Message Received</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Application data with conversation ID</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-success rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        2</div>
+                                    <p class="font-semibold">ID Validation</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Conversation ID exists and is active</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-success rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        3</div>
+                                    <p class="font-semibold">Data Processing</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Application stored in database</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-success rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        4</div>
+                                    <p class="font-semibold">Admin Notification</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Dashboard updated with new application</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-red-50 rounded-xl p-8 border-l-4 border-error">
+                        <h3 class="text-2xl font-bold text-error mb-6 flex items-center">
+                            <span class="text-3xl mr-3">❌</span>
+                            Validation Failure Flow
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-error rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        1</div>
+                                    <p class="font-semibold">Message Received</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Application data with conversation ID</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-error rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        2</div>
+                                    <p class="font-semibold">ID Validation Failed</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Conversation ID not found or inactive</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-error rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        3</div>
+                                    <p class="font-semibold">Application Rejected</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Data not stored, rejection logged</p>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <div
+                                        class="w-6 h-6 bg-error rounded-full flex items-center justify-center text-white text-xs font-bold mr-3">
+                                        4</div>
+                                    <p class="font-semibold">Error Response</p>
+                                </div>
+                                <p class="text-sm text-gray-600 ml-9">Parent notified of rejection reason</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-dark">Validation Logic Implementation</h3>
+                    <div class="code-block text-green-400">
+                        <div class="text-gray-400">// Message Validation Function</div>
+                        <div>async function validateApplicationMessage(message) {</div>
+                        <div class="ml-4">try {</div>
+                        <div class="ml-8">// Extract conversation ID from message</div>
+                        <div class="ml-8">const conversationId = message.conversationId;</div>
+                        <div class="ml-8"></div>
+                        <div class="ml-8">// Check if conversation exists and is active</div>
+                        <div class="ml-8">const conversation = await db.conversations.findOne({</div>
+                        <div class="ml-12">id: conversationId,</div>
+                        <div class="ml-12">status: 'active'</div>
+                        <div class="ml-8">});</div>
+                        <div class="ml-8"></div>
+                        <div class="ml-8">if (!conversation) {</div>
+                        <div class="ml-12">throw new Error('Invalid or inactive conversation ID');</div>
+                        <div class="ml-8">}</div>
+                        <div class="ml-8"></div>
+                        <div class="ml-8">// Process and store application</div>
+                        <div class="ml-8">return await storeApplication(message.studentData, conversationId);</div>
+                        <div class="ml-4">} catch (error) {</div>
+                        <div class="ml-8">return { success: false, error: error.message };</div>
+                        <div class="ml-4">}</div>
+                        <div>}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Database Design -->
+        <div class="slide items-center justify-center bg-light" id="slide9">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Database Architecture</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-primary mb-6">Core Tables</h3>
+
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-primary pl-4">
+                                <h4 class="font-bold text-lg mb-2">conversations</h4>
+                                <div class="code-block text-green-400 text-xs">
+                                    <div>id (VARCHAR) - Primary Key</div>
+                                    <div>school_id (VARCHAR)</div>
+                                    <div>academic_year (INT)</div>
+                                    <div>class_id (VARCHAR)</div>
+                                    <div>status (ENUM)</div>
+                                    <div>created_by (INT)</div>
+                                    <div>created_at (TIMESTAMP)</div>
+                                </div>
+                            </div>
+
+                            <div class="border-l-4 border-success pl-4">
+                                <h4 class="font-bold text-lg mb-2">admission_applications</h4>
+                                <div class="code-block text-green-400 text-xs">
+                                    <div>id (INT) - Primary Key</div>
+                                    <div>conversation_id (VARCHAR) - FK</div>
+                                    <div>student_name (VARCHAR)</div>
+                                    <div>date_of_birth (DATE)</div>
+                                    <div>gender (ENUM)</div>
+                                    <div>class (VARCHAR)</div>
+                                    <div>document_name (VARCHAR)</div>
+                                    <div>parent_id (INT)</div>
+                                    <div>submitted_at (TIMESTAMP)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-success mb-6">Supporting Tables</h3>
+
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-purple-600 pl-4">
+                                <h4 class="font-bold text-lg mb-2">users</h4>
+                                <div class="code-block text-green-400 text-xs">
+                                    <div>id (INT) - Primary Key</div>
+                                    <div>username (VARCHAR)</div>
+                                    <div>email (VARCHAR)</div>
+                                    <div>role (ENUM) - admin/parent</div>
+                                    <div>password_hash (VARCHAR)</div>
+                                    <div>created_at (TIMESTAMP)</div>
+                                </div>
+                            </div>
+
+                            <div class="border-l-4 border-orange-500 pl-4">
+                                <h4 class="font-bold text-lg mb-2">message_logs</h4>
+                                <div class="code-block text-green-400 text-xs">
+                                    <div>id (INT) - Primary Key</div>
+                                    <div>conversation_id (VARCHAR)</div>
+                                    <div>message_data (JSON)</div>
+                                    <div>status (ENUM) - success/failed</div>
+                                    <div>error_message (TEXT)</div>
+                                    <div>processed_at (TIMESTAMP)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-dark">Entity Relationship Diagram</h3>
+                    <div class="bg-gray-50 p-8 rounded-lg">
+                        <div class="flex justify-center items-center space-x-8">
+                            <div class="text-center">
+                                <div
+                                    class="w-24 h-16 bg-primary rounded-lg flex items-center justify-center text-white font-bold mb-2">
+                                    conversations
+                                </div>
+                                <p class="text-xs text-gray-600">1 : N</p>
+                            </div>
+
+                            <div class="text-2xl text-gray-400">→</div>
+
+                            <div class="text-center">
+                                <div
+                                    class="w-24 h-16 bg-success rounded-lg flex items-center justify-center text-white font-bold mb-2">
+                                    applications
+                                </div>
+                                <p class="text-xs text-gray-600">N : 1</p>
+                            </div>
+
+                            <div class="text-2xl text-gray-400">←</div>
+
+                            <div class="text-center">
+                                <div
+                                    class="w-24 h-16 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold mb-2">
+                                    users
+                                </div>
+                                <p class="text-xs text-gray-600">1 : N</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-6">
+                            <p class="text-sm text-gray-600">
+                                One conversation can have multiple applications, each application belongs to one user
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Key Benefits -->
+        <div class="slide items-center justify-center bg-white" id="slide10">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Key Benefits & Advantages</h2>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-6">
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">🔒</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-primary mb-2">Enhanced Security</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• RBAC-based access control</li>
+                                        <li>• Conversation ID validation</li>
+                                        <li>• Role-specific permissions</li>
+                                        <li>• Secure message transmission</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-success rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">⚡</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-success mb-2">Operational Efficiency</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• Controlled admission windows</li>
+                                        <li>• Automated validation process</li>
+                                        <li>• Real-time admin notifications</li>
+                                        <li>• Streamlined data processing</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">📈</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-purple-600 mb-2">Scalability</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• Multi-school support</li>
+                                        <li>• Year-wise organization</li>
+                                        <li>• Class-specific management</li>
+                                        <li>• High-volume processing</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">🎯</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-orange-500 mb-2">Administrative Control</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• Complete admission window control</li>
+                                        <li>• Prevent unauthorized applications</li>
+                                        <li>• Timing-based access management</li>
+                                        <li>• Centralized oversight</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">🔧</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-blue-500 mb-2">Technical Excellence</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• Message-based architecture</li>
+                                        <li>• Robust validation system</li>
+                                        <li>• Comprehensive logging</li>
+                                        <li>• Error handling & recovery</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefit-card card-hover rounded-xl p-6 shadow-lg">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-xl text-white">👥</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-green-500 mb-2">User Experience</h3>
+                                    <ul class="space-y-1 text-gray-700 text-sm">
+                                        <li>• Clear application process</li>
+                                        <li>• Immediate feedback</li>
+                                        <li>• Transparent status updates</li>
+                                        <li>• Intuitive portal interfaces</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <div
+                        class="inline-flex items-center bg-gradient-to-r from-primary to-secondary text-white rounded-full px-8 py-4 shadow-lg">
+                        <span class="text-2xl mr-3">🚀</span>
+                        <span class="text-lg font-semibold">Ready for Enterprise-Scale Deployment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Implementation Roadmap -->
+        <div class="slide items-center justify-center bg-light" id="slide11">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-12 text-dark">Implementation Roadmap</h2>
+
+                <div class="space-y-8">
+                    <div class="workflow-step bg-white rounded-xl p-6 shadow-lg border-l-4 border-primary">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                1</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark">Phase 1: Foundation Setup</h3>
+                                <p class="text-gray-600">Database design and core infrastructure</p>
+                            </div>
+                        </div>
+                        <div class="ml-16 grid md:grid-cols-3 gap-4">
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Database Schema</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Create tables structure</li>
+                                    <li>• Set up relationships</li>
+                                    <li>• Define indexes</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Authentication</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• User management system</li>
+                                    <li>• JWT token implementation</li>
+                                    <li>• Password security</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">RBAC Middleware</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Role definitions</li>
+                                    <li>• Permission matrix</li>
+                                    <li>• Access control logic</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step bg-white rounded-xl p-6 shadow-lg border-l-4 border-success">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 bg-success rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                2</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark">Phase 2: Core Functionality</h3>
+                                <p class="text-gray-600">Conversation management and message processing</p>
+                            </div>
+                        </div>
+                        <div class="ml-16 grid md:grid-cols-3 gap-4">
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Conversation API</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Create conversation endpoint</li>
+                                    <li>• Status management</li>
+                                    <li>• Admin controls</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Message Processing</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Validation logic</li>
+                                    <li>• Data storage</li>
+                                    <li>• Error handling</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Application Forms</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Form structure</li>
+                                    <li>• Field validation</li>
+                                    <li>• Submission handling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-600">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                3</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark">Phase 3: User Interfaces</h3>
+                                <p class="text-gray-600">Admin and parent portals development</p>
+                            </div>
+                        </div>
+                        <div class="ml-16 grid md:grid-cols-3 gap-4">
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Admin Portal</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Dashboard design</li>
+                                    <li>• Application management</li>
+                                    <li>• Conversation controls</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Parent Portal</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Application forms</li>
+                                    <li>• Status tracking</li>
+                                    <li>• Document upload</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Notifications</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Email integration</li>
+                                    <li>• Real-time updates</li>
+                                    <li>• Status notifications</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                4</div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark">Phase 4: Testing & Deployment</h3>
+                                <p class="text-gray-600">Quality assurance and production deployment</p>
+                            </div>
+                        </div>
+                        <div class="ml-16 grid md:grid-cols-3 gap-4">
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Testing Suite</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Unit tests</li>
+                                    <li>• Integration tests</li>
+                                    <li>• Security testing</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Performance</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Load testing</li>
+                                    <li>• Optimization</li>
+                                    <li>• Monitoring setup</li>
+                                </ul>
+                            </div>
+                            <div class="tech-stack-item p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Deployment</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Production setup</li>
+                                    <li>• Security hardening</li>
+                                    <li>• Documentation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusion -->
+        <div class="slide items-center justify-center gradient-bg" id="slide12">
+            <div class="max-w-6xl mx-auto px-6 text-white text-center">
+                <div class="fade-in">
+                    <div class="text-6xl mb-8">🎯</div>
+                    <h2 class="text-5xl font-bold mb-8">Ready to Transform School Admissions</h2>
+
+                    <div class="grid md:grid-cols-3 gap-8 mb-12">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8">
+                            <div class="text-4xl mb-4">🔒</div>
+                            <h3 class="text-xl font-bold mb-3">Secure by Design</h3>
+                            <p class="opacity-90">RBAC-controlled access with message-based validation</p>
+                        </div>
+
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8">
+                            <div class="text-4xl mb-4">⚡</div>
+                            <h3 class="text-xl font-bold mb-3">Highly Efficient</h3>
+                            <p class="opacity-90">Automated processing with real-time notifications</p>
+                        </div>
+
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8">
+                            <div class="text-4xl mb-4">📈</div>
+                            <h3 class="text-xl font-bold mb-3">Enterprise Ready</h3>
+                            <p class="opacity-90">Scalable architecture for multi-school deployment</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8 max-w-4xl mx-auto">
+                        <h3 class="text-2xl font-bold mb-6">Next Steps</h3>
+                        <div class="grid md:grid-cols-2 gap-6 text-left">
+                            <div>
+                                <h4 class="font-semibold mb-3 flex items-center">
+                                    <span class="text-2xl mr-2">🚀</span>
+                                    Immediate Actions
+                                </h4>
+                                <ul class="space-y-2 text-sm opacity-90">
+                                    <li>• Finalize database schema design</li>
+                                    <li>• Set up development environment</li>
+                                    <li>• Begin RBAC middleware development</li>
+                                    <li>• Create initial test scenarios</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-3 flex items-center">
+                                    <span class="text-2xl mr-2">📋</span>
+                                    Development Timeline
+                                </h4>
+                                <ul class="space-y-2 text-sm opacity-90">
+                                    <li>• Phase 1: 2-3 weeks (Foundation)</li>
+                                    <li>• Phase 2: 3-4 weeks (Core Features)</li>
+                                    <li>• Phase 3: 4-5 weeks (UI Development)</li>
+                                    <li>• Phase 4: 2-3 weeks (Testing & Deploy)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-white border-opacity-30">
+                            <p class="text-xl font-semibold">
+                                A revolutionary approach to secure, controlled, and scalable school admission management
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div
+        class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg px-6 py-3 flex items-center space-x-4">
+        <button id="prevBtn"
+            class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors">
+            <span class="text-lg text-gray-600">←</span>
+        </button>
+        <div class="flex space-x-2">
+            <div class="w-2 h-2 bg-primary rounded-full slide-dot active" data-slide="1"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="2"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="3"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="4"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="5"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="6"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="7"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="8"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="9"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="10"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="11"></div>
+            <div class="w-2 h-2 bg-gray-300 rounded-full slide-dot" data-slide="12"></div>
+        </div>
+        <button id="nextBtn"
+            class="w-10 h-10 bg-primary hover:bg-secondary text-white rounded-full flex items-center justify-center transition-colors">
+            <span class="text-lg">→</span>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        function updateSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Show current slide
+            document.getElementById(`slide${slideNumber}`).classList.add('active');
+
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${(slideNumber / totalSlides) * 100}%`;
+
+            // Update slide counter
+            document.getElementById('slideCounter').textContent = `${slideNumber} / ${totalSlides}`;
+
+            // Update dots
+            document.querySelectorAll('.slide-dot').forEach(dot => {
+                dot.classList.remove('active', 'bg-primary');
+                dot.classList.add('bg-gray-300');
+                if (parseInt(dot.dataset.slide) === slideNumber) {
+                    dot.classList.add('active', 'bg-primary');
+                    dot.classList.remove('bg-gray-300');
+                }
+            });
+
+            // Animate workflow steps if present
+            setTimeout(() => {
+                const workflowSteps = document.querySelectorAll(`#slide${slideNumber} .workflow-step`);
+                workflowSteps.forEach((step, index) => {
+                    setTimeout(() => {
+                        step.classList.add('animate');
+                    }, index * 200);
+                });
+            }, 300);
+
+            currentSlide = slideNumber;
+        }
+
+        // Navigation event listeners
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                updateSlide(currentSlide + 1);
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlide > 1) {
+                updateSlide(currentSlide - 1);
+            }
+        });
+
+        // Dot navigation
+        document.querySelectorAll('.slide-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideNumber = parseInt(dot.dataset.slide);
+                updateSlide(slideNumber);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+                updateSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 1) {
+                updateSlide(currentSlide - 1);
+            }
+        });
+
+        // Initialize first slide animations
+        setTimeout(() => {
+            const workflowSteps = document.querySelectorAll('#slide1 .workflow-step');
+            workflowSteps.forEach((step, index) => {
+                setTimeout(() => {
+                    step.classList.add('animate');
+                }, index * 200);
+            });
+        }, 500);
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'96844d0f36937f47',t:'MTc1NDA0MDQ2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
