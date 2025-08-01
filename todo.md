@@ -4,6 +4,7 @@ This list tracks all key tasks across branding, website, product UX, marketing, 
 
 ---
 
+
 ## 🌐 Website
 
 - [x] Hero section with CTA
