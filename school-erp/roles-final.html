@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simflo School ERP - Role-Based Management Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'simflo-purple': '#5722F9',
+                        'simflo-light': '#F7F7F7',
+                        'simflo-accent': '#E0E0E0',
+                        'simflo-text': '#1E1E1E',
+                        'simflo-secondary': '#606060',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.4s ease-out',
+                        'slide-right': 'slideRight 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #6433F9, #9333EA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); }
+            80%, 100% { opacity: 0; }
+        }
+        
+        .notification-slide {
+            animation: slideInRight 0.5s ease-out;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .module-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(100, 51, 249, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        .module-card:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-gray-50 to-white">
+
+
+    <!-- School ERP Section -->
+    <section class="py-12 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center bg-blue-50 rounded-full px-4 py-2 mb-6 floating-badge">
+                    <span class="text-blue-600 text-sm font-semibold">🏫 School Management</span>
+                </div>
+                <h2 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">
+                    One Platform. <span class="gradient-text">Every Role.</span> Complete Control.
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                    Experience how Simflo adapts to every user in your school ecosystem with role-specific modules and intelligent workflows.
+                </p>
+                
+                <!-- Interactive Demo Preview -->
+                <div class="max-w-3xl mx-auto mb-8">
+                    <div class="bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 relative overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group">
+                        <!-- Background Pattern -->
+                        <div class="absolute inset-0 opacity-5">
+                            <div class="absolute top-4 left-4 w-16 h-16 bg-blue-400 rounded-full"></div>
+                            <div class="absolute bottom-4 right-4 w-12 h-12 bg-purple-400 rounded-full"></div>
+                            <div class="absolute top-1/2 right-8 w-8 h-8 bg-indigo-400 rounded-full"></div>
+                        </div>
+                        
+                        <div class="text-center relative z-10">
+                            <div class="flex items-center justify-center space-x-3 mb-4">
+                                <div class="relative">
+                                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                    <div class="absolute inset-0 w-3 h-3 bg-green-400 rounded-full animate-ping opacity-75"></div>
+                                </div>
+                                <span class="text-lg font-bold text-gray-800">Live Platform Demo</span>
+                                <div class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">ACTIVE</div>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-simflo-purple transition-colors">
+                                Experience Role-Based School Management
+                            </h3>
+                            <p class="text-gray-700 mb-6">Interactive demo with real-time data across all modules</p>
+                            
+                            <!-- Interactive Stats -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+                                <div class="bg-white/60 backdrop-blur-sm rounded-lg p-4 hover:bg-white/80 transition-all group-hover:scale-105">
+                                    <div class="text-2xl mb-1">📊</div>
+                                    <div class="text-sm font-semibold text-gray-800">Live Analytics</div>
+                                    <div class="text-xs text-gray-600">Real-time insights</div>
+                                </div>
+                                <div class="bg-white/60 backdrop-blur-sm rounded-lg p-4 hover:bg-white/80 transition-all group-hover:scale-105">
+                                    <div class="text-2xl mb-1">👥</div>
+                                    <div class="text-sm font-semibold text-gray-800">Multi-Role Access</div>
+                                    <div class="text-xs text-gray-600">6 user types</div>
+                                </div>
+                                <div class="bg-white/60 backdrop-blur-sm rounded-lg p-4 hover:bg-white/80 transition-all group-hover:scale-105">
+                                    <div class="text-2xl mb-1">🔄</div>
+                                    <div class="text-sm font-semibold text-gray-800">Live Updates</div>
+                                    <div class="text-xs text-gray-600">Instant sync</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Demo CTA -->
+                            <button class="bg-simflo-purple text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg group-hover:shadow-xl">
+                                🚀 Start Interactive Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Selection Tabs -->
+            <div class="mb-12">
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+                    <button class="role-tab active bg-simflo-purple text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-purple-700 flex items-center space-x-1 sm:space-x-2 transform hover:scale-102 text-sm sm:text-base" data-role="all">
+                        <span class="text-base sm:text-lg">🌟</span>
+                        <span>All</span>
+                    </button>
+                    <button class="role-tab bg-white text-gray-700 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all hover:bg-gray-50 border border-gray-200 flex items-center space-x-1 sm:space-x-2 transform hover:scale-105 text-sm sm:text-base" data-role="management">
+                        <span class="text-base sm:text-lg">👔</span>
+                        <span>Management</span>
+                    </button>
+                    <button class="role-tab bg-white text-gray-700 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all hover:bg-gray-50 border border-gray-200 flex items-center space-x-1 sm:space-x-2 transform hover:scale-105 text-sm sm:text-base" data-role="admin">
+                        <span class="text-base sm:text-lg">⚙️</span>
+                        <span class="hidden xs:inline sm:inline">Admin Staff</span>
+                        <span class="xs:hidden sm:hidden">Admin</span>
+                    </button>
+                    <button class="role-tab bg-white text-gray-700 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all hover:bg-gray-50 border border-gray-200 flex items-center space-x-1 sm:space-x-2 transform hover:scale-105 text-sm sm:text-base" data-role="faculty">
+                        <span class="text-base sm:text-lg">👩‍🏫</span>
+                        <span>Faculty</span>
+                    </button>
+                    <button class="role-tab bg-white text-gray-700 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all hover:bg-gray-50 border border-gray-200 flex items-center space-x-1 sm:space-x-2 transform hover:scale-105 text-sm sm:text-base" data-role="student">
+                        <span class="text-base sm:text-lg">🎒</span>
+                        <span>Student</span>
+                    </button>
+                    <button class="role-tab bg-white text-gray-700 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all hover:bg-gray-50 border border-gray-200 flex items-center space-x-1 sm:space-x-2 transform hover:scale-105 text-sm sm:text-base" data-role="parent">
+                        <span class="text-base sm:text-lg">👨‍👩‍👧‍👦</span>
+                        <span>Parent</span>
+                    </button>
+                </div>
+
+                <!-- Role Description -->
+                <div class="text-center">
+                    <p id="role-description" class="text-lg text-gray-600 animate-fade-in">
+                        Complete overview of all modules across every role - see the full power of Simflo's integrated platform.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modules Section -->
+            <div class="mb-12">
+                <!-- Module Cards Container -->
+                <div class="flex justify-center">
+                    <div id="modules-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 max-w-fit">
+                        <!-- Modules will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Cards Section -->
+            <div id="features-section" class="hidden">
+                <div class="text-center mb-8">
+                    <h3 id="module-title" class="text-2xl font-bold text-gray-900 mb-2">Module Features</h3>
+                    <p class="text-gray-600">Comprehensive tools designed for your workflow</p>
+                </div>
+                
+                <div id="features-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                    <!-- Feature cards will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Interactive Notifications Sidebar -->
+            <div id="notifications-sidebar" class="fixed right-2 sm:right-4 top-1/2 transform -translate-y-1/2 space-y-2 sm:space-y-3 z-40">
+                <!-- Notifications will be dynamically added here -->
+            </div>
+
+            <!-- Demo CTA -->
+            <div class="text-center mt-16">
+                <div class="bg-gradient-to-r from-simflo-purple to-purple-700 rounded-2xl p-8 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold mb-4">Ready to Transform Your School Management?</h3>
+                        <p class="text-purple-100 mb-6">See how Simflo adapts to every role in your institution</p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <button class="bg-white text-simflo-purple px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+                                Schedule School Demo
+                            </button>
+                            <button class="border-2 border-white text-white px-8 py-3 rounded-xl font-semibold hover:bg-white hover:text-simflo-purple transition-all transform hover:scale-105">
+                                Watch Interactive Tour
+                            </button>
+                        </div>
+                        
+                        <!-- Live stats -->
+                        <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <div class="text-2xl font-bold">500+</div>
+                                <div class="text-sm text-purple-200">Schools Using Simflo</div>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <div class="text-2xl font-bold">50K+</div>
+                                <div class="text-sm text-purple-200">Active Users</div>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-3">
+                                <div class="text-2xl font-bold">99.9%</div>
+                                <div class="text-sm text-purple-200">Uptime</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Role and module data
+        const roleData = {
+            management: {
+                description: "Strategic oversight with comprehensive analytics, budget management, and institutional performance tracking across all departments.",
+                modules: [
+                    { id: 'admission', name: 'Admission', icon: '📝', category: 'academic' },
+                    { id: 'finance', name: 'Finance', icon: '💰', category: 'operational' },
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examination', icon: '📋', category: 'academic' },
+                    { id: 'hr', name: 'HR Management', icon: '👥', category: 'operational' }
+                ]
+            },
+            admin: {
+                description: "Administrative tools for student records, scheduling, communications, and day-to-day operations management.",
+                modules: [
+                    { id: 'admission', name: 'Admissions', icon: '📝', category: 'academic' },
+                    { id: 'finance', name: 'Finance', icon: '💰', category: 'operational' },
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examinations', icon: '📝', category: 'academic' },
+                    { id: 'hr', name: 'HR Management', icon: '👥', category: 'operational' },
+                    { id: 'services', name: 'Services', icon: '🛎️', category: 'operational' }
+                ]
+            },
+            faculty: {
+                description: "Teaching-focused tools for curriculum management, student assessment, and classroom collaboration.",
+                modules: [
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examinations', icon: '📝', category: 'academic' },
+                    { id: 'library', name: 'Library', icon: '📖', category: 'resources' },
+                    { id: 'hr', name: 'Human Resource', icon: '👥', category: 'operational' }
+                ]
+            },
+            student: {
+                description: "Student-centric portal for coursework, grades, schedules, and campus services access.",
+                modules: [
+                    { id: 'admission', name: 'Admission', icon: '📝', category: 'academic' },
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examinations', icon: '📋', category: 'academic' },
+                    { id: 'library', name: 'Library', icon: '📖', category: 'resources' },
+                    { id: 'services', name: 'Services', icon: '🛎️', category: 'services' }
+                ]
+            },
+            parent: {
+                description: "Parent engagement tools for tracking student progress, communication with teachers, and school updates.",
+                modules: [
+                    { id: 'admission', name: 'Admission', icon: '📝', category: 'academic' },
+                    { id: 'finance', name: 'Finance', icon: '💰', category: 'financial' },
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examinations', icon: '📋', category: 'academic' },
+                    { id: 'services', name: 'Services', icon: '🛎️', category: 'services' }
+                ]
+            },
+            all: {
+                description: "Complete overview of all modules across every role - see the full power of Simflo's integrated platform.",
+                modules: [
+                    { id: 'admission', name: 'Admissions', icon: '📝', category: 'academic' },
+                    { id: 'finance', name: 'Finance', icon: '💰', category: 'operational' },
+                    { id: 'academics', name: 'Academics', icon: '📚', category: 'academic' },
+                    { id: 'examination', name: 'Examinations', icon: '📝', category: 'academic' },
+                    { id: 'hr', name: 'HR Management', icon: '👥', category: 'operational' },
+                    { id: 'library', name: 'Library', icon: '📖', category: 'resources' },
+                    { id: 'services', name: 'Services', icon: '🛎️', category: 'operational' }
+                ]
+            }
+        };
+
+        // Feature data for modules with SVG icons
+        const moduleFeatures = {
+            finance: [
+                {
+                    title: "Fee Structure & Setup",
+                    subtitle: "Standardize and review fee plans across student categories.",
+                    points: ["Review approved fee plans", "Monitor concessions & waivers", "Ensure compliance by category"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>`
+                },
+                {
+                    title: "Collections & Dues",
+                    subtitle: "Track collection performance and overdue payments by grade or department.",
+                    points: ["Monitor collection trends", "Track outstanding dues", "View daily/monthly reports"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                },
+                {
+                    title: "Finance Dashboard & Reports",
+                    subtitle: "Access financial KPIs, summaries, and revenue insights.",
+                    points: ["Analyze income vs. expenses", "Download audited summaries", "Monitor collection ratio"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+                },
+                {
+                    title: "Refunds & Approvals",
+                    subtitle: "Stay informed on refund requests and critical approvals.",
+                    points: ["Review refund justifications", "Approve/reject high-value cases", "Track refund status reports"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                }
+            ],
+            admission: [
+                {
+                    title: "Application Status",
+                    subtitle: "Track your admission progress in real time.",
+                    points: ["View application updates", "Check verification stages", "Get selection alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Merit List Notification",
+                    subtitle: "Instant alerts when merit lists are out.",
+                    points: ["View merit rankings", "Check cutoff status", "Receive notifications"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+                },
+                {
+                    title: "Document Upload",
+                    subtitle: "Easily submit and manage admission documents.",
+                    points: ["Upload required files", "Track approval status", "Re-upload if needed"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 10l-4-4-1.41 1.41L15.17 12H9v2h6.17l-2.58 2.59L14 18l4-4z"/></svg>`
+                },
+                {
+                    title: "Student ID Generation",
+                    subtitle: "Access your digital student ID post-admission.",
+                    points: ["Download ID card", "Confirm profile info", "Use for access/login"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`
+                }
+            ],
+            academics: [
+                {
+                    title: "Class Timetable",
+                    subtitle: "Stay updated with your subject schedule.",
+                    points: ["View day-wise plan", "Know teacher & subject", "See substitutions"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Syllabus Tracking",
+                    subtitle: "Follow your academic progress easily.",
+                    points: ["Monitor completion", "Check chapters covered", "Stay exam-ready"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6L23 9l-11-6zM18.82 9L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>`
+                },
+                {
+                    title: "Homework & Assignments",
+                    subtitle: "Access and submit assignments on time.",
+                    points: ["View tasks & deadlines", "Submit digitally", "Track grades/comments"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Academic Calendar",
+                    subtitle: "Know all major academic dates and events.",
+                    points: ["Term & holiday info", "Exam & submission dates", "School event alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`
+                }
+            ],
+            examination: [
+                {
+                    title: "Exam Timetable",
+                    subtitle: "Get your complete exam schedule in one place.",
+                    points: ["Subject-wise timings", "Slot and venue details", "Daily overview"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Admit Cards",
+                    subtitle: "Download and carry digital admit cards.",
+                    points: ["One-click download", "QR-based scan", "Auto-filled info"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 17.5L4 13l1.41-1.41L10.5 16.67l8.09-8.09L20 10l-9.5 9.5z"/></svg>`
+                },
+                {
+                    title: "Result Reports",
+                    subtitle: "View your performance across terms.",
+                    points: ["See term-wise marks", "Subject grade summary", "Cumulative report"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Re-evaluation Requests",
+                    subtitle: "Request answer sheet re-checks easily.",
+                    points: ["Select subject", "Add notes/comments", "Track request status"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                }
+            ],
+            library: [
+                {
+                    title: "Book Search & Browse",
+                    subtitle: "Explore and find books quickly.",
+                    points: ["Smart search filters", "Real-time availability", "Genre & author tags"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>`
+                },
+                {
+                    title: "Issue & Return Status",
+                    subtitle: "Track your borrowed books & due dates.",
+                    points: ["View issue/return info", "Fine alerts", "Renewal details"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`
+                },
+                {
+                    title: "E-Library Access",
+                    subtitle: "Access digital notes and books anytime.",
+                    points: ["Faculty notes", "PDFs & e-books", "Offline downloads"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>`
+                },
+                {
+                    title: "Reservation System",
+                    subtitle: "Reserve titles before they run out.",
+                    points: ["Place book holds", "Get notification alerts", "48-hr pickup window"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+                }
+            ],
+            hr: [
+                {
+                    title: "Staff Profile Management",
+                    subtitle: "Maintain your personal records.",
+                    points: ["Edit contact & ID info", "View qualifications", "Track milestones"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`
+                },
+                {
+                    title: "Attendance & Leave Tracker",
+                    subtitle: "Manage your presence and leave.",
+                    points: ["Mark daily attendance", "Apply for leave online", "Track approval status"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Payroll & Salary Slips",
+                    subtitle: "Access payroll details securely.",
+                    points: ["Download payslips", "View salary breakdown", "Check credits"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>`
+                },
+                {
+                    title: "Performance Reviews",
+                    subtitle: "Track your growth and feedback.",
+                    points: ["View appraisal scores", "Set goals", "Monitor review cycle"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01.99l-2.54 3.38c-.35.47-.35 1.1 0 1.58l2.54 3.38c.47.62 1.21.99 2.01.99h1.54c.69 0 1.32-.42 1.58-1.05L22 14v8h-2z"/></svg>`
+                }
+            ],
+            services: [
+                {
+                    title: "Transport Tracking",
+                    subtitle: "Know your bus location and timings in real time.",
+                    points: ["Live GPS tracking", "Pickup/drop schedules", "Driver contact"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/></svg>`
+                },
+                {
+                    title: "Hostel Information",
+                    subtitle: "View your room details and hostel updates.",
+                    points: ["Room & mess info", "Hostel rules", "Noticeboard alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 12V6L21 12v8c0 .55-.45 1-1 1H4c-.55 0-1-.45-1-1v-8l11-6zm0-2.18L5.5 12H10V9.82z"/></svg>`
+                },
+                {
+                    title: "ID Card & Certificates",
+                    subtitle: "Download ID cards and official certificates.",
+                    points: ["Digital ID access", "Request bonafide/TC", "Track status"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Student Helpdesk",
+                    subtitle: "Raise and track service-related requests.",
+                    points: ["Create service tickets", "Assigned to staff", "Get timely updates"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+                }
+            ],
+            // Management-specific features
+            management_admission: [
+                {
+                    title: "Student Admission Forms",
+                    subtitle: "Track how your institution collects and processes applications with real-time insights.",
+                    points: ["Monitor inflow", "View category stats (RTE, alumni)", "Track form status & conversions"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Merit List Management",
+                    subtitle: "Oversee transparent, controlled merit-based admissions with approval workflows.",
+                    points: ["Review selection trends", "Approve or override lists", "View seat allocations"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+                },
+                {
+                    title: "Staff & Subject Setup",
+                    subtitle: "Ensure correct staff-subject mapping across all classes and departments.",
+                    points: ["Track allocations", "Monitor teaching loads", "View pending assignments"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01.99l-2.54 3.38c-.35.47-.35 1.1 0 1.58l2.54 3.38c.47.62 1.21.99 2.01.99h1.54c.69 0 1.32-.42 1.58-1.05L22 14v8h-2z"/></svg>`
+                },
+                {
+                    title: "Class & Section Allocation",
+                    subtitle: "Get a full view of student distribution by capacity and merit.",
+                    points: ["Monitor section-wise loads", "Approve new sections", "View real-time class strength"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6L23 9l-11-6zM18.82 9L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>`
+                }
+            ],
+            management_finance: [
+                {
+                    title: "Fee Structure & Setup",
+                    subtitle: "Standardize and control fee plans for all student categories.",
+                    points: ["Review approved plans", "Monitor waivers & concessions", "Ensure category compliance"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>`
+                },
+                {
+                    title: "Collections & Dues",
+                    subtitle: "Track collections and dues in real-time across levels.",
+                    points: ["Monitor trends", "Track outstanding dues", "View daily/monthly reports"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                },
+                {
+                    title: "Finance Dashboard & Reports",
+                    subtitle: "Access key KPIs to assess revenue and financial health.",
+                    points: ["Analyze income vs. expense", "Download summaries", "Monitor collection ratios"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+                },
+                {
+                    title: "Refunds & Approvals",
+                    subtitle: "Stay updated on refund cases and high-value approvals.",
+                    points: ["Review justifications", "Approve/reject cases", "Track refund status"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                }
+            ],
+            management_academics: [
+                {
+                    title: "Curriculum Planning",
+                    subtitle: "Track curriculum structure, updates, and alignment to goals.",
+                    points: ["View course distribution", "Monitor gaps", "Approve new subjects"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6L23 9l-11-6zM18.82 9L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>`
+                },
+                {
+                    title: "Academic Calendar",
+                    subtitle: "Oversee term schedules and event timelines institution-wide.",
+                    points: ["Review schedules", "Track holidays", "Approve milestones"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Timetable Overview",
+                    subtitle: "Ensure optimal teacher load and class utilization.",
+                    points: ["Monitor workloads", "Spot timetable gaps", "Approve changes"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`
+                },
+                {
+                    title: "Syllabus Completion",
+                    subtitle: "Track class-wise syllabus status and intervene as needed.",
+                    points: ["View progress", "Spot delays", "Get alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                }
+            ],
+            management_examination: [
+                {
+                    title: "Exam Planning & Scheduling",
+                    subtitle: "Oversee exam calendars, readiness, and departmental loads.",
+                    points: ["Review assessments", "Approve date sheets", "Track invigilation needs"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Mark Entry & Evaluation",
+                    subtitle: "Monitor evaluation timelines and subject-wise inputs.",
+                    points: ["Track pending entries", "Spot delays", "Review submissions"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 17.5L4 13l1.41-1.41L10.5 16.67l8.09-8.09L20 10l-9.5 9.5z"/></svg>`
+                },
+                {
+                    title: "Report Cards & Publishing",
+                    subtitle: "Manage report formats, drafts, and publishing workflows.",
+                    points: ["Approve cycles", "Preview consistency", "Monitor release timelines"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Result Analytics",
+                    subtitle: "Access detailed academic performance reports.",
+                    points: ["View grade breakdowns", "Spot weak areas", "Compare yearly trends"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                }
+            ],
+            management_hr: [
+                {
+                    title: "Staff Directory & Details",
+                    subtitle: "Access complete staff profiles, roles, and departments.",
+                    points: ["View staff list", "Filter by department", "Track profile completion"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`
+                },
+                {
+                    title: "Leave & Attendance",
+                    subtitle: "Monitor staff attendance for HR and payroll decisions.",
+                    points: ["Track patterns", "Approve escalations", "View absentee trends"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Recruitment & Joining",
+                    subtitle: "Stay updated on hiring, selection, and onboarding.",
+                    points: ["Track hiring stages", "Approve selections", "Monitor joining timelines"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01.99l-2.54 3.38c-.35.47-.35 1.1 0 1.58l2.54 3.38c.47.62 1.21.99 2.01.99h1.54c.69 0 1.32-.42 1.58-1.05L22 14v8h-2z"/></svg>`
+                },
+                {
+                    title: "Performance & Appraisal",
+                    subtitle: "Track reviews, appraisals, and staff growth.",
+                    points: ["View evaluations", "Track promotion readiness", "Approve grades"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01.99l-2.54 3.38c-.35.47-.35 1.1 0 1.58l2.54 3.38c.47.62 1.21.99 2.01.99h1.54c.69 0 1.32-.42 1.58-1.05L22 14v8h-2z"/></svg>`
+                }
+            ],
+            // Parent-specific features
+            parent_admission: [
+                {
+                    title: "Student Admission Forms",
+                    subtitle: "Apply for your child's admission online.",
+                    points: ["Fill digital forms", "Upload documents securely", "Track real-time status"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Merit List Management",
+                    subtitle: "Get notified on your child's admission status.",
+                    points: ["View merit rounds", "Get instant updates", "Download selection letters"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+                },
+                {
+                    title: "Staff & Subject Setup",
+                    subtitle: "Know your child's teachers and subjects.",
+                    points: ["View class teachers", "See subject faculty", "Department-level info"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H17c-.8 0-1.54.37-2.01.99l-2.54 3.38c-.35.47-.35 1.1 0 1.58l2.54 3.38c.47.62 1.21.99 2.01.99h1.54c.69 0 1.32-.42 1.58-1.05L22 14v8h-2z"/></svg>`
+                },
+                {
+                    title: "Class & Section Allocation",
+                    subtitle: "Track your child's final placement.",
+                    points: ["View class/section info", "Understand batch structure", "Stay updated on changes"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6L23 9l-11-6zM18.82 9L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>`
+                }
+            ],
+            parent_finance: [
+                {
+                    title: "Fee Setup & Structure",
+                    subtitle: "See a detailed breakdown of all fees.",
+                    points: ["Term-wise components", "Optional charges info", "Late fee policies"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>`
+                },
+                {
+                    title: "Fee Payment",
+                    subtitle: "Pay school fees quickly and securely.",
+                    points: ["Multiple digital modes", "Instant receipts", "Auto-reminders"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/></svg>`
+                },
+                {
+                    title: "Refund & Concession",
+                    subtitle: "Track any fee relief or refunds.",
+                    points: ["Apply for concessions", "Check eligibility", "Approval status updates"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`
+                },
+                {
+                    title: "Payment History & Reports",
+                    subtitle: "Access and download past fee records.",
+                    points: ["Payment timeline", "Tax-friendly reports", "All receipts in one place"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                }
+            ],
+            parent_academics: [
+                {
+                    title: "Timetable Scheduling",
+                    subtitle: "Know your child's daily academic plan.",
+                    points: ["Subject-wise schedule", "Teacher info", "Changes/updates"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Syllabus & Lesson Plans",
+                    subtitle: "Follow what your child is learning.",
+                    points: ["View subject syllabus", "Weekly learning goals", "Lesson completion updates"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6L23 9l-11-6zM18.82 9L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>`
+                },
+                {
+                    title: "Homework & Assignments",
+                    subtitle: "Stay updated on homework progress.",
+                    points: ["View daily tasks", "Access shared notes", "Submission tracking"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Academic Calendar",
+                    subtitle: "Get a clear view of key academic dates.",
+                    points: ["Term-wise plans", "Events & holidays", "PTMs & exams"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`
+                }
+            ],
+            parent_examination: [
+                {
+                    title: "Exam Timetable",
+                    subtitle: "Stay informed on upcoming exams.",
+                    points: ["Subject-wise schedule", "Timings & venues", "Instant alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>`
+                },
+                {
+                    title: "Marks Entry",
+                    subtitle: "Track marks as they're updated.",
+                    points: ["View results instantly", "Subject-wise scores", "Result timelines"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 17.5L4 13l1.41-1.41L10.5 16.67l8.09-8.09L20 10l-9.5 9.5z"/></svg>`
+                },
+                {
+                    title: "Report Card Generation",
+                    subtitle: "Download official academic reports.",
+                    points: ["PDF report cards", "Grades and remarks", "Term-by-term progress"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`
+                },
+                {
+                    title: "Performance Analytics",
+                    subtitle: "Understand your child's learning curve.",
+                    points: ["Visual performance graphs", "Subject trend analysis", "Term-wise comparison"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>`
+                }
+            ],
+            parent_services: [
+                {
+                    title: "Transport Management",
+                    subtitle: "Track your child's commute live.",
+                    points: ["Bus route info", "Live GPS tracking", "Pickup/drop alerts"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/></svg>`
+                },
+                {
+                    title: "Communication Logs",
+                    subtitle: "Connect easily with school staff.",
+                    points: ["View circulars/messages", "Chat with teachers", "Access chat history"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>`
+                },
+                {
+                    title: "Grievance & Support",
+                    subtitle: "Raise concerns with ease.",
+                    points: ["Submit queries/complaints", "Monitor resolution", "Contact support"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`
+                },
+                {
+                    title: "Notification Center",
+                    subtitle: "All school alerts in one place.",
+                    points: ["Personalized messages", "Exam, fee, and event alerts", "Real-time updates"],
+                    icon: `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>`
+                }
+            ]
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadModules('all');
+            setupRoleTabs();
+        });
+
+        // Setup role tab functionality
+        function setupRoleTabs() {
+            const roleTabs = document.querySelectorAll('.role-tab');
+            roleTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    roleTabs.forEach(t => {
+                        t.classList.remove('active', 'bg-simflo-purple', 'text-white');
+                        t.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+                    });
+                    this.classList.add('active', 'bg-simflo-purple', 'text-white');
+                    this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-200');
+
+                    // Load modules for selected role
+                    const role = this.dataset.role;
+                    const roleName = this.textContent.trim();
+                    loadModules(role);
+                    hideFeatures();
+                });
+            });
+        }
+
+        // Load modules for selected role
+        function loadModules(role) {
+            const data = roleData[role];
+            const container = document.getElementById('modules-container');
+            const description = document.getElementById('role-description');
+
+            // Update description
+            description.textContent = data.description;
+            description.classList.add('animate-fade-in');
+
+            // Clear and populate modules
+            container.innerHTML = '';
+            
+            data.modules.forEach((module, index) => {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'module-card bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:border-simflo-purple hover:shadow-lg transition-all cursor-pointer hover-lift h-28 sm:h-32 flex flex-col justify-center';
+                moduleCard.style.animationDelay = `${index * 0.1}s`;
+                moduleCard.classList.add('animate-slide-up');
+                
+                moduleCard.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-xl sm:text-2xl mb-1 sm:mb-2">${module.icon}</div>
+                        <h4 class="font-medium text-gray-900 text-xs sm:text-sm leading-tight">${module.name}</h4>
+                    </div>
+                `;
+
+                moduleCard.addEventListener('click', () => {
+                    // Add click animation
+                    moduleCard.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        moduleCard.style.transform = 'translateY(-4px)';
+                    }, 150);
+                    
+                    loadFeatures(module.id, module.name);
+                });
+                container.appendChild(moduleCard);
+            });
+        }
+
+        // Load features for selected module
+        function loadFeatures(moduleId, moduleName) {
+            // Check for role-specific features first
+            const currentRole = document.querySelector('.role-tab.active').dataset.role;
+            let features = moduleFeatures[moduleId];
+            
+            // Use role-specific features if available
+            if (currentRole === 'parent') {
+                const parentFeatureKey = `parent_${moduleId}`;
+                if (moduleFeatures[parentFeatureKey]) {
+                    features = moduleFeatures[parentFeatureKey];
+                }
+            } else if (currentRole === 'management') {
+                const managementFeatureKey = `management_${moduleId}`;
+                if (moduleFeatures[managementFeatureKey]) {
+                    features = moduleFeatures[managementFeatureKey];
+                }
+            }
+            
+            if (!features) return;
+
+            const featuresSection = document.getElementById('features-section');
+            const moduleTitle = document.getElementById('module-title');
+            const featuresGrid = document.getElementById('features-grid');
+
+            // Update title
+            moduleTitle.textContent = `${moduleName} Features`;
+
+            // Clear and populate features
+            featuresGrid.innerHTML = '';
+            
+            features.forEach((feature, index) => {
+                const featureCard = document.createElement('div');
+                featureCard.className = 'bg-white rounded-lg p-6 border border-gray-200 hover:border-simflo-purple hover:shadow-lg transition-all hover-lift cursor-pointer';
+                
+                featureCard.innerHTML = `
+                    <div class="text-left">
+                        <div class="w-12 h-12 mb-3 text-simflo-purple">
+                            ${feature.icon}
+                        </div>
+                        <h5 class="font-bold text-gray-900 mb-2">${feature.title}</h5>
+                        <p class="text-gray-600 text-sm mb-4">${feature.subtitle}</p>
+                        <ul class="space-y-2">
+                            ${feature.points.map((point, i) => `
+                                <li class="flex items-start space-x-2 text-sm text-gray-700">
+                                    <div class="w-1.5 h-1.5 bg-simflo-purple rounded-full flex-shrink-0 mt-2"></div>
+                                    <span>${point}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                featuresGrid.appendChild(featureCard);
+            });
+
+            // Show features section
+            featuresSection.classList.remove('hidden');
+            featuresSection.classList.add('animate-fade-in');
+
+            // Scroll to features section
+            featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Hide features section
+        function hideFeatures() {
+            const featuresSection = document.getElementById('features-section');
+            featuresSection.classList.add('hidden');
+        }
+
+        // Interactive notifications system
+        function triggerNotification(message, type = 'info') {
+            const sidebar = document.getElementById('notifications-sidebar');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                'info': 'bg-blue-500',
+                'success': 'bg-green-500',
+                'feature-demo': 'bg-purple-500',
+                'role-change': 'bg-orange-500'
+            };
+            
+            notification.className = `${colors[type]} text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-lg notification-slide max-w-xs`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+            `;
+            
+            sidebar.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Auto-trigger demo notifications
+        setInterval(() => {
+            const messages = [
+                '👥 New user joined the demo',
+                '📊 Analytics updated in real-time',
+                '🔔 System notification received',
+                '✅ Task completed successfully'
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            triggerNotification(randomMessage, 'info');
+        }, 8000);
+
+
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968aab0a80e73217',t:'MTc1NDEwNzIyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
