@@ -814,16 +814,34 @@
         // Form submission handler
         document.getElementById('allocationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form values
-            const formData = new FormData(this);
+            performSearch();
+        });
+
+        // Auto-search when any dropdown changes
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.addEventListener('change', function() {
+                // Visual feedback for selection
+                if (this.value) {
+                    this.style.borderColor = '#6366F1';
+                } else {
+                    this.style.borderColor = '#DADCE0';
+                }
+                
+                // Trigger search automatically
+                performSearch();
+            });
+        });
+
+        // Centralized search function
+        function performSearch() {
+            const form = document.getElementById('allocationForm');
+            const formData = new FormData(form);
             const academicYear = formData.get('academic-year');
             const classValue = formData.get('class');
             const subject = formData.get('subject');
             const classTeacher = formData.get('class-teacher');
             
             // Add loading state
-            const form = this;
             form.classList.add('loading');
             
             // Simulate API call delay
@@ -834,10 +852,12 @@
                 const filteredData = filterAllocations(classValue, subject, classTeacher);
                 showResults(filteredData);
                 
-                // Show success notification
-                showNotification('Search completed successfully!', 'success');
-            }, 1000);
-        });
+                // Show success notification only if user clicked search button
+                if (event && event.type === 'submit') {
+                    showNotification('Search completed successfully!', 'success');
+                }
+            }, 500);
+        }
 
         // Filter allocations based on criteria
         function filterAllocations(classFilter, subjectFilter, teacherFilter) {
@@ -1013,16 +1033,7 @@
             }
         });
 
-        // Enhanced form interactions
-        document.querySelectorAll('.filter-select').forEach(select => {
-            select.addEventListener('change', function() {
-                if (this.value) {
-                    this.style.borderColor = '#6366F1';
-                } else {
-                    this.style.borderColor = '#DADCE0';
-                }
-            });
-        });
+        // This functionality is now handled in the auto-search section above
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969d667c42f52e47',t:'MTc1NDMwMzY0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969d767ee3690b57',t:'MTc1NDMwNDMwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
