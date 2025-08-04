@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Allocations - School ERP</title>
+    <title>Subject & Class Teacher Allocation - School ERP</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -14,168 +14,44 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FAFBFC;
-            color: #1A1A1A;
+            background-color: #F8FAFC;
+            color: #1E293B;
             line-height: 1.6;
         }
 
-        /* Layout Grid */
-        .app-container {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
         }
 
-        /* Sidebar - Minimal */
-        .sidebar {
-            background-color: #FFFFFF;
-            border-right: 1px solid #E8EAED;
-            padding: 24px 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-header {
-            padding: 0 24px 32px;
-            border-bottom: 1px solid #F1F3F4;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 18px;
-        }
-
-        .logo-text {
-            font-size: 22px;
-            font-weight: 700;
-            color: #1A1A1A;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 32px 0;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 4px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 24px;
-            text-decoration: none;
-            color: #5F6368;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border-right: 3px solid transparent;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            background-color: #F8F9FA;
-            color: #1A1A1A;
-        }
-
-        .nav-link.active {
-            background-color: #F0F4FF;
-            color: #6366F1;
-            border-right-color: #6366F1;
-            font-weight: 600;
-        }
-
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 32px 40px;
-            max-width: 1200px;
-        }
-
-        /* Breadcrumb */
-        .breadcrumb {
+        /* Header Section */
+        .header {
             margin-bottom: 32px;
         }
 
-        .breadcrumb-text {
-            font-size: 24px;
+        .page-title {
+            font-size: 28px;
             font-weight: 700;
-            color: #1A1A1A;
-            letter-spacing: -0.02em;
+            color: #0F172A;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
         }
 
-        /* Tab Navigation */
-        .tab-navigation {
-            margin-bottom: 40px;
-        }
-
-        .tab-pills {
-            display: flex;
-            gap: 8px;
-            background-color: #F1F3F4;
-            padding: 6px;
-            border-radius: 12px;
-            width: fit-content;
-        }
-
-        .tab-pill {
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-            background: transparent;
-            color: #5F6368;
-        }
-
-        .tab-pill.active {
-            background-color: #FFFFFF;
-            color: #1A1A1A;
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-pill:hover:not(.active) {
-            color: #1A1A1A;
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748B;
+            font-weight: 400;
         }
 
         /* Filter Panel */
         .filter-panel {
-            background-color: #FFFFFF;
-            border: 1px solid #E8EAED;
+            background: white;
             border-radius: 16px;
             padding: 32px;
             margin-bottom: 32px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E2E8F0;
         }
 
         .filter-grid {
@@ -191,49 +67,47 @@
         }
 
         .filter-label {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
-            color: #3C4043;
+            color: #374151;
             margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .filter-select {
             width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid #DADCE0;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
             font-size: 14px;
             font-family: 'Inter', sans-serif;
-            background-color: #FFFFFF;
-            color: #1A1A1A;
+            background-color: white;
+            color: #1E293B;
             cursor: pointer;
             transition: all 0.2s ease;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%235F6368' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 14px center;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748B' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 16px center;
             background-repeat: no-repeat;
             background-size: 16px;
-            padding-right: 44px;
+            padding-right: 48px;
         }
 
         .filter-select:focus {
             outline: none;
-            border-color: #6366F1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .filter-select:hover {
-            border-color: #BDC1C6;
+            border-color: #CBD5E1;
         }
 
         .search-btn {
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            background-color: #1E293B;
             color: white;
             border: none;
-            padding: 14px 32px;
-            border-radius: 10px;
+            padding: 12px 32px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -242,12 +116,13 @@
             align-items: center;
             gap: 8px;
             height: fit-content;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .search-btn:hover {
+            background-color: #0F172A;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.15);
         }
 
         .search-btn:active {
@@ -256,151 +131,228 @@
 
         /* Content Area */
         .content-area {
-            background-color: #FFFFFF;
-            border: 1px solid #E8EAED;
+            background: white;
             border-radius: 16px;
-            min-height: 400px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E2E8F0;
+            overflow: hidden;
         }
 
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 40px;
-            text-align: center;
-        }
-
-        .empty-icon {
-            width: 80px;
-            height: 80px;
-            background-color: #F8F9FA;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            font-size: 32px;
-            color: #9AA0A6;
-        }
-
-        .empty-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #3C4043;
-            margin-bottom: 8px;
-        }
-
-        .empty-description {
-            font-size: 14px;
-            color: #5F6368;
-            max-width: 300px;
-            line-height: 1.5;
-        }
-
-        /* Table Styles */
-        .table-container {
-            padding: 32px;
-            display: none;
-        }
-
-        .table-container.show {
-            display: block;
-        }
-
+        /* Table Header */
         .table-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #E2E8F0;
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
         }
 
         .table-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1A1A1A;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0F172A;
         }
 
+        /* Bulk Actions */
+        .bulk-actions {
+            padding: 20px 32px;
+            background-color: #F8FAFC;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .bulk-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bulk-btn.primary {
+            background-color: #3B82F6;
+            color: white;
+            border-color: #3B82F6;
+        }
+
+        .bulk-btn.primary:hover {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+        .bulk-btn.secondary {
+            background-color: white;
+            color: #6B7280;
+            border-color: #D1D5DB;
+        }
+
+        .bulk-btn.secondary:hover:not(:disabled) {
+            background-color: #F9FAFB;
+            color: #374151;
+        }
+
+        .bulk-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Table */
         .allocation-table {
             width: 100%;
             border-collapse: collapse;
         }
 
         .allocation-table th {
-            background-color: #F8F9FA;
-            padding: 16px 12px;
+            background-color: #F8FAFC;
+            padding: 16px 32px;
             text-align: left;
             font-size: 12px;
             font-weight: 600;
-            color: #3C4043;
+            color: #6B7280;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #E8EAED;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .allocation-table th:first-child {
+            width: 50px;
         }
 
         .allocation-table td {
-            padding: 16px 12px;
-            border-bottom: 1px solid #F1F3F4;
+            padding: 20px 32px;
+            border-bottom: 1px solid #F1F5F9;
             font-size: 14px;
-            color: #1A1A1A;
+            color: #1E293B;
+            vertical-align: middle;
         }
 
         .allocation-table tr:hover {
-            background-color: #F8F9FA;
+            background-color: #F8FAFC;
         }
 
+        .allocation-table tr.selected {
+            background-color: #EFF6FF;
+        }
+
+        /* Checkbox */
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #D1D5DB;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox:checked {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Teacher Info */
         .teacher-info {
             display: flex;
             flex-direction: column;
         }
 
         .teacher-name {
-            font-weight: 500;
-            color: #1A1A1A;
+            font-weight: 600;
+            color: #0F172A;
             margin-bottom: 2px;
         }
 
         .teacher-dept {
             font-size: 12px;
-            color: #5F6368;
+            color: #6B7280;
         }
 
+        /* Subject Count */
+        .subject-count {
+            font-weight: 600;
+            color: #3B82F6;
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 8px;
         }
 
         .action-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.2s ease;
         }
 
         .action-btn.edit {
-            background-color: #FEF7CD;
-            color: #F59E0B;
+            background-color: #FEF3C7;
+            color: #D97706;
         }
 
         .action-btn.edit:hover {
-            background-color: #FDE047;
+            background-color: #FDE68A;
+            transform: scale(1.05);
         }
 
-        .action-btn.remove {
+        .action-btn.delete {
             background-color: #FEE2E2;
-            color: #EF4444;
+            color: #DC2626;
         }
 
-        .action-btn.remove:hover {
+        .action-btn.delete:hover {
             background-color: #FECACA;
+            transform: scale(1.05);
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 80px 32px;
+            text-align: center;
+            color: #6B7280;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .empty-description {
+            font-size: 14px;
+            color: #6B7280;
         }
 
         /* Modal Styles */
@@ -426,12 +378,12 @@
         }
 
         .modal {
-            background-color: #FFFFFF;
+            background: white;
             border-radius: 16px;
             padding: 32px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             transform: translateY(20px);
             transition: transform 0.3s ease;
         }
@@ -446,8 +398,8 @@
 
         .modal-title {
             font-size: 20px;
-            font-weight: 600;
-            color: #1A1A1A;
+            font-weight: 700;
+            color: #0F172A;
             margin-bottom: 8px;
         }
 
@@ -465,9 +417,9 @@
         }
 
         .btn-cancel {
-            background-color: #F8F9FA;
-            color: #3C4043;
-            border: 1px solid #DADCE0;
+            background-color: #F8FAFC;
+            color: #6B7280;
+            border: 1px solid #D1D5DB;
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 14px;
@@ -477,11 +429,12 @@
         }
 
         .btn-cancel:hover {
-            background-color: #F1F3F4;
+            background-color: #F1F5F9;
+            color: #374151;
         }
 
         .btn-save {
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            background-color: #1E293B;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -493,13 +446,13 @@
         }
 
         .btn-save:hover {
+            background-color: #0F172A;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
         }
 
         /* Loading State */
         .loading .search-btn {
-            background: #9AA0A6;
+            background-color: #9CA3AF;
             pointer-events: none;
         }
 
@@ -518,16 +471,8 @@
         }
 
         @media (max-width: 768px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                display: none;
-            }
-            
-            .main-content {
-                padding: 20px;
+            .container {
+                padding: 20px 16px;
             }
             
             .filter-grid {
@@ -537,9 +482,19 @@
             .search-btn {
                 grid-column: span 1;
             }
+            
+            .allocation-table th,
+            .allocation-table td {
+                padding: 12px 16px;
+            }
+            
+            .bulk-actions {
+                padding: 16px;
+                flex-wrap: wrap;
+            }
         }
 
-        /* Smooth Animations */
+        /* Animations */
         .fade-in {
             animation: fadeIn 0.4s ease-in;
         }
@@ -548,188 +503,176 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification.success {
+            background-color: #10B981;
+        }
+
+        .notification.error {
+            background-color: #EF4444;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon">S</div>
-                    <div class="logo-text">School ERP</div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="page-title">Subject & Class Teacher Allocation</h1>
+            <p class="page-subtitle">Assign subject & class teacher to a class for the academic year 2025</p>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-panel">
+            <form class="filter-grid" id="allocationForm">
+                <div class="filter-group">
+                    <label class="filter-label" for="academic-year">Academic Year</label>
+                    <select class="filter-select" id="academic-year" name="academic-year">
+                        <option value="2025-2026" selected>2025-2026</option>
+                        <option value="2024-2025">2024-2025</option>
+                        <option value="2023-2024">2023-2024</option>
+                    </select>
                 </div>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <div class="nav-icon">📋</div>
-                            Allocations
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Breadcrumb -->
-            <div class="breadcrumb">
-                <h1 class="breadcrumb-text">Allocations</h1>
-            </div>
+                <div class="filter-group">
+                    <label class="filter-label" for="class">Class</label>
+                    <select class="filter-select" id="class" name="class">
+                        <option value="" selected>All classes</option>
+                        <option value="Grade 1A">Grade 1A</option>
+                        <option value="Grade 1B">Grade 1B</option>
+                        <option value="Grade 2A">Grade 2A</option>
+                        <option value="Grade 2B">Grade 2B</option>
+                        <option value="Grade 3A">Grade 3A</option>
+                        <option value="Grade 3B">Grade 3B</option>
+                        <option value="Grade 4A">Grade 4A</option>
+                        <option value="Grade 4B">Grade 4B</option>
+                        <option value="Grade 5A">Grade 5A</option>
+                        <option value="Grade 5B">Grade 5B</option>
+                    </select>
+                </div>
 
-            <!-- Tab Navigation -->
-            <div class="tab-navigation">
-                <div class="tab-pills">
-                    <button class="tab-pill active" id="subjectClassTab">
-                        Subject & Class Teacher
-                    </button>
-                    <button class="tab-pill" id="primarySecondaryTab">
-                        Primary and Secondary Teacher
+                <div class="filter-group">
+                    <label class="filter-label" for="subject">Subject</label>
+                    <select class="filter-select" id="subject" name="subject">
+                        <option value="" selected>All subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="English">English</option>
+                        <option value="Science">Science</option>
+                        <option value="Social Studies">Social Studies</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Physical Education">Physical Education</option>
+                        <option value="Art">Art</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label" for="class-teacher">Class Teacher</label>
+                    <select class="filter-select" id="class-teacher" name="class-teacher">
+                        <option value="" selected>All class Teacher</option>
+                        <option value="Suchita Singh">Suchita Singh</option>
+                        <option value="Rajesh Kumar">Rajesh Kumar</option>
+                        <option value="Priya Sharma">Priya Sharma</option>
+                        <option value="Amit Patel">Amit Patel</option>
+                        <option value="Neha Gupta">Neha Gupta</option>
+                        <option value="Vikram Singh">Vikram Singh</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <button type="submit" class="search-btn">
+                        <span>🔍</span>
+                        Search
                     </button>
                 </div>
+            </form>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Table Header -->
+            <div class="table-header">
+                <h2 class="table-title">Current Allocations</h2>
             </div>
 
-            <!-- Filter Panel -->
-            <div class="filter-panel">
-                <form class="filter-grid" id="allocationForm">
-                    <div class="filter-group">
-                        <label class="filter-label" for="academic-year">Academic Year</label>
-                        <select class="filter-select" id="academic-year" name="academic-year">
-                            <option value="2025-2026" selected>2025-2026</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2023-2024">2023-2024</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label" for="class">Class</label>
-                        <select class="filter-select" id="class" name="class">
-                            <option value="" selected>All Classes</option>
-                            <option value="1-A">Class 1-A</option>
-                            <option value="1-B">Class 1-B</option>
-                            <option value="2-A">Class 2-A</option>
-                            <option value="2-B">Class 2-B</option>
-                            <option value="3-A">Class 3-A</option>
-                            <option value="3-B">Class 3-B</option>
-                            <option value="4-A">Class 4-A</option>
-                            <option value="4-B">Class 4-B</option>
-                            <option value="5-A">Class 5-A</option>
-                            <option value="5-B">Class 5-B</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label" for="subject">Subject</label>
-                        <select class="filter-select" id="subject" name="subject">
-                            <option value="" selected>All Subjects</option>
-                            <option value="mathematics">Mathematics</option>
-                            <option value="english">English</option>
-                            <option value="science">Science</option>
-                            <option value="social-studies">Social Studies</option>
-                            <option value="hindi">Hindi</option>
-                            <option value="computer-science">Computer Science</option>
-                            <option value="physical-education">Physical Education</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label class="filter-label" for="class-teacher">Class Teacher</label>
-                        <select class="filter-select" id="class-teacher" name="class-teacher">
-                            <option value="" selected>All Class Teachers</option>
-                            <option value="sarah-johnson">Sarah Johnson</option>
-                            <option value="michael-brown">Michael Brown</option>
-                            <option value="emily-davis">Emily Davis</option>
-                            <option value="david-wilson">David Wilson</option>
-                            <option value="lisa-anderson">Lisa Anderson</option>
-                            <option value="james-taylor">James Taylor</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <button type="submit" class="search-btn">
-                            <span>🔍</span>
-                            Search
-                        </button>
-                    </div>
-                </form>
+            <!-- Bulk Actions -->
+            <div class="bulk-actions">
+                <button class="bulk-btn primary" id="exportBtn">
+                    <span>📊</span>
+                    Export
+                </button>
+                <button class="bulk-btn secondary" id="bulkAssignBtn" disabled>
+                    <span>📝</span>
+                    Bulk Subject Assign
+                </button>
+                <button class="bulk-btn secondary" id="bulkRemoveBtn" disabled>
+                    <span>🗑️</span>
+                    Bulk Remove
+                </button>
+                <span id="selectedCount" style="margin-left: auto; color: #6B7280; font-size: 14px;"></span>
             </div>
 
-            <!-- Content Area -->
-            <div class="content-area">
+            <!-- Table Container -->
+            <div id="tableContainer">
                 <!-- Empty State (Default) -->
                 <div class="empty-state" id="emptyState">
                     <div class="empty-icon">📋</div>
-                    <h3 class="empty-title">No allocations yet</h3>
-                    <p class="empty-description">Use the filters above to search for teacher allocations or create new ones.</p>
+                    <h3 class="empty-title">No allocations found</h3>
+                    <p class="empty-description">Use the search filters above to find teacher allocations</p>
                 </div>
 
-                <!-- Table Container (Hidden by default) -->
-                <div class="table-container" id="tableContainer">
-                    <div class="table-header">
-                        <h2 class="table-title">Teacher Allocations</h2>
-                    </div>
-
-                    <table class="allocation-table">
-                        <thead>
-                            <tr>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Subject Teacher</th>
-                                <th>Class Teacher</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allocationTableBody">
-                            <!-- Sample data will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Table (Hidden by default) -->
+                <table class="allocation-table" id="allocationTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" class="checkbox" id="selectAll">
+                            </th>
+                            <th>Class</th>
+                            <th>Subjects</th>
+                            <th>Class Teacher</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allocationTableBody">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- Edit Modal -->
     <div class="modal-overlay" id="editModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Edit Subject/Class Teacher</h3>
+                <h3 class="modal-title">Edit Class Allocation</h3>
+                <p style="color: #6B7280; font-size: 14px;">Update teacher assignments for this class</p>
             </div>
             
             <form class="modal-form" id="editForm">
                 <div class="filter-group">
                     <label class="filter-label" for="modal-class">Class</label>
                     <select class="filter-select" id="modal-class" name="class" disabled>
-                        <option value="5-A">Class 5-A</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label" for="modal-subject">Subject</label>
-                    <select class="filter-select" id="modal-subject" name="subject" required>
-                        <option value="">Select Subject</option>
-                        <option value="mathematics">Mathematics</option>
-                        <option value="english">English</option>
-                        <option value="science">Science</option>
-                        <option value="social-studies">Social Studies</option>
-                        <option value="hindi">Hindi</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="physical-education">Physical Education</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label" for="modal-subject-teacher">Subject Teacher</label>
-                    <select class="filter-select" id="modal-subject-teacher" name="subject-teacher" required>
-                        <option value="">Select Subject Teacher</option>
-                        <option value="sarah-johnson">Sarah Johnson - Math Dept</option>
-                        <option value="michael-brown">Michael Brown - English Dept</option>
-                        <option value="emily-davis">Emily Davis - Science Dept</option>
-                        <option value="david-wilson">David Wilson - Social Studies</option>
-                        <option value="lisa-anderson">Lisa Anderson - Hindi Dept</option>
-                        <option value="james-taylor">James Taylor - PE Dept</option>
+                        <option value="">Select Class</option>
                     </select>
                 </div>
 
@@ -737,130 +680,101 @@
                     <label class="filter-label" for="modal-class-teacher">Class Teacher</label>
                     <select class="filter-select" id="modal-class-teacher" name="class-teacher" required>
                         <option value="">Select Class Teacher</option>
-                        <option value="sarah-johnson">Sarah Johnson</option>
-                        <option value="michael-brown">Michael Brown</option>
-                        <option value="emily-davis">Emily Davis</option>
-                        <option value="david-wilson">David Wilson</option>
-                        <option value="lisa-anderson">Lisa Anderson</option>
-                        <option value="james-taylor">James Taylor</option>
+                        <option value="Suchita Singh">Suchita Singh - Mathematics Dept</option>
+                        <option value="Rajesh Kumar">Rajesh Kumar - English Dept</option>
+                        <option value="Priya Sharma">Priya Sharma - Science Dept</option>
+                        <option value="Amit Patel">Amit Patel - Social Studies Dept</option>
+                        <option value="Neha Gupta">Neha Gupta - Hindi Dept</option>
+                        <option value="Vikram Singh">Vikram Singh - PE Dept</option>
                     </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Assigned Subjects</label>
+                    <div style="color: #6B7280; font-size: 14px; padding: 12px; background-color: #F8FAFC; border-radius: 8px;">
+                        Mathematics, English, Science, Social Studies, Hindi, Computer Science, Physical Education, Art
+                    </div>
                 </div>
             </form>
 
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button type="button" class="btn-save" onclick="saveAllocation()">Save</button>
+                <button type="button" class="btn-save" onclick="saveAllocation()">Save Changes</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Sample data for demonstration
+        // Sample data
         const sampleAllocations = [
             {
-                class: "Class 5-A",
-                subject: "Mathematics",
-                subjectTeacher: { name: "Sarah Johnson", dept: "Math Dept" },
-                classTeacher: { name: "Emily Davis", dept: "Primary" }
+                id: 1,
+                class: "Grade 1A",
+                subjects: 8,
+                classTeacher: { name: "Suchita Singh", dept: "Mathematics dept" }
             },
             {
-                class: "Class 5-A",
-                subject: "English",
-                subjectTeacher: { name: "Michael Brown", dept: "English Dept" },
-                classTeacher: { name: "Emily Davis", dept: "Primary" }
+                id: 2,
+                class: "Grade 1B",
+                subjects: 8,
+                classTeacher: { name: "Rajesh Kumar", dept: "English dept" }
             },
             {
-                class: "Class 5-B",
-                subject: "Science",
-                subjectTeacher: { name: "Emily Davis", dept: "Science Dept" },
-                classTeacher: { name: "David Wilson", dept: "Primary" }
+                id: 3,
+                class: "Grade 2A",
+                subjects: 7,
+                classTeacher: { name: "Priya Sharma", dept: "Science dept" }
             },
             {
-                class: "Class 4-A",
-                subject: "Mathematics",
-                subjectTeacher: { name: "Sarah Johnson", dept: "Math Dept" },
-                classTeacher: { name: "Lisa Anderson", dept: "Primary" }
+                id: 4,
+                class: "Grade 2B",
+                subjects: 7,
+                classTeacher: { name: "Amit Patel", dept: "Social Studies dept" }
             },
             {
-                class: "Class 3-B",
-                subject: "Hindi",
-                subjectTeacher: { name: "Lisa Anderson", dept: "Hindi Dept" },
-                classTeacher: { name: "James Taylor", dept: "Primary" }
+                id: 5,
+                class: "Grade 3A",
+                subjects: 9,
+                classTeacher: { name: "Neha Gupta", dept: "Hindi dept" }
+            },
+            {
+                id: 6,
+                class: "Grade 3B",
+                subjects: 9,
+                classTeacher: { name: "Vikram Singh", dept: "PE dept" }
             }
         ];
 
-        // Tab switching functionality
-        document.getElementById('subjectClassTab').addEventListener('click', function() {
-            switchTab('subjectClass');
-        });
+        let selectedRows = new Set();
 
-        document.getElementById('primarySecondaryTab').addEventListener('click', function() {
-            switchTab('primarySecondary');
-        });
-
-        function switchTab(tabName) {
-            // Update tab appearance
-            document.querySelectorAll('.tab-pill').forEach(tab => tab.classList.remove('active'));
-            
-            if (tabName === 'subjectClass') {
-                document.getElementById('subjectClassTab').classList.add('active');
-            } else {
-                document.getElementById('primarySecondaryTab').classList.add('active');
-                // For now, show empty state for secondary tab
-                showEmptyState();
-            }
-        }
-
-        // Form submission handler
+        // Form submission
         document.getElementById('allocationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             performSearch();
         });
 
-        // Auto-search when any dropdown changes
+        // Auto-search on dropdown change
         document.querySelectorAll('.filter-select').forEach(select => {
-            select.addEventListener('change', function() {
-                // Visual feedback for selection
-                if (this.value) {
-                    this.style.borderColor = '#6366F1';
-                } else {
-                    this.style.borderColor = '#DADCE0';
-                }
-                
-                // Trigger search automatically
-                performSearch();
-            });
+            select.addEventListener('change', performSearch);
         });
 
-        // Centralized search function
         function performSearch() {
             const form = document.getElementById('allocationForm');
             const formData = new FormData(form);
-            const academicYear = formData.get('academic-year');
-            const classValue = formData.get('class');
-            const subject = formData.get('subject');
-            const classTeacher = formData.get('class-teacher');
             
-            // Add loading state
             form.classList.add('loading');
             
-            // Simulate API call delay
             setTimeout(() => {
                 form.classList.remove('loading');
-                
-                // Filter and show results
-                const filteredData = filterAllocations(classValue, subject, classTeacher);
+                const filteredData = filterAllocations(formData);
                 showResults(filteredData);
-                
-                // Show success notification only if user clicked search button
-                if (event && event.type === 'submit') {
-                    showNotification('Search completed successfully!', 'success');
-                }
-            }, 500);
+            }, 800);
         }
 
-        // Filter allocations based on criteria
-        function filterAllocations(classFilter, subjectFilter, teacherFilter) {
+        function filterAllocations(formData) {
+            const classFilter = formData.get('class');
+            const teacherFilter = formData.get('class-teacher');
+            
             return sampleAllocations.filter(allocation => {
                 let matches = true;
                 
@@ -868,13 +782,7 @@
                     matches = false;
                 }
                 
-                if (subjectFilter && !allocation.subject.toLowerCase().includes(subjectFilter.toLowerCase())) {
-                    matches = false;
-                }
-                
-                if (teacherFilter && 
-                    !allocation.subjectTeacher.name.toLowerCase().includes(teacherFilter.toLowerCase()) &&
-                    !allocation.classTeacher.name.toLowerCase().includes(teacherFilter.toLowerCase())) {
+                if (teacherFilter && !allocation.classTeacher.name.toLowerCase().includes(teacherFilter.toLowerCase())) {
                     matches = false;
                 }
                 
@@ -882,36 +790,30 @@
             });
         }
 
-        // Show results in table
         function showResults(data) {
             const emptyState = document.getElementById('emptyState');
-            const tableContainer = document.getElementById('tableContainer');
+            const table = document.getElementById('allocationTable');
             const tableBody = document.getElementById('allocationTableBody');
             
             if (data.length === 0) {
-                showEmptyState();
+                emptyState.style.display = 'block';
+                table.style.display = 'none';
                 return;
             }
             
-            // Hide empty state and show table
             emptyState.style.display = 'none';
-            tableContainer.classList.add('show');
+            table.style.display = 'table';
             
-            // Clear existing rows
             tableBody.innerHTML = '';
             
-            // Add new rows
-            data.forEach((allocation, index) => {
+            data.forEach(allocation => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${allocation.class}</td>
-                    <td>${allocation.subject}</td>
                     <td>
-                        <div class="teacher-info">
-                            <span class="teacher-name">${allocation.subjectTeacher.name}</span>
-                            <span class="teacher-dept">${allocation.subjectTeacher.dept}</span>
-                        </div>
+                        <input type="checkbox" class="checkbox row-checkbox" data-id="${allocation.id}">
                     </td>
+                    <td><strong>${allocation.class}</strong></td>
+                    <td><span class="subject-count">${allocation.subjects}</span></td>
                     <td>
                         <div class="teacher-info">
                             <span class="teacher-name">${allocation.classTeacher.name}</span>
@@ -920,10 +822,10 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="editAllocation(${index})">
+                            <button class="action-btn edit" onclick="editAllocation(${allocation.id}, '${allocation.class}', '${allocation.classTeacher.name}')">
                                 ✏️
                             </button>
-                            <button class="action-btn remove" onclick="removeAllocation(${index})">
+                            <button class="action-btn delete" onclick="deleteAllocation(${allocation.id})">
                                 🗑️
                             </button>
                         </div>
@@ -932,108 +834,148 @@
                 tableBody.appendChild(row);
             });
             
-            // Add fade-in animation
-            tableContainer.classList.add('fade-in');
+            // Add event listeners for checkboxes
+            setupCheckboxes();
+            table.classList.add('fade-in');
         }
 
-        // Show empty state
-        function showEmptyState() {
-            const emptyState = document.getElementById('emptyState');
-            const tableContainer = document.getElementById('tableContainer');
+        function setupCheckboxes() {
+            const selectAll = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
             
-            emptyState.style.display = 'flex';
-            tableContainer.classList.remove('show');
-        }
-
-        // Edit allocation
-        function editAllocation(index) {
-            const modal = document.getElementById('editModal');
-            modal.classList.add('active');
+            selectAll.addEventListener('change', function() {
+                rowCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    const row = checkbox.closest('tr');
+                    if (this.checked) {
+                        selectedRows.add(parseInt(checkbox.dataset.id));
+                        row.classList.add('selected');
+                    } else {
+                        selectedRows.delete(parseInt(checkbox.dataset.id));
+                        row.classList.remove('selected');
+                    }
+                });
+                updateBulkActions();
+            });
             
-            // Pre-fill form with current data if needed
-            // This is where you'd populate the modal with existing data
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const row = this.closest('tr');
+                    const id = parseInt(this.dataset.id);
+                    
+                    if (this.checked) {
+                        selectedRows.add(id);
+                        row.classList.add('selected');
+                    } else {
+                        selectedRows.delete(id);
+                        row.classList.remove('selected');
+                    }
+                    
+                    selectAll.checked = rowCheckboxes.length === selectedRows.size;
+                    updateBulkActions();
+                });
+            });
         }
 
-        // Remove allocation
-        function removeAllocation(index) {
-            if (confirm('Are you sure you want to remove this allocation?')) {
-                showNotification('Allocation removed successfully!', 'success');
-                // Here you would remove the row from the table
+        function updateBulkActions() {
+            const bulkAssignBtn = document.getElementById('bulkAssignBtn');
+            const bulkRemoveBtn = document.getElementById('bulkRemoveBtn');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            const count = selectedRows.size;
+            
+            if (count > 0) {
+                bulkAssignBtn.disabled = false;
+                bulkRemoveBtn.disabled = false;
+                selectedCount.textContent = `${count} selected`;
+            } else {
+                bulkAssignBtn.disabled = true;
+                bulkRemoveBtn.disabled = true;
+                selectedCount.textContent = '';
             }
         }
 
-        // Modal functions
+        function editAllocation(id, className, teacherName) {
+            const modal = document.getElementById('editModal');
+            const modalClass = document.getElementById('modal-class');
+            const modalTeacher = document.getElementById('modal-class-teacher');
+            
+            modalClass.innerHTML = `<option value="${className}">${className}</option>`;
+            modalTeacher.value = teacherName;
+            
+            modal.classList.add('active');
+        }
+
+        function deleteAllocation(id) {
+            if (confirm('Are you sure you want to delete this allocation?')) {
+                showNotification('Allocation deleted successfully!', 'success');
+                // Here you would remove the row and refresh the table
+            }
+        }
+
         function closeModal() {
             const modal = document.getElementById('editModal');
             modal.classList.remove('active');
-            
-            // Reset form
             document.getElementById('editForm').reset();
         }
 
         function saveAllocation() {
-            const subject = document.getElementById('modal-subject').value;
-            const subjectTeacher = document.getElementById('modal-subject-teacher').value;
-            const classTeacher = document.getElementById('modal-class-teacher').value;
+            const teacher = document.getElementById('modal-class-teacher').value;
             
-            if (!subject || !subjectTeacher || !classTeacher) {
-                showNotification('Please fill in all fields', 'error');
+            if (!teacher) {
+                showNotification('Please select a class teacher', 'error');
                 return;
             }
             
-            // Simulate saving
             setTimeout(() => {
                 closeModal();
-                showNotification('Allocation saved successfully!', 'success');
+                showNotification('Allocation updated successfully!', 'success');
             }, 500);
         }
 
-        // Notification system
-        function showNotification(message, type = 'info') {
+        // Bulk actions
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            showNotification('Export started! Check your downloads.', 'success');
+        });
+
+        document.getElementById('bulkAssignBtn').addEventListener('click', function() {
+            if (selectedRows.size > 0) {
+                showNotification(`Bulk assignment started for ${selectedRows.size} classes`, 'success');
+            }
+        });
+
+        document.getElementById('bulkRemoveBtn').addEventListener('click', function() {
+            if (selectedRows.size > 0 && confirm(`Remove ${selectedRows.size} selected allocations?`)) {
+                showNotification(`${selectedRows.size} allocations removed successfully!`, 'success');
+                selectedRows.clear();
+                updateBulkActions();
+            }
+        });
+
+        function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 16px 24px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 500;
-                z-index: 10000;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-                ${type === 'success' ? 'background-color: #10B981;' : 
-                  type === 'error' ? 'background-color: #EF4444;' : 
-                  'background-color: #6366F1;'}
-            `;
+            notification.className = `notification ${type}`;
             notification.textContent = message;
             
             document.body.appendChild(notification);
             
-            // Animate in
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
+            setTimeout(() => notification.classList.add('show'), 100);
             
-            // Remove after 3 seconds
             setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
             }, 3000);
         }
 
-        // Close modal when clicking outside
+        // Close modal on outside click
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('modal-overlay')) {
                 closeModal();
             }
         });
 
-        // This functionality is now handled in the auto-search section above
+        // Initialize with search
+        setTimeout(() => performSearch(), 500);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969d767ee3690b57',t:'MTc1NDMwNDMwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969d82aef5953be0',t:'MTc1NDMwNDgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
