@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject & Class Teacher Allocation - Simflo School ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+            color: #1E1E1E;
+            line-height: 1.6;
+        }
+
+        /* Layout Grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Ultra Clean */
+        .sidebar {
+            background-color: #FFFFFF;
+            border-right: 1px solid #F0F0F0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #7B54FA 0%, #9B7BFF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1E1E1E;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: #F9FAFB;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background-color: #F3F4F6;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #7B54FA 0%, #9B7BFF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1E1E1E;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 24px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding: 0 24px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 2px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            border-right: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background-color: #F9FAFB;
+            color: #374151;
+        }
+
+        .nav-link.active {
+            background-color: #F3F0FF;
+            color: #7B54FA;
+            border-right-color: #7B54FA;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-badge {
+            background-color: #EF4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+
+        .nav-badge.success {
+            background-color: #10B981;
+        }
+
+        .nav-badge.warning {
+            background-color: #F59E0B;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .sidebar-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: #6B7280;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-footer-item:hover {
+            color: #374151;
+        }
+
+        .sidebar-footer-item .nav-icon {
+            font-size: 14px;
+        }
+
+        /* Main Content - Ultra Clean */
+        .main-content {
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+            letter-spacing: -0.025em;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: #6B7280;
+            font-weight: 400;
+        }
+
+        /* Filter Section - Minimalist Card */
+        .filter-section {
+            background-color: #FFFFFF;
+            border: 1px solid #F3F4F6;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 14px center;
+            background-repeat: no-repeat;
+            background-size: 14px;
+            padding-right: 44px;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #7B54FA;
+            box-shadow: 0 0 0 3px rgba(123, 84, 250, 0.08);
+        }
+
+        .form-select:hover {
+            border-color: #D1D5DB;
+        }
+
+        .form-select option {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7B54FA 0%, #9B7BFF 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: fit-content;
+            box-shadow: 0 2px 8px rgba(123, 84, 250, 0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Results Section - Clean Empty State */
+        .results-section {
+            background-color: #FFFFFF;
+            border: 1px solid #F3F4F6;
+            border-radius: 16px;
+            padding: 48px 32px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .results-placeholder {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .results-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #F9FAFB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            color: #9CA3AF;
+        }
+
+        .results-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .results-description {
+            font-size: 14px;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        /* Success State */
+        .results-success {
+            background-color: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .results-success .results-icon {
+            background-color: #DCFCE7;
+            color: #16A34A;
+        }
+
+        .results-success .results-title {
+            color: #15803D;
+        }
+
+        .results-success .results-description {
+            color: #166534;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .filter-form {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+            
+            .btn-primary {
+                grid-column: span 2;
+                justify-self: start;
+                width: fit-content;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 24px;
+            }
+            
+            .filter-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-primary {
+                grid-column: span 1;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading .btn-primary {
+            background: #9CA3AF;
+        }
+
+        /* Table Styles */
+        .table-section {
+            background-color: #FFFFFF;
+            border: 1px solid #F3F4F6;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            background-color: #F9FAFB;
+            color: #374151;
+            border: 1px solid #E5E7EB;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #F3F4F6;
+            border-color: #D1D5DB;
+        }
+
+        .allocation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .allocation-table th {
+            background-color: #F9FAFB;
+            padding: 16px 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .allocation-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .allocation-table tr:hover {
+            background-color: #F9FAFB;
+        }
+
+        .teacher-cell {
+            color: #6B7280;
+            font-size: 13px;
+        }
+
+        .teacher-name {
+            font-weight: 500;
+            color: #111827;
+            display: block;
+        }
+
+        .teacher-dept {
+            color: #9CA3AF;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn.edit {
+            background-color: #FEF3C7;
+            color: #D97706;
+        }
+
+        .action-btn.edit:hover {
+            background-color: #FDE68A;
+        }
+
+        .action-btn.delete {
+            background-color: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .action-btn.delete:hover {
+            background-color: #FECACA;
+        }
+
+        .checkbox-cell {
+            width: 40px;
+        }
+
+        .checkbox-cell input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #7B54FA;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background-color: #F9FAFB;
+            color: #374151;
+            border: 1px solid #E5E7EB;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #F3F4F6;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #7B54FA 0%, #9B7BFF 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.25);
+        }
+
+        /* Smooth Animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">S</div>
+                    <div class="logo-text">Simflo</div>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">SM</div>
+                    <div class="user-info">
+                        <div class="user-name">Sarah Miller</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Dashboard</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📊</div>
+                                Overview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📈</div>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📋</div>
+                                Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Student Management</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">👥</div>
+                                Students
+                                <span class="nav-badge">1,247</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📝</div>
+                                Admissions
+                                <span class="nav-badge warning">12</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">🎓</div>
+                                Graduations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📊</div>
+                                Attendance
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Staff Management</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">👨‍🏫</div>
+                                Teachers
+                                <span class="nav-badge success">89</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">👨‍💼</div>
+                                Staff
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">💰</div>
+                                Payroll
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📅</div>
+                                Leave Management
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Academic Management</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📚</div>
+                                Curriculum
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">🏫</div>
+                                Classes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📖</div>
+                                Subjects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📝</div>
+                                Examinations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">🎯</div>
+                                Grading
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Allocations</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">🎯</div>
+                                Subject & Class Teacher
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <div class="nav-icon">👥</div>
+                                Primary & Secondary Teacher
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">🏫</div>
+                                Room Allocation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">⏰</div>
+                                Time Table
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Finance</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">💳</div>
+                                Fee Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📊</div>
+                                Accounts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">💰</div>
+                                Expenses
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Communication</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📧</div>
+                                Messages
+                                <span class="nav-badge">5</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📢</div>
+                                Announcements
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <div class="nav-icon">📱</div>
+                                SMS Gateway
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-footer-item">
+                    <div class="nav-icon">⚙️</div>
+                    Settings
+                </a>
+                <a href="#" class="sidebar-footer-item">
+                    <div class="nav-icon">❓</div>
+                    Help & Support
+                </a>
+                <a href="#" class="sidebar-footer-item">
+                    <div class="nav-icon">🚪</div>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Primary and Secondary Teacher Allocation</h1>
+                <p class="page-subtitle">Assign subject and assistant teachers to classes for academic year 2025</p>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <form class="filter-form" id="allocationForm">
+                    <div class="form-group">
+                        <label class="form-label" for="academic-year">Academic Year</label>
+                        <select class="form-select" id="academic-year" name="academic-year">
+                            <option value="2025-2026" selected>2025-2026</option>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2023-2024">2023-2024</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="class">Class</label>
+                        <select class="form-select" id="class" name="class">
+                            <option value="" selected>All Classes</option>
+                            <option value="1">Class 1</option>
+                            <option value="2">Class 2</option>
+                            <option value="3">Class 3</option>
+                            <option value="4">Class 4</option>
+                            <option value="5">Class 5</option>
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="subject">Subject</label>
+                        <select class="form-select" id="subject" name="subject">
+                            <option value="" selected>All Subjects</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="english">English</option>
+                            <option value="science">Science</option>
+                            <option value="social-studies">Social Studies</option>
+                            <option value="hindi">Hindi</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="physical-education">Physical Education</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="teacher">Teacher</label>
+                        <select class="form-select" id="teacher" name="teacher">
+                            <option value="" selected>All Teachers</option>
+                            <option value="suchita-singh">Suchita Singh</option>
+                            <option value="alok-sharma">Alok Sharma</option>
+                            <option value="priya-gupta">Priya Gupta</option>
+                            <option value="rajesh-kumar">Rajesh Kumar</option>
+                            <option value="neha-verma">Neha Verma</option>
+                            <option value="amit-patel">Amit Patel</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary">
+                            <span>🔍</span>
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section" id="tableSection">
+                <div class="table-header">
+                    <h2 class="table-title">Current Allocations</h2>
+                    <div class="table-actions">
+                        <button class="btn-secondary" id="bulkAssignBtn">
+                            <span>👥</span>
+                            Bulk Assign
+                        </button>
+                        <button class="btn-secondary" id="bulkRemoveBtn">
+                            <span>🗑️</span>
+                            Bulk Remove
+                        </button>
+                    </div>
+                </div>
+
+                <table class="allocation-table">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-cell">
+                                <input type="checkbox" id="selectAll">
+                            </th>
+                            <th>Subject</th>
+                            <th>Subject Teacher</th>
+                            <th>Assistant Teacher</th>
+                            <th>Class</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allocationTableBody">
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="row-checkbox">
+                            </td>
+                            <td>Mathematics</td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Suchita Singh</span>
+                                <span class="teacher-dept">Math Dept</span>
+                            </td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Alok Sharma</span>
+                                <span class="teacher-dept">Math Dept</span>
+                            </td>
+                            <td>Class 7-A</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit" onclick="openEditModal('Mathematics', 'Suchita Singh', 'Alok Sharma', 'Class 7-A')">
+                                        ✏️
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteAllocation('Mathematics', 'Class 7-A')">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="row-checkbox">
+                            </td>
+                            <td>English</td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Priya Gupta</span>
+                                <span class="teacher-dept">English Dept</span>
+                            </td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Neha Verma</span>
+                                <span class="teacher-dept">English Dept</span>
+                            </td>
+                            <td>Class 8-B</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit" onclick="openEditModal('English', 'Priya Gupta', 'Neha Verma', 'Class 8-B')">
+                                        ✏️
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteAllocation('English', 'Class 8-B')">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="row-checkbox">
+                            </td>
+                            <td>Science</td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Rajesh Kumar</span>
+                                <span class="teacher-dept">Science Dept</span>
+                            </td>
+                            <td class="teacher-cell">
+                                <span class="teacher-name">Amit Patel</span>
+                                <span class="teacher-dept">Science Dept</span>
+                            </td>
+                            <td>Class 9-A</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn edit" onclick="openEditModal('Science', 'Rajesh Kumar', 'Amit Patel', 'Class 9-A')">
+                                        ✏️
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteAllocation('Science', 'Class 9-A')">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit/Assign Modal -->
+    <div class="modal-overlay" id="assignModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Assign Teachers</h3>
+                <p class="modal-subtitle">Select subject and assistant teachers for the allocation</p>
+            </div>
+            
+            <form class="modal-form" id="assignForm">
+                <div class="form-group">
+                    <label class="form-label" for="modal-subject">Subject</label>
+                    <select class="form-select" id="modal-subject" name="subject" required>
+                        <option value="">Select Subject</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="english">English</option>
+                        <option value="science">Science</option>
+                        <option value="social-studies">Social Studies</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="physical-education">Physical Education</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="modal-subject-teacher">Subject Teacher</label>
+                    <select class="form-select" id="modal-subject-teacher" name="subject-teacher" required>
+                        <option value="">Select Subject Teacher</option>
+                        <option value="suchita-singh">Suchita Singh - Math Dept</option>
+                        <option value="priya-gupta">Priya Gupta - English Dept</option>
+                        <option value="rajesh-kumar">Rajesh Kumar - Science Dept</option>
+                        <option value="neha-verma">Neha Verma - English Dept</option>
+                        <option value="amit-patel">Amit Patel - Science Dept</option>
+                        <option value="alok-sharma">Alok Sharma - Math Dept</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="modal-assistant-teacher">Assistant Teacher</label>
+                    <select class="form-select" id="modal-assistant-teacher" name="assistant-teacher" required>
+                        <option value="">Select Assistant Teacher</option>
+                        <option value="alok-sharma">Alok Sharma - Math Dept</option>
+                        <option value="neha-verma">Neha Verma - English Dept</option>
+                        <option value="amit-patel">Amit Patel - Science Dept</option>
+                        <option value="suchita-singh">Suchita Singh - Math Dept</option>
+                        <option value="priya-gupta">Priya Gupta - English Dept</option>
+                        <option value="rajesh-kumar">Rajesh Kumar - Science Dept</option>
+                    </select>
+                </div>
+            </form>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn-save" onclick="saveAllocation()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Modal -->
+    <div class="modal-overlay" id="bulkModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="bulkModalTitle">Bulk Action</h3>
+                <p class="modal-subtitle" id="bulkModalSubtitle">Confirm your bulk action</p>
+            </div>
+            
+            <div id="bulkModalContent">
+                <p>Are you sure you want to perform this action on the selected allocations?</p>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeBulkModal()">Cancel</button>
+                <button type="button" class="btn-save" id="bulkConfirmBtn" onclick="confirmBulkAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler with enhanced UX
+        document.getElementById('allocationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = new FormData(this);
+            const academicYear = formData.get('academic-year');
+            const classValue = formData.get('class');
+            const subject = formData.get('subject');
+            const teacher = formData.get('teacher');
+            
+            // Add loading state
+            const form = this;
+            const tableSection = document.getElementById('tableSection');
+            
+            form.classList.add('loading');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                form.classList.remove('loading');
+                
+                // Filter table based on search criteria
+                filterTable(subject, classValue, teacher);
+                
+                // Show success message
+                showNotification('Search completed successfully!', 'success');
+            }, 800);
+        });
+
+        // Filter table function
+        function filterTable(subject, classFilter, teacher) {
+            const rows = document.querySelectorAll('#allocationTableBody tr');
+            
+            rows.forEach(row => {
+                const subjectCell = row.cells[1].textContent.toLowerCase();
+                const subjectTeacherCell = row.cells[2].textContent.toLowerCase();
+                const assistantTeacherCell = row.cells[3].textContent.toLowerCase();
+                const classCell = row.cells[4].textContent.toLowerCase();
+                
+                let showRow = true;
+                
+                if (subject && !subjectCell.includes(subject.toLowerCase())) {
+                    showRow = false;
+                }
+                
+                if (classFilter && !classCell.includes(classFilter.toLowerCase())) {
+                    showRow = false;
+                }
+                
+                if (teacher && !subjectTeacherCell.includes(teacher.toLowerCase()) && !assistantTeacherCell.includes(teacher.toLowerCase())) {
+                    showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Modal functions
+        function openEditModal(subject, subjectTeacher, assistantTeacher, className) {
+            const modal = document.getElementById('assignModal');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = 'Edit Teacher Allocation';
+            
+            // Pre-fill form with current values
+            document.getElementById('modal-subject').value = subject.toLowerCase();
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('assignModal');
+            modal.classList.remove('active');
+            
+            // Reset form
+            document.getElementById('assignForm').reset();
+        }
+
+        function saveAllocation() {
+            const subject = document.getElementById('modal-subject').value;
+            const subjectTeacher = document.getElementById('modal-subject-teacher').value;
+            const assistantTeacher = document.getElementById('modal-assistant-teacher').value;
+            
+            if (!subject || !subjectTeacher || !assistantTeacher) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Simulate saving
+            setTimeout(() => {
+                closeModal();
+                showNotification('Teacher allocation saved successfully!', 'success');
+            }, 500);
+        }
+
+        // Delete allocation function
+        function deleteAllocation(subject, className) {
+            if (confirm(`Are you sure you want to delete the allocation for ${subject} in ${className}?`)) {
+                showNotification(`${subject} allocation for ${className} has been deleted`, 'success');
+            }
+        }
+
+        // Bulk actions
+        document.getElementById('bulkAssignBtn').addEventListener('click', function() {
+            const selectedRows = document.querySelectorAll('.row-checkbox:checked');
+            if (selectedRows.length === 0) {
+                showNotification('Please select at least one allocation', 'error');
+                return;
+            }
+            
+            openBulkModal('assign', selectedRows.length);
+        });
+
+        document.getElementById('bulkRemoveBtn').addEventListener('click', function() {
+            const selectedRows = document.querySelectorAll('.row-checkbox:checked');
+            if (selectedRows.length === 0) {
+                showNotification('Please select at least one allocation', 'error');
+                return;
+            }
+            
+            openBulkModal('remove', selectedRows.length);
+        });
+
+        function openBulkModal(action, count) {
+            const modal = document.getElementById('bulkModal');
+            const title = document.getElementById('bulkModalTitle');
+            const subtitle = document.getElementById('bulkModalSubtitle');
+            const content = document.getElementById('bulkModalContent');
+            const confirmBtn = document.getElementById('bulkConfirmBtn');
+            
+            if (action === 'assign') {
+                title.textContent = 'Bulk Assign Teachers';
+                subtitle.textContent = 'Assign teachers to multiple allocations';
+                content.innerHTML = `<p>You are about to assign teachers to <strong>${count}</strong> selected allocations.</p>`;
+                confirmBtn.textContent = 'Assign';
+            } else {
+                title.textContent = 'Bulk Remove Allocations';
+                subtitle.textContent = 'Remove multiple teacher allocations';
+                content.innerHTML = `<p>You are about to remove <strong>${count}</strong> selected allocations. This action cannot be undone.</p>`;
+                confirmBtn.textContent = 'Remove';
+                confirmBtn.style.backgroundColor = '#DC2626';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeBulkModal() {
+            const modal = document.getElementById('bulkModal');
+            modal.classList.remove('active');
+            
+            // Reset confirm button style
+            const confirmBtn = document.getElementById('bulkConfirmBtn');
+            confirmBtn.style.backgroundColor = '';
+        }
+
+        function confirmBulkAction() {
+            const selectedRows = document.querySelectorAll('.row-checkbox:checked');
+            const action = document.getElementById('bulkModalTitle').textContent.includes('Assign') ? 'assigned' : 'removed';
+            
+            setTimeout(() => {
+                closeBulkModal();
+                
+                // Uncheck all checkboxes
+                selectedRows.forEach(checkbox => checkbox.checked = false);
+                document.getElementById('selectAll').checked = false;
+                
+                showNotification(`${selectedRows.length} allocations have been ${action} successfully!`, 'success');
+            }, 500);
+        }
+
+        // Select all functionality
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        // Individual checkbox handling
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('row-checkbox')) {
+                const allCheckboxes = document.querySelectorAll('.row-checkbox');
+                const checkedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+                const selectAllCheckbox = document.getElementById('selectAll');
+                
+                selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                ${type === 'success' ? 'background-color: #10B981;' : 
+                  type === 'error' ? 'background-color: #EF4444;' : 
+                  'background-color: #3B82F6;'}
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Enhanced navigation with smooth transitions
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.classList.contains('active')) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Form validation feedback
+        document.querySelectorAll('.form-select').forEach(select => {
+            select.addEventListener('change', function() {
+                if (this.value) {
+                    this.style.borderColor = '#10B981';
+                } else {
+                    this.style.borderColor = '#E5E7EB';
+                }
+            });
+        });
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                if (e.target.id === 'assignModal') {
+                    closeModal();
+                } else if (e.target.id === 'bulkModal') {
+                    closeBulkModal();
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'969d4ac1079174eb',t:'MTc1NDMwMjUxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
