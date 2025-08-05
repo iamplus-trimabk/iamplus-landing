@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance - School ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1f2937',
+                        'primary-light': '#374151',
+                        'bg-light': '#f9fafb',
+                        'card-bg': '#ffffff',
+                        'text-primary': '#111827',
+                        'text-secondary': '#6b7280',
+                        'border-light': '#e5e7eb',
+                        'sidebar-bg': '#f3f4f6',
+                        'accent': '#3b82f6',
+                        'accent-light': '#60a5fa',
+                        'success': '#10b981',
+                        'danger': '#ef4444'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-bg-light font-sans">
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-sidebar-bg border-r border-border-light flex-shrink-0">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                        <span class="text-white text-lg font-bold">S</span>
+                    </div>
+                    <h1 class="text-xl font-bold text-text-primary">School ERP</h1>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <nav class="space-y-2">
+                    <div class="mb-4">
+                        <h3 class="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Attendance</h3>
+                        <div class="space-y-1">
+                            <a href="#" class="flex items-center px-4 py-3 text-text-primary bg-white rounded-lg shadow-sm border-l-4 border-accent">
+                                <i class="fas fa-check-circle mr-3 w-5 text-accent"></i>
+                                Mark Attendance
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-3 text-text-secondary hover:bg-white hover:text-text-primary rounded-lg transition-all">
+                                <i class="fas fa-chart-line mr-3 w-5"></i>
+                                Attendance Report
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <a href="#" class="flex items-center px-4 py-3 text-text-secondary hover:bg-white hover:text-text-primary rounded-lg transition-all opacity-60">
+                            <i class="fas fa-users-cog mr-3 w-5"></i>
+                            Allocations
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-text-secondary hover:bg-white hover:text-text-primary rounded-lg transition-all opacity-60">
+                            <i class="fas fa-calendar-alt mr-3 w-5"></i>
+                            Calendar Management
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-text-secondary hover:bg-white hover:text-text-primary rounded-lg transition-all opacity-60">
+                            <i class="fas fa-dollar-sign mr-3 w-5"></i>
+                            Fee Management
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <div class="p-8">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-text-primary mb-2">Mark Attendance</h1>
+                    <p class="text-text-secondary">Select class and mark student attendance for today</p>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="bg-card-bg rounded-xl shadow-sm border border-border-light p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                            <select id="classSelect" class="w-full px-4 py-3 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm bg-white transition-all">
+                                <option>Select Class</option>
+                                <option value="10-A">Class 10-A</option>
+                                <option value="10-B">Class 10-B</option>
+                                <option value="9-A">Class 9-A</option>
+                                <option value="9-B">Class 9-B</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Subject</label>
+                            <select id="subjectSelect" class="w-full px-4 py-3 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm bg-white transition-all">
+                                <option>Select Subject</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="English">English</option>
+                                <option value="Science">Science</option>
+                                <option value="History">History</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Date</label>
+                            <input type="date" id="dateInput" class="w-full px-4 py-3 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm bg-white transition-all" value="2025-07-06">
+                        </div>
+                        <div>
+                            <button id="loadStudentsBtn" class="w-full bg-primary hover:bg-primary-light text-white px-6 py-3 rounded-lg text-sm font-medium transition-all transform hover:scale-105 flex items-center justify-center shadow-md">
+                                <i class="fas fa-users mr-2"></i>
+                                Load Students
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Summary -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex space-x-3">
+                        <button id="markAllPresentBtn" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-text-primary rounded-lg text-sm font-medium transition-all flex items-center">
+                            <i class="fas fa-check mr-2 text-success"></i>
+                            Mark All Present
+                        </button>
+                        <button id="markAllAbsentBtn" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-text-primary rounded-lg text-sm font-medium transition-all flex items-center">
+                            <i class="fas fa-times mr-2 text-danger"></i>
+                            Mark All Absent
+                        </button>
+                        <button class="px-4 py-2 border border-border-light hover:bg-gray-50 text-text-primary rounded-lg text-sm font-medium transition-all flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            Export
+                        </button>
+                    </div>
+                    <div class="text-sm text-text-secondary">
+                        <span>Total Students: <span id="totalStudents">32</span></span>
+                        <span class="mx-2">|</span>
+                        <span>Absent: <span id="absentCount" class="text-danger font-medium">4</span></span>
+                        <span class="mx-2">|</span>
+                        <span>Present: <span id="presentCount" class="text-success font-medium">28</span></span>
+                    </div>
+                </div>
+
+                <!-- Student Attendance Table -->
+                <div class="bg-card-bg rounded-xl shadow-sm border border-border-light">
+                    <!-- Table Header -->
+                    <div class="px-6 py-5 border-b border-border-light">
+                        <h2 class="text-xl font-bold text-text-primary">Class 10-A – Mathematics</h2>
+                        <p class="text-text-secondary text-sm mt-1">6 July 2025</p>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-border-light">
+                                <tr>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm w-12">
+                                        <input type="checkbox" class="rounded border-gray-300 text-accent focus:ring-accent transition-all" id="selectAll" onchange="toggleAllCheckboxes()">
+                                    </th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Roll No</th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Student Name</th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Status</th>
+                                    <th class="text-center py-4 px-6 font-semibold text-text-primary text-sm">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Students will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Bottom Actions -->
+                    <div class="px-6 py-5 border-t border-border-light flex justify-between items-center">
+                        <div class="flex space-x-3">
+                            <button class="px-6 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-medium transition-all flex items-center">
+                                <i class="fas fa-lock mr-2"></i>
+                                Lock Attendance
+                            </button>
+                            <button id="saveAttendanceBtn" class="px-6 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-medium transition-all flex items-center">
+                                <i class="fas fa-save mr-2"></i>
+                                Save Attendance
+                            </button>
+                            <button class="px-6 py-2 border border-border-light hover:bg-gray-50 text-text-primary rounded-lg text-sm font-medium transition-all">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full mx-4 transform transition-all">
+            <div class="p-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check text-success"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-text-primary mb-2">Attendance Saved</h3>
+                    <p class="text-text-secondary text-sm mb-6">Student attendance has been successfully recorded.</p>
+                    <button onclick="closeSuccessModal()" class="w-full px-4 py-2 bg-success hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-all">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample student data
+        const students = [
+            { rollNo: '001', name: 'Aarav Sharma', status: 'present' },
+            { rollNo: '002', name: 'Ananya Patel', status: 'present' },
+            { rollNo: '003', name: 'Arjun Kumar', status: 'absent' },
+            { rollNo: '004', name: 'Diya Singh', status: 'present' },
+            { rollNo: '005', name: 'Ishaan Gupta', status: 'present' },
+            { rollNo: '006', name: 'Kavya Reddy', status: 'absent' },
+            { rollNo: '007', name: 'Kiran Joshi', status: 'present' },
+            { rollNo: '008', name: 'Meera Agarwal', status: 'present' },
+            { rollNo: '009', name: 'Nikhil Verma', status: 'absent' },
+            { rollNo: '010', name: 'Priya Mehta', status: 'present' },
+            { rollNo: '011', name: 'Rahul Bansal', status: 'present' },
+            { rollNo: '012', name: 'Riya Kapoor', status: 'absent' },
+            { rollNo: '013', name: 'Rohan Tiwari', status: 'present' },
+            { rollNo: '014', name: 'Sakshi Yadav', status: 'present' },
+            { rollNo: '015', name: 'Siddharth Nair', status: 'present' },
+            { rollNo: '016', name: 'Sneha Jain', status: 'present' }
+        ];
+
+        function loadStudents() {
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-border-light hover:bg-gray-50 transition-all';
+                
+                row.innerHTML = `
+                    <td class="py-4 px-6">
+                        <input type="checkbox" class="rounded border-gray-300 text-accent focus:ring-accent row-checkbox transition-all">
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="text-sm font-medium text-text-primary">${student.rollNo}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="text-sm text-text-primary">${student.name}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="status-badge px-3 py-1 rounded-full text-xs font-medium ${student.status === 'present' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${student.status === 'present' ? 'Present' : 'Absent'}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <div class="flex justify-center space-x-2">
+                            <button class="w-8 h-8 bg-green-100 hover:bg-green-200 text-green-600 rounded-full flex items-center justify-center transition-all transform hover:scale-110" onclick="markPresent(${index})">
+                                <i class="fas fa-check text-xs"></i>
+                            </button>
+                            <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-all transform hover:scale-110" onclick="markAbsent(${index})">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+
+            updateSummary();
+        }
+
+        function markPresent(index) {
+            students[index].status = 'present';
+            loadStudents();
+        }
+
+        function markAbsent(index) {
+            students[index].status = 'absent';
+            loadStudents();
+        }
+
+
+
+        function markAllPresent() {
+            students.forEach(student => student.status = 'present');
+            loadStudents();
+        }
+
+        function markAllAbsent() {
+            students.forEach(student => student.status = 'absent');
+            loadStudents();
+        }
+
+        function updateSummary() {
+            const total = students.length;
+            const absent = students.filter(s => s.status === 'absent').length;
+            const present = students.filter(s => s.status === 'present').length;
+
+            document.getElementById('totalStudents').textContent = total;
+            document.getElementById('absentCount').textContent = absent;
+            document.getElementById('presentCount').textContent = present;
+        }
+
+        function toggleAllCheckboxes() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        function saveAttendance() {
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        // Event listeners
+        document.getElementById('loadStudentsBtn').addEventListener('click', loadStudents);
+        document.getElementById('markAllPresentBtn').addEventListener('click', markAllPresent);
+        document.getElementById('markAllAbsentBtn').addEventListener('click', markAllAbsent);
+        document.getElementById('saveAttendanceBtn').addEventListener('click', saveAttendance);
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStudents();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a62c9c65eb47c3',t:'MTc1NDM5NTY0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
