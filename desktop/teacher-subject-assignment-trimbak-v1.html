@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP - Teacher & Class Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #1E1E1E;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #7B54FA;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #F7F7F7;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: #7B54FA;
+            color: white;
+            box-shadow: 0 2px 4px rgba(123, 84, 250, 0.2);
+        }
+
+        .toggle-btn:not(.active) {
+            color: #606060;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: #E0E0E0;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1E1E1E;
+        }
+
+        /* Option 1: Interactive Network View */
+        .network-container {
+            background: #F7F7F7;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .network-view {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .node-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .node-group h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #7B54FA;
+        }
+
+        .node {
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .node:hover {
+            border-color: #7B54FA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.15);
+        }
+
+        .node.selected {
+            border-color: #7B54FA;
+            background: #7B54FA;
+            color: white;
+        }
+
+        .node-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .node-subtitle {
+            font-size: 12px;
+            color: #606060;
+        }
+
+        .node.selected .node-subtitle {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .node-info {
+            font-size: 10px;
+            color: #7B54FA;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .node.selected .node-info {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .warning-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #FFC107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .error-indicator {
+            background: #DC3545;
+        }
+
+        .success-indicator {
+            background: #28A745;
+        }
+
+        .unassigned {
+            border-color: #FFC107;
+            background: #FFF9E6;
+        }
+
+        .overloaded {
+            border-color: #DC3545;
+            background: #FFE6E6;
+        }
+
+        .underloaded {
+            border-color: #FFC107;
+            background: #FFF9E6;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: #7B54FA;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .connection-line.active {
+            opacity: 1;
+        }
+
+        /* Option 2: Card-based Grid View */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .class-card, .teacher-card {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .class-card:hover, .teacher-card:hover {
+            border-color: #7B54FA;
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1E1E1E;
+        }
+
+        .edit-btn {
+            background: #F7F7F7;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background: #7B54FA;
+            color: white;
+        }
+
+        .subject-list {
+            list-style: none;
+        }
+
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F7F7F7;
+        }
+
+        .subject-item:last-child {
+            border-bottom: none;
+        }
+
+        .subject-name {
+            font-weight: 500;
+            color: #1E1E1E;
+        }
+
+        .teacher-name {
+            font-size: 14px;
+            color: #606060;
+            background: #F7F7F7;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .time-slot {
+            font-size: 12px;
+            color: #7B54FA;
+            font-weight: 500;
+        }
+
+        /* Option 3: Timeline/Schedule View */
+        .schedule-container {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .schedule-header {
+            background: #F7F7F7;
+            padding: 16px 24px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            gap: 1px;
+            background: #E0E0E0;
+        }
+
+        .time-header, .day-header {
+            background: #F7F7F7;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            color: #606060;
+        }
+
+        .schedule-cell {
+            background: white;
+            padding: 8px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .schedule-cell:hover {
+            background: #F7F7F7;
+        }
+
+        .schedule-cell.occupied {
+            background: #7B54FA;
+            color: white;
+        }
+
+        .schedule-cell.occupied:hover {
+            background: #6B46E5;
+        }
+
+        .cell-subject {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .cell-teacher {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* Modal for editing */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606060;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1E1E1E;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #7B54FA;
+        }
+
+        .btn-primary {
+            background: #7B54FA;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #6B46E5;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #F7F7F7;
+            color: #606060;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: #E0E0E0;
+        }
+
+        /* Schedule Grid Modal */
+        .schedule-grid-modal {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .day-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #606060;
+            text-align: center;
+            padding: 8px 4px;
+        }
+
+        .period-cell {
+            aspect-ratio: 1;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .period-cell:hover {
+            border-color: #7B54FA;
+        }
+
+        .period-cell.assigned {
+            background: #7B54FA;
+            color: white;
+            border-color: #7B54FA;
+        }
+
+        .period-cell.available {
+            background: #F7F7F7;
+            border-color: #28A745;
+        }
+
+        .period-cell.conflict {
+            background: #FFE6E6;
+            border-color: #DC3545;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .quick-assign-btn {
+            background: #28A745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-assign-btn:hover {
+            background: #218838;
+        }
+
+        .reassign-btn {
+            background: #FFC107;
+            color: #1E1E1E;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reassign-btn:hover {
+            background: #E0A800;
+        }
+
+        .options-nav {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .option-tab {
+            padding: 12px 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #606060;
+            transition: all 0.2s ease;
+        }
+
+        .option-tab.active {
+            color: #7B54FA;
+            border-bottom-color: #7B54FA;
+        }
+
+        .option-content {
+            display: none;
+        }
+
+        .option-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .network-view {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 80px repeat(5, 1fr);
+                font-size: 12px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Simflo ERP</div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" onclick="switchView('class')">Class View</button>
+                <button class="toggle-btn" onclick="switchView('teacher')">Teacher View</button>
+            </div>
+        </div>
+
+        <!-- Class View Section -->
+        <div id="class-view" class="content-section active">
+            <h2 class="section-title">Class Management - Multiple UI Options</h2>
+            
+            <div class="options-nav">
+                <div class="option-tab active" onclick="switchOption('network')">Network View</div>
+                <div class="option-tab" onclick="switchOption('cards')">Card Grid</div>
+                <div class="option-tab" onclick="switchOption('schedule')">Schedule View</div>
+            </div>
+
+            <!-- Option 1: Network/Mind Map View -->
+            <div id="network-option" class="option-content active">
+                <div class="network-container">
+                    <div class="network-view">
+                        <div class="node-group">
+                            <h3>Classes</h3>
+                            <div class="node" onclick="selectNode(this, 'class', 'Class 10A')">
+                                <div class="node-title">Class 10A</div>
+                                <div class="node-subtitle">30 Students</div>
+                                <div class="node-info">3 subjects assigned</div>
+                            </div>
+                            <div class="node underloaded" onclick="selectNode(this, 'class', 'Class 10B')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Class 10B</div>
+                                <div class="node-subtitle">28 Students</div>
+                                <div class="node-info">2 subjects (need 4)</div>
+                            </div>
+                            <div class="node underloaded" onclick="selectNode(this, 'class', 'Class 9A')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Class 9A</div>
+                                <div class="node-subtitle">32 Students</div>
+                                <div class="node-info">2 subjects (need 3)</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group">
+                            <h3>Subjects</h3>
+                            <div class="node subject-node" data-subject="Mathematics" onclick="selectNode(this, 'subject', 'Mathematics')">
+                                <div class="node-title">Mathematics</div>
+                                <div class="node-subtitle">Core Subject</div>
+                                <div class="node-info">3 classes assigned</div>
+                            </div>
+                            <div class="node subject-node underloaded" data-subject="Physics" onclick="selectNode(this, 'subject', 'Physics')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Physics</div>
+                                <div class="node-subtitle">Science</div>
+                                <div class="node-info">2 classes (need 3)</div>
+                            </div>
+                            <div class="node subject-node underloaded" data-subject="English" onclick="selectNode(this, 'subject', 'English')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">English</div>
+                                <div class="node-subtitle">Language</div>
+                                <div class="node-info">2 classes (need 3)</div>
+                            </div>
+                            <div class="node subject-node unassigned" data-subject="Chemistry" onclick="selectNode(this, 'subject', 'Chemistry')" style="position: relative;">
+                                <div class="error-indicator">⚠</div>
+                                <div class="node-title">Chemistry</div>
+                                <div class="node-subtitle">Science</div>
+                                <div class="node-info">1 class (need 2)</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group">
+                            <h3>Teachers</h3>
+                            <div class="node teacher-node" data-teacher="Dr. Smith" onclick="selectNode(this, 'teacher', 'Dr. Smith')">
+                                <div class="node-title">Dr. Smith</div>
+                                <div class="node-subtitle">Mathematics</div>
+                                <div class="node-info">3 classes, 15 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node underloaded" data-teacher="Ms. Johnson" onclick="selectNode(this, 'teacher', 'Ms. Johnson')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Ms. Johnson</div>
+                                <div class="node-subtitle">Physics</div>
+                                <div class="node-info">2 classes, 10 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node underloaded" data-teacher="Mr. Brown" onclick="selectNode(this, 'teacher', 'Mr. Brown')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Mr. Brown</div>
+                                <div class="node-subtitle">English</div>
+                                <div class="node-info">2 classes, 10 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node overloaded" data-teacher="Dr. Wilson" onclick="selectNode(this, 'teacher', 'Dr. Wilson')" style="position: relative;">
+                                <div class="error-indicator">!</div>
+                                <div class="node-title">Dr. Wilson</div>
+                                <div class="node-subtitle">Chemistry, Biology</div>
+                                <div class="node-info">5 classes, 25 hrs/week</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2: Card Grid View -->
+            <div id="cards-option" class="option-content">
+                <div class="grid-container">
+                    <div class="class-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 10A</h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <span class="subject-name">Mathematics</span>
+                                <div>
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <div class="time-slot">Mon 9:00-10:00</div>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <span class="subject-name">Physics</span>
+                                <div>
+                                    <span class="teacher-name">Ms. Johnson</span>
+                                    <div class="time-slot">Tue 10:00-11:00</div>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <span class="subject-name">English</span>
+                                <div>
+                                    <span class="teacher-name">Mr. Brown</span>
+                                    <div class="time-slot">Wed 11:00-12:00</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="class-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 10B</h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <span class="subject-name">Mathematics</span>
+                                <div>
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <div class="time-slot">Mon 10:00-11:00</div>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <span class="subject-name">Chemistry</span>
+                                <div>
+                                    <span class="teacher-name">Dr. Wilson</span>
+                                    <div class="time-slot">Thu 9:00-10:00</div>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <span class="subject-name">English</span>
+                                <div>
+                                    <span class="teacher-name">Mr. Brown</span>
+                                    <div class="time-slot">Fri 11:00-12:00</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="class-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 9A</h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <span class="subject-name">Mathematics</span>
+                                <div>
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <div class="time-slot">Tue 9:00-10:00</div>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <span class="subject-name">Physics</span>
+                                <div>
+                                    <span class="teacher-name">Ms. Johnson</span>
+                                    <div class="time-slot">Wed 10:00-11:00</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 3: Schedule/Timeline View -->
+            <div id="schedule-option" class="option-content">
+                <div class="schedule-container">
+                    <div class="schedule-header">
+                        <h3>Class 10A - Weekly Schedule</h3>
+                        <button class="btn-primary" onclick="openModal('add-schedule')">Add Period</button>
+                    </div>
+                    <div class="schedule-grid">
+                        <div class="time-header">Time</div>
+                        <div class="day-header">Mon</div>
+                        <div class="day-header">Tue</div>
+                        <div class="day-header">Wed</div>
+                        <div class="day-header">Thu</div>
+                        <div class="day-header">Fri</div>
+                        <div class="day-header">Sat</div>
+                        <div class="day-header">Sun</div>
+
+                        <div class="time-header">9:00</div>
+                        <div class="schedule-cell occupied" onclick="editScheduleCell(this)">
+                            <div class="cell-subject">Math</div>
+                            <div class="cell-teacher">Dr. Smith</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">English</div>
+                            <div class="cell-teacher">Mr. Brown</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">Physics</div>
+                            <div class="cell-teacher">Ms. Johnson</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+
+                        <div class="time-header">10:00</div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">Physics</div>
+                            <div class="cell-teacher">Ms. Johnson</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">Chemistry</div>
+                            <div class="cell-teacher">Dr. Wilson</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+
+                        <div class="time-header">11:00</div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">English</div>
+                            <div class="cell-teacher">Mr. Brown</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell occupied">
+                            <div class="cell-subject">Math</div>
+                            <div class="cell-teacher">Dr. Smith</div>
+                        </div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+                        <div class="schedule-cell"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher View Section -->
+        <div id="teacher-view" class="content-section">
+            <h2 class="section-title">Teacher Management</h2>
+            <div class="grid-container">
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Dr. Smith</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 10A</span>
+                            <div class="time-slot">Mon 9:00-10:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 10B</span>
+                            <div class="time-slot">Mon 10:00-11:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 9A</span>
+                            <div class="time-slot">Tue 9:00-10:00</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ms. Johnson</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">Physics - Class 10A</span>
+                            <div class="time-slot">Tue 10:00-11:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Physics - Class 9A</span>
+                            <div class="time-slot">Wed 10:00-11:00</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Mr. Brown</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">English - Class 10A</span>
+                            <div class="time-slot">Wed 11:00-12:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">English - Class 10B</span>
+                            <div class="time-slot">Fri 11:00-12:00</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Modal -->
+        <div id="assignment-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="assignment-modal-title">Assign Teacher</h3>
+                    <button class="close-btn" onclick="closeAssignmentModal()">&times;</button>
+                </div>
+                <div id="assignment-content">
+                    <!-- Content will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Grid Modal -->
+        <div id="schedule-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="schedule-modal-title">Subject Schedule</h3>
+                    <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+                </div>
+                <div id="schedule-content">
+                    <p style="margin-bottom: 16px; color: #606060;">Click on time slots to assign periods for this subject:</p>
+                    <div class="schedule-grid-modal">
+                        <div class="day-label">Mon</div>
+                        <div class="day-label">Tue</div>
+                        <div class="day-label">Wed</div>
+                        <div class="day-label">Thu</div>
+                        <div class="day-label">Fri</div>
+                        <div class="day-label">Sat</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '9:00')">9:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Tue', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Wed', '9:00')">9:00</div>
+                        <div class="period-cell conflict" onclick="togglePeriod(this, 'Thu', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '9:00')">9:00</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Tue', '10:00')">10:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Wed', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Thu', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '10:00')">10:00</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Tue', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Wed', '11:00')">11:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Thu', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '11:00')">11:00</div>
+                    </div>
+                    <div style="margin-top: 16px; padding: 12px; background: #F7F7F7; border-radius: 8px; font-size: 14px;">
+                        <strong>Legend:</strong>
+                        <span style="color: #7B54FA;">■ Assigned</span> |
+                        <span style="color: #28A745;">■ Available</span> |
+                        <span style="color: #DC3545;">■ Conflict</span>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="btn-secondary" onclick="closeScheduleModal()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="saveSchedule()">Save Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Assignment</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Teacher</label>
+                        <select class="form-select">
+                            <option>Dr. Smith</option>
+                            <option>Ms. Johnson</option>
+                            <option>Mr. Brown</option>
+                            <option>Dr. Wilson</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select">
+                            <option>Mathematics</option>
+                            <option>Physics</option>
+                            <option>English</option>
+                            <option>Chemistry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Class</label>
+                        <select class="form-select">
+                            <option>Class 10A</option>
+                            <option>Class 10B</option>
+                            <option>Class 9A</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Slot</label>
+                        <input type="text" class="form-input" placeholder="e.g., Mon 9:00-10:00">
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedNodes = [];
+
+        function switchView(view) {
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide content sections
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(view + '-view').classList.add('active');
+        }
+
+        function switchOption(option) {
+            // Update option tabs
+            document.querySelectorAll('.option-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide option content
+            document.querySelectorAll('.option-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(option + '-option').classList.add('active');
+        }
+
+        function selectNode(element, type, name) {
+            // Clear previous selections
+            document.querySelectorAll('.node').forEach(node => node.classList.remove('selected'));
+            
+            // Select current node
+            element.classList.add('selected');
+            
+            // Show connections based on selection
+            showConnections(type, name);
+            
+            // Show assignment options based on node type
+            if (type === 'teacher' || type === 'subject') {
+                showAssignmentOptions(type, name, element);
+            }
+        }
+
+        function showAssignmentOptions(type, name, element) {
+            // Add a small delay to show the assignment modal
+            setTimeout(() => {
+                if (type === 'teacher') {
+                    openTeacherAssignmentModal(name);
+                } else if (type === 'subject') {
+                    openSubjectAssignmentModal(name);
+                }
+            }, 300);
+        }
+
+        function openTeacherAssignmentModal(teacherName) {
+            const modal = document.getElementById('assignment-modal');
+            const title = document.getElementById('assignment-modal-title');
+            const content = document.getElementById('assignment-content');
+            
+            title.textContent = `Reassign ${teacherName}`;
+            
+            // Get teacher's current subjects (in real app, this would come from your data)
+            const teacherSubjects = {
+                'Dr. Smith': ['Mathematics'],
+                'Ms. Johnson': ['Physics'],
+                'Mr. Brown': ['English'],
+                'Dr. Wilson': ['Chemistry', 'Biology']
+            };
+            
+            const subjects = teacherSubjects[teacherName] || [];
+            
+            content.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Current Subjects</label>
+                    <div style="margin-bottom: 16px;">
+                        ${subjects.map(subject => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #F7F7F7; border-radius: 8px; margin-bottom: 8px;">
+                                <span>${subject}</span>
+                                <button class="reassign-btn" onclick="reassignSubject('${teacherName}', '${subject}')">Reassign</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Add New Subject</label>
+                    <select class="form-select" id="new-subject-select">
+                        <option value="">Select a subject...</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="English">English</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+                <div class="assignment-actions">
+                    <button class="quick-assign-btn" onclick="assignSubjectToTeacher('${teacherName}')">Add Subject</button>
+                    <button class="btn-primary" onclick="openScheduleModal('${teacherName}')">View Schedule</button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function openSubjectAssignmentModal(subjectName) {
+            const modal = document.getElementById('assignment-modal');
+            const title = document.getElementById('assignment-modal-title');
+            const content = document.getElementById('assignment-content');
+            
+            title.textContent = `Assign ${subjectName}`;
+            
+            // Get subject's current assignments
+            const subjectAssignments = {
+                'Mathematics': ['Class 10A - Dr. Smith', 'Class 10B - Dr. Smith', 'Class 9A - Dr. Smith'],
+                'Physics': ['Class 10A - Ms. Johnson', 'Class 9A - Ms. Johnson'],
+                'English': ['Class 10A - Mr. Brown', 'Class 10B - Mr. Brown'],
+                'Chemistry': ['Class 10B - Dr. Wilson']
+            };
+            
+            const assignments = subjectAssignments[subjectName] || [];
+            const unassignedClasses = ['Class 9A', 'Class 10B']; // Example unassigned classes
+            
+            content.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Current Assignments</label>
+                    <div style="margin-bottom: 16px;">
+                        ${assignments.map(assignment => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #F7F7F7; border-radius: 8px; margin-bottom: 8px;">
+                                <span>${assignment}</span>
+                                <button class="reassign-btn" onclick="reassignClass('${subjectName}', '${assignment}')">Change Teacher</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ${unassignedClasses.length > 0 ? `
+                <div class="form-group">
+                    <label class="form-label">Unassigned Classes</label>
+                    <div style="margin-bottom: 16px;">
+                        ${unassignedClasses.map(className => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #FFF9E6; border: 1px solid #FFC107; border-radius: 8px; margin-bottom: 8px;">
+                                <span>${className} - ${subjectName}</span>
+                                <button class="quick-assign-btn" onclick="quickAssignClass('${subjectName}', '${className}')">Quick Assign</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+                <div class="assignment-actions">
+                    <button class="btn-primary" onclick="openScheduleModal('${subjectName}')">View Schedule Grid</button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function openScheduleModal(name) {
+            const modal = document.getElementById('schedule-modal');
+            const title = document.getElementById('schedule-modal-title');
+            
+            title.textContent = `${name} - Schedule Grid`;
+            modal.classList.add('active');
+        }
+
+        function closeAssignmentModal() {
+            document.getElementById('assignment-modal').classList.remove('active');
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('active');
+        }
+
+        function togglePeriod(cell, day, time) {
+            if (cell.classList.contains('conflict')) {
+                alert(`Conflict detected for ${day} ${time}. Please resolve conflicts first.`);
+                return;
+            }
+            
+            if (cell.classList.contains('assigned')) {
+                cell.classList.remove('assigned');
+                cell.classList.add('available');
+            } else if (cell.classList.contains('available')) {
+                cell.classList.remove('available');
+                cell.classList.add('assigned');
+            }
+        }
+
+        function saveSchedule() {
+            alert('Schedule saved successfully!');
+            closeScheduleModal();
+        }
+
+        function assignSubjectToTeacher(teacherName) {
+            const select = document.getElementById('new-subject-select');
+            const subject = select.value;
+            
+            if (subject) {
+                alert(`${subject} assigned to ${teacherName}!`);
+                closeAssignmentModal();
+                // In real app, update the data and refresh the view
+            } else {
+                alert('Please select a subject first.');
+            }
+        }
+
+        function reassignSubject(teacherName, subject) {
+            alert(`Reassigning ${subject} from ${teacherName}. Select new teacher.`);
+            // In real app, show teacher selection modal
+        }
+
+        function reassignClass(subject, assignment) {
+            alert(`Reassigning ${assignment}. Select new teacher.`);
+            // In real app, show teacher selection modal
+        }
+
+        function quickAssignClass(subject, className) {
+            alert(`Quick assigning ${subject} to ${className}. Selecting best available teacher.`);
+            closeAssignmentModal();
+            // In real app, use algorithm to find best teacher and assign
+        }
+
+        function showConnections(type, name) {
+            // Clear existing connection lines
+            document.querySelectorAll('.connection-line').forEach(line => line.remove());
+            
+            // Highlight related nodes based on the selection
+            if (type === 'class') {
+                // Highlight subjects and teachers for this class
+                highlightRelatedNodes(name);
+            }
+        }
+
+        function highlightRelatedNodes(className) {
+            // Sample data mapping - in real app, this would come from your data source
+            const classSubjects = {
+                'Class 10A': ['Mathematics', 'Physics', 'English'],
+                'Class 10B': ['Mathematics', 'Chemistry', 'English'],
+                'Class 9A': ['Mathematics', 'Physics']
+            };
+
+            const subjectTeachers = {
+                'Mathematics': 'Dr. Smith',
+                'Physics': 'Ms. Johnson',
+                'English': 'Mr. Brown',
+                'Chemistry': 'Dr. Wilson'
+            };
+
+            // Highlight subjects
+            document.querySelectorAll('.subject-node').forEach(node => {
+                const subject = node.dataset.subject;
+                if (classSubjects[className] && classSubjects[className].includes(subject)) {
+                    node.style.borderColor = '#7B54FA';
+                    node.style.backgroundColor = '#F7F7F7';
+                } else {
+                    node.style.borderColor = '#E0E0E0';
+                    node.style.backgroundColor = 'white';
+                }
+            });
+
+            // Highlight teachers
+            document.querySelectorAll('.teacher-node').forEach(node => {
+                const teacher = node.dataset.teacher;
+                const isAssigned = classSubjects[className] && 
+                    classSubjects[className].some(subject => subjectTeachers[subject] === teacher);
+                
+                if (isAssigned) {
+                    node.style.borderColor = '#7B54FA';
+                    node.style.backgroundColor = '#F7F7F7';
+                } else {
+                    node.style.borderColor = '#E0E0E0';
+                    node.style.backgroundColor = 'white';
+                }
+            });
+        }
+
+        function openModal(type) {
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        function editScheduleCell(cell) {
+            if (cell.classList.contains('occupied')) {
+                openModal('edit-schedule');
+            } else {
+                openModal('add-schedule');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('edit-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('assignment-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAssignmentModal();
+            }
+        });
+
+        document.getElementById('schedule-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeScheduleModal();
+            }
+        });
+
+        // Initialize with Class 10A selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstClassNode = document.querySelector('.node');
+            if (firstClassNode) {
+                selectNode(firstClassNode, 'class', 'Class 10A');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a745c953747e72',t:'MTc1NDQwNzE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
