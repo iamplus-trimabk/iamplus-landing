@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP - Teacher & Class Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #1E1E1E;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #7B54FA;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #F7F7F7;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: #7B54FA;
+            color: white;
+            box-shadow: 0 2px 4px rgba(123, 84, 250, 0.2);
+        }
+
+        .toggle-btn:not(.active) {
+            color: #606060;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: #E0E0E0;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1E1E1E;
+        }
+
+        /* Option 1: Interactive Network View */
+        .network-container {
+            background: #F7F7F7;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .network-view {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .node-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .node-group h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #7B54FA;
+        }
+
+        .node {
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .schedule-grid-node {
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-grid-node.expanded {
+            min-width: 220px;
+            padding: 20px;
+        }
+
+        .schedule-grid-column {
+            transition: all 0.3s ease;
+        }
+
+        .schedule-grid-column.hidden {
+            opacity: 0;
+            transform: translateX(-20px);
+            pointer-events: none;
+            width: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .node:hover {
+            border-color: #7B54FA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.15);
+        }
+
+        .node.selected {
+            border-color: #7B54FA;
+            background: #7B54FA;
+            color: white;
+        }
+
+        .node-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .node-subtitle {
+            font-size: 12px;
+            color: #606060;
+        }
+
+        .node.selected .node-subtitle {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .node-info {
+            font-size: 10px;
+            color: #7B54FA;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .node.selected .node-info {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .warning-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #FFC107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .error-indicator {
+            background: #DC3545;
+        }
+
+        .success-indicator {
+            background: #28A745;
+        }
+
+        .unassigned {
+            border-color: #FFC107;
+            background: #FFF9E6;
+        }
+
+        .overloaded {
+            border-color: #DC3545;
+            background: #FFE6E6;
+        }
+
+        .underloaded {
+            border-color: #FFC107;
+            background: #FFF9E6;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: #7B54FA;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .connection-line.active {
+            opacity: 1;
+        }
+
+        /* Option 2: Card-based Grid View */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .class-card, .teacher-card {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .class-card:hover, .teacher-card:hover {
+            border-color: #7B54FA;
+            box-shadow: 0 4px 16px rgba(123, 84, 250, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1E1E1E;
+        }
+
+        .edit-btn {
+            background: #F7F7F7;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background: #7B54FA;
+            color: white;
+        }
+
+        .subject-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: #FAFAFA;
+            border: 1px solid #F0F0F0;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .subject-item:hover {
+            background: #F7F7F7;
+            border-color: #E0E0E0;
+            transform: translateY(-1px);
+        }
+
+        .subject-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .subject-item.overloaded {
+            border-color: #FFB3B3;
+            background: #FFF5F5;
+        }
+
+        .subject-item.unassigned {
+            border: 2px dashed #FFC107;
+            background: #FFFBF0;
+        }
+
+        .subject-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .subject-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #1E1E1E;
+            margin: 0;
+        }
+
+        .subject-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .teacher-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .teacher-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1E1E1E;
+            background: #E8F4FD;
+            padding: 6px 10px;
+            border-radius: 20px;
+            border: 1px solid #D1E7F8;
+        }
+
+        .teacher-name.overloaded {
+            background: #FFE6E6;
+            color: #DC3545;
+            border-color: #FFB3B3;
+        }
+
+        .assistant-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #7B54FA;
+            background: #F0EBFF;
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid #E0D4FF;
+        }
+
+        .assistant-name.unassigned {
+            background: #FFF9E6;
+            color: #B8860B;
+            border-color: #F0E68C;
+        }
+
+        .time-slot {
+            font-size: 12px;
+            color: #7B54FA;
+            font-weight: 500;
+            background: #F8F6FF;
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid #E8E0FF;
+        }
+
+        .extra-periods {
+            background: #DC3545;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .missing-periods {
+            background: #FFC107;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .time-slot {
+            font-size: 12px;
+            color: #7B54FA;
+            font-weight: 500;
+        }
+
+        /* Option 3: Timeline/Schedule View */
+        .schedule-container {
+            background: white;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .schedule-header {
+            background: #F7F7F7;
+            padding: 16px 24px;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            gap: 1px;
+            background: #E0E0E0;
+        }
+
+        .time-header, .day-header {
+            background: #F7F7F7;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            color: #606060;
+        }
+
+        .schedule-cell {
+            background: white;
+            padding: 8px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .schedule-cell:hover {
+            background: #F7F7F7;
+        }
+
+        .schedule-cell.occupied {
+            background: #7B54FA;
+            color: white;
+        }
+
+        .schedule-cell.occupied:hover {
+            background: #6B46E5;
+        }
+
+        .schedule-cell.available {
+            background: #F7F7F7;
+            border: 2px dashed #E0E0E0;
+        }
+
+        .schedule-cell.available:hover {
+            background: #F0EBFF;
+            border-color: #7B54FA;
+        }
+
+        .schedule-cell.warning {
+            border: 2px solid #FFC107;
+        }
+
+        .schedule-cell.error {
+            border: 2px solid #DC3545;
+        }
+
+        .cell-subject {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .cell-teacher {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* Modal for editing */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606060;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1E1E1E;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #7B54FA;
+        }
+
+        .btn-primary {
+            background: #7B54FA;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #6B46E5;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #F7F7F7;
+            color: #606060;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: #E0E0E0;
+        }
+
+        /* Schedule Grid Modal */
+        .schedule-grid-modal {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .day-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #606060;
+            text-align: center;
+            padding: 8px 4px;
+        }
+
+        .period-cell {
+            aspect-ratio: 1;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .period-cell:hover {
+            border-color: #7B54FA;
+        }
+
+        .period-cell.assigned {
+            background: #7B54FA;
+            color: white;
+            border-color: #7B54FA;
+        }
+
+        .period-cell.available {
+            background: #F7F7F7;
+            border-color: #28A745;
+        }
+
+        .period-cell.conflict {
+            background: #FFE6E6;
+            border-color: #DC3545;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Inline Assignment Styles */
+        .inline-assignment {
+            position: absolute;
+            z-index: 100;
+            background: white;
+            border: 2px solid #7B54FA;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(123, 84, 250, 0.2);
+            min-width: 320px;
+            max-width: 400px;
+            margin-top: 8px;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        .inline-assignment-content {
+            padding: 16px;
+        }
+
+        .inline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .inline-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #7B54FA;
+            margin: 0;
+        }
+
+        .close-inline-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #606060;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .close-inline-btn:hover {
+            background: #F7F7F7;
+            color: #7B54FA;
+        }
+
+        .inline-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #606060;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .inline-subjects, .inline-assignments, .inline-unassigned {
+            margin-bottom: 16px;
+        }
+
+        .inline-subject-item, .inline-assignment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #F7F7F7;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .inline-unassigned-item {
+            padding: 8px 12px;
+            background: #FFF9E6;
+            border: 1px solid #FFC107;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .inline-unassigned-item span {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1E1E1E;
+        }
+
+        .inline-form-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .inline-add-subject {
+            margin-bottom: 16px;
+        }
+
+        .inline-select {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .inline-select:focus {
+            outline: none;
+            border-color: #7B54FA;
+        }
+
+        .inline-assign-btn {
+            background: #28A745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .inline-assign-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .inline-reassign-btn {
+            background: #FFC107;
+            color: #1E1E1E;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .inline-reassign-btn:hover {
+            background: #E0A800;
+        }
+
+        .inline-schedule-btn {
+            background: #7B54FA;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .inline-schedule-btn:hover {
+            background: #6B46E5;
+        }
+
+        .inline-actions {
+            border-top: 1px solid #E0E0E0;
+            padding-top: 12px;
+        }
+
+        /* Position inline assignment relative to nodes */
+        .node-group {
+            position: relative;
+        }
+
+        .mini-schedule-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin: 8px 0;
+        }
+
+        .mini-grid-row {
+            display: flex;
+            gap: 2px;
+        }
+
+        .mini-cell {
+            width: 20px;
+            height: 16px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .mini-cell.assigned {
+            background: #7B54FA;
+            color: white;
+        }
+
+        .mini-cell.available {
+            background: #E0E0E0;
+            color: #606060;
+        }
+
+        .mini-cell.conflict {
+            background: #DC3545;
+            color: white;
+        }
+
+        .schedule-grid-node {
+            min-width: 140px;
+        }
+
+        .quick-assign-btn {
+            background: #28A745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-assign-btn:hover {
+            background: #218838;
+        }
+
+        .reassign-btn {
+            background: #FFC107;
+            color: #1E1E1E;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reassign-btn:hover {
+            background: #E0A800;
+        }
+
+        .options-nav {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .option-tab {
+            padding: 12px 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #606060;
+            transition: all 0.2s ease;
+        }
+
+        .option-tab.active {
+            color: #7B54FA;
+            border-bottom-color: #7B54FA;
+        }
+
+        .option-content {
+            display: none;
+        }
+
+        .option-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .network-view {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 80px repeat(5, 1fr);
+                font-size: 12px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Simflo ERP</div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" onclick="switchView('class')">Class View</button>
+                <button class="toggle-btn" onclick="switchView('teacher')">Teacher View</button>
+            </div>
+        </div>
+
+        <!-- Class View Section -->
+        <div id="class-view" class="content-section active">
+            <h2 class="section-title">Class Management - Multiple UI Options</h2>
+            
+            <div class="options-nav">
+                <div class="option-tab active" onclick="switchOption('network')">Network View</div>
+                <div class="option-tab" onclick="switchOption('cards')">Card Grid</div>
+                <div class="option-tab" onclick="switchOption('schedule')">Schedule View</div>
+                <div class="schedule-toggle" style="margin-left: auto;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #606060;">
+                        <input type="checkbox" id="schedule-grid-toggle" checked onchange="toggleScheduleGrid()" style="margin: 0;">
+                        Show Schedule Grid
+                    </label>
+                </div>
+            </div>
+
+            <!-- Option 1: Network/Mind Map View -->
+            <div id="network-option" class="option-content active">
+                <div class="network-container">
+                    <div class="network-view">
+                        <div class="node-group">
+                            <h3>Classes</h3>
+                            <div class="node" onclick="selectNode(this, 'class', 'Class 10A')">
+                                <div class="node-title">Class 10A</div>
+                                <div class="node-subtitle">30 Students</div>
+                                <div class="node-info">3 subjects assigned</div>
+                            </div>
+                            <div class="node underloaded" onclick="selectNode(this, 'class', 'Class 10B')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Class 10B</div>
+                                <div class="node-subtitle">28 Students</div>
+                                <div class="node-info">2 subjects (need 4)</div>
+                            </div>
+                            <div class="node underloaded" onclick="selectNode(this, 'class', 'Class 9A')" style="position: relative;">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Class 9A</div>
+                                <div class="node-subtitle">32 Students</div>
+                                <div class="node-info">2 subjects (need 3)</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group">
+                            <h3>Subjects</h3>
+                            <div class="node subject-node" data-subject="Mathematics" onclick="selectNode(this, 'subject', 'Mathematics')">
+                                <div class="node-title">Mathematics</div>
+                                <div class="node-subtitle">Core Subject</div>
+                                <div class="node-info">3 classes assigned</div>
+                            </div>
+                            <div class="node subject-node underloaded" data-subject="Physics" onclick="selectNode(this, 'subject', 'Physics')" style="position: relative;" title="Physics needs 1 more class assignment">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Physics</div>
+                                <div class="node-subtitle">Science</div>
+                                <div class="node-info">2 classes (-1 needed)</div>
+                            </div>
+                            <div class="node subject-node underloaded" data-subject="English" onclick="selectNode(this, 'subject', 'English')" style="position: relative;" title="English needs 1 more class assignment">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">English</div>
+                                <div class="node-subtitle">Language</div>
+                                <div class="node-info">2 classes (-1 needed)</div>
+                            </div>
+                            <div class="node subject-node unassigned" data-subject="Chemistry" onclick="selectNode(this, 'subject', 'Chemistry')" style="position: relative;" title="Chemistry critically understaffed - needs 1 more class">
+                                <div class="error-indicator">⚠</div>
+                                <div class="node-title">Chemistry</div>
+                                <div class="node-subtitle">Science</div>
+                                <div class="node-info">1 class (-1 needed)</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group schedule-grid-column" id="schedule-grid-column">
+                            <h3>Schedule Grid</h3>
+                            <div class="node schedule-grid-node" onclick="openScheduleModal('Mathematics')" style="cursor: pointer;" title="Mathematics schedule across all classes - Click to manage">
+                                <div class="node-title">Mathematics</div>
+                                <div class="mini-schedule-grid">
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell assigned" title="Mon 9:00 - Class 10A">M</div>
+                                        <div class="mini-cell assigned" title="Tue 9:00 - Class 9A">T</div>
+                                        <div class="mini-cell assigned" title="Wed 11:00 - Class 10A">W</div>
+                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
+                                        <div class="mini-cell available" title="Fri - Available for assignment">F</div>
+                                    </div>
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell assigned" title="Mon 10:00 - Class 10B">M</div>
+                                        <div class="mini-cell available" title="Tue 10:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Wed 10:00 - Available">W</div>
+                                        <div class="mini-cell available" title="Thu 10:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
+                                    </div>
+                                </div>
+                                <div class="node-info">3 classes assigned</div>
+                            </div>
+                            
+                            <div class="node schedule-grid-node underloaded" onclick="openScheduleModal('Physics')" style="cursor: pointer; position: relative;" title="Physics needs 1 more class assignment - Click to manage">
+                                <div class="warning-indicator" title="Physics is underloaded - needs 1 more class">!</div>
+                                <div class="node-title">Physics</div>
+                                <div class="mini-schedule-grid">
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell available" title="Mon - Available for assignment">M</div>
+                                        <div class="mini-cell assigned" title="Tue 10:00 - Class 10A">T</div>
+                                        <div class="mini-cell assigned" title="Wed 10:00 - Class 9A">W</div>
+                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
+                                        <div class="mini-cell assigned" title="Fri 9:00 - Class 10A">F</div>
+                                    </div>
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
+                                    </div>
+                                </div>
+                                <div class="node-info">2 classes (-1 needed)</div>
+                            </div>
+                            
+                            <div class="node schedule-grid-node underloaded" onclick="openScheduleModal('English')" style="cursor: pointer; position: relative;" title="English needs 1 more class assignment - Click to manage">
+                                <div class="warning-indicator" title="English is underloaded - needs 1 more class">!</div>
+                                <div class="node-title">English</div>
+                                <div class="mini-schedule-grid">
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell assigned" title="Mon 11:00 - Class 10A">M</div>
+                                        <div class="mini-cell available" title="Tue - Available for assignment">T</div>
+                                        <div class="mini-cell assigned" title="Wed 9:00 - Class 10A">W</div>
+                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
+                                        <div class="mini-cell assigned" title="Fri 11:00 - Class 10B">F</div>
+                                    </div>
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
+                                    </div>
+                                </div>
+                                <div class="node-info">2 classes (-1 needed)</div>
+                            </div>
+                            
+                            <div class="node schedule-grid-node unassigned" onclick="openScheduleModal('Chemistry')" style="cursor: pointer; position: relative;" title="Chemistry critically understaffed - Dr. Wilson overloaded">
+                                <div class="error-indicator" title="Chemistry has critical staffing issues">⚠</div>
+                                <div class="node-title">Chemistry</div>
+                                <div class="mini-schedule-grid">
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell available" title="Mon - Available for assignment">M</div>
+                                        <div class="mini-cell available" title="Tue - Available for assignment">T</div>
+                                        <div class="mini-cell available" title="Wed - Available for assignment">W</div>
+                                        <div class="mini-cell conflict" title="Thu 10:00 - Class 10B (Dr. Wilson overloaded)">T</div>
+                                        <div class="mini-cell available" title="Fri - Available for assignment">F</div>
+                                    </div>
+                                    <div class="mini-grid-row">
+                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
+                                    </div>
+                                </div>
+                                <div class="node-info">1 class (teacher overloaded)</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group">
+                            <h3>Teachers</h3>
+                            <div class="node teacher-node" data-teacher="Dr. Smith" onclick="selectNode(this, 'teacher', 'Dr. Smith')">
+                                <div class="node-title">Dr. Smith</div>
+                                <div class="node-subtitle">Mathematics</div>
+                                <div class="node-info">3 classes, 15 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node underloaded" data-teacher="Ms. Johnson" onclick="selectNode(this, 'teacher', 'Ms. Johnson')" style="position: relative;" title="Underloaded: Only 2 classes assigned, can take 1 more">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Ms. Johnson</div>
+                                <div class="node-subtitle">Physics</div>
+                                <div class="node-info">2 classes, 10 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node underloaded" data-teacher="Mr. Brown" onclick="selectNode(this, 'teacher', 'Mr. Brown')" style="position: relative;" title="Underloaded: Only 2 classes assigned, can take 1 more">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Mr. Brown</div>
+                                <div class="node-subtitle">English</div>
+                                <div class="node-info">2 classes, 10 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node overloaded" data-teacher="Dr. Wilson" onclick="selectNode(this, 'teacher', 'Dr. Wilson')" style="position: relative;" title="Overloaded: 5 classes assigned, 2 over limit">
+                                <div class="error-indicator">⚠</div>
+                                <div class="node-title">Dr. Wilson</div>
+                                <div class="node-subtitle">Chemistry, Biology</div>
+                                <div class="node-info">5 classes (+2), 25 hrs/week</div>
+                            </div>
+                        </div>
+
+                        <div class="node-group">
+                            <h3>Assistant Teachers</h3>
+                            <div class="node teacher-node" data-teacher="Ms. Davis" onclick="selectNode(this, 'assistant', 'Ms. Davis')">
+                                <div class="node-title">Ms. Davis</div>
+                                <div class="node-subtitle">Math Assistant</div>
+                                <div class="node-info">2 classes, 8 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node underloaded" data-teacher="Mr. Taylor" onclick="selectNode(this, 'assistant', 'Mr. Taylor')" style="position: relative;" title="Available for more assignments">
+                                <div class="warning-indicator">!</div>
+                                <div class="node-title">Mr. Taylor</div>
+                                <div class="node-subtitle">Science Assistant</div>
+                                <div class="node-info">1 class, 4 hrs/week</div>
+                            </div>
+                            <div class="node teacher-node unassigned" data-teacher="Ms. Lee" onclick="selectNode(this, 'assistant', 'Ms. Lee')" style="position: relative;" title="Unassigned assistant teacher">
+                                <div class="error-indicator">⚠</div>
+                                <div class="node-title">Ms. Lee</div>
+                                <div class="node-subtitle">Language Assistant</div>
+                                <div class="node-info">0 classes assigned</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2: Card Grid View -->
+            <div id="cards-option" class="option-content">
+                <div class="grid-container">
+                    <div class="class-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 10A</h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">Mathematics</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Mon 9:00-10:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <span class="assistant-name">Ms. Davis</span>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">Physics</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Tue 10:00-11:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Ms. Johnson</span>
+                                    <span class="assistant-name">Mr. Taylor</span>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">English</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Wed 11:00-12:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Mr. Brown</span>
+                                    <span class="assistant-name unassigned" title="No assistant assigned">No Assistant</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="class-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 10B</h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">Mathematics</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Mon 10:00-11:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <span class="assistant-name">Ms. Davis</span>
+                                </div>
+                            </li>
+                            <li class="subject-item overloaded" title="Dr. Wilson is overloaded with +2 extra classes">
+                                <div class="subject-left">
+                                    <div class="subject-name">Chemistry <span class="extra-periods">+2</span></div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Thu 9:00-10:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name overloaded">Dr. Wilson</span>
+                                    <span class="assistant-name unassigned" title="No assistant assigned">No Assistant</span>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">English</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Fri 11:00-12:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Mr. Brown</span>
+                                    <span class="assistant-name">Ms. Lee</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="class-card underloaded" title="Class 9A needs 1 more subject assignment">
+                        <div class="card-header">
+                            <h3 class="card-title">Class 9A <span class="missing-periods">-1</span></h3>
+                            <button class="edit-btn" onclick="openModal('edit-class')">✏️</button>
+                        </div>
+                        <ul class="subject-list">
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">Mathematics</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Tue 9:00-10:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Dr. Smith</span>
+                                    <span class="assistant-name">Ms. Davis</span>
+                                </div>
+                            </li>
+                            <li class="subject-item">
+                                <div class="subject-left">
+                                    <div class="subject-name">Physics</div>
+                                    <div class="subject-meta">
+                                        <div class="time-slot">Wed 10:00-11:00</div>
+                                    </div>
+                                </div>
+                                <div class="teacher-info">
+                                    <span class="teacher-name">Ms. Johnson</span>
+                                    <span class="assistant-name">Mr. Taylor</span>
+                                </div>
+                            </li>
+                            <li class="subject-item unassigned assignment-row" style="cursor: pointer;" title="Click to assign a subject">
+                                <div class="assignment-interface" style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+                                    <div style="font-weight: 600; color: #B8860B; text-align: center;">+ Add Subject</div>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <select class="form-select" style="flex: 1; padding: 8px; font-size: 12px;" onchange="updateTeacherOptions(this)">
+                                            <option value="">Select Subject...</option>
+                                            <option value="Chemistry">Chemistry (Available)</option>
+                                            <option value="Biology">Biology (Available)</option>
+                                            <option value="History">History (Available)</option>
+                                        </select>
+                                        <select class="form-select" style="flex: 1; padding: 8px; font-size: 12px;" disabled id="teacher-select-9a">
+                                            <option value="">Select Teacher...</option>
+                                        </select>
+                                        <select class="form-select" style="flex: 0.8; padding: 8px; font-size: 12px;" disabled id="assistant-select-9a">
+                                            <option value="">Assistant...</option>
+                                        </select>
+                                        <button class="quick-assign-btn" onclick="assignInline('Class 9A')" style="padding: 8px 12px; font-size: 12px;">Assign</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 3: Schedule/Timeline View -->
+            <div id="schedule-option" class="option-content">
+                <div class="schedule-container">
+                    <div class="schedule-header">
+                        <h3>Class 10A - Weekly Schedule</h3>
+                        <button class="btn-primary" onclick="openModal('add-schedule')">Add Period</button>
+                    </div>
+                    <div class="schedule-grid">
+                        <div class="time-header">Time</div>
+                        <div class="day-header">Mon</div>
+                        <div class="day-header">Tue</div>
+                        <div class="day-header">Wed</div>
+                        <div class="day-header">Thu</div>
+                        <div class="day-header">Fri</div>
+                        <div class="day-header">Sat</div>
+                        <div class="day-header">Sun</div>
+
+                        <div class="time-header">9:00</div>
+                        <div class="schedule-cell occupied" onclick="editScheduleCell(this)" title="Mathematics - Dr. Smith + Ms. Davis (Assistant)">
+                            <div class="cell-subject">Math</div>
+                            <div class="cell-teacher">Dr. Smith</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Tue', '9:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell occupied" title="English - Mr. Brown (No Assistant)">
+                            <div class="cell-subject">English</div>
+                            <div class="cell-teacher">Mr. Brown</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Thu', '9:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell occupied warning" title="Physics - Ms. Johnson + Mr. Taylor (Ms. Johnson underloaded - can take 1 more class)">
+                            <div class="cell-subject">Physics</div>
+                            <div class="cell-teacher">Ms. Johnson</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sat', '9:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sun', '9:00')" title="Click to assign subject and teacher"></div>
+
+                        <div class="time-header">10:00</div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Mon', '10:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell occupied" title="Physics - Ms. Johnson + Mr. Taylor (Assistant)">
+                            <div class="cell-subject">Physics</div>
+                            <div class="cell-teacher">Ms. Johnson</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Wed', '10:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell occupied error" title="Chemistry - Dr. Wilson (OVERLOADED: +2 extra classes, needs assistant)">
+                            <div class="cell-subject">Chemistry</div>
+                            <div class="cell-teacher">Dr. Wilson</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Fri', '10:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sat', '10:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sun', '10:00')" title="Click to assign subject and teacher"></div>
+
+                        <div class="time-header">11:00</div>
+                        <div class="schedule-cell occupied" title="English - Mr. Brown + Ms. Lee (Assistant)">
+                            <div class="cell-subject">English</div>
+                            <div class="cell-teacher">Mr. Brown</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Tue', '11:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell occupied" title="Mathematics - Dr. Smith + Ms. Davis (Assistant)">
+                            <div class="cell-subject">Math</div>
+                            <div class="cell-teacher">Dr. Smith</div>
+                        </div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Thu', '11:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Fri', '11:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sat', '11:00')" title="Click to assign subject and teacher"></div>
+                        <div class="schedule-cell available" onclick="assignToEmptyCell(this, 'Sun', '11:00')" title="Click to assign subject and teacher"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher View Section -->
+        <div id="teacher-view" class="content-section">
+            <h2 class="section-title">Teacher Management</h2>
+            <div class="grid-container">
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Dr. Smith</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 10A</span>
+                            <div class="time-slot">Mon 9:00-10:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 10B</span>
+                            <div class="time-slot">Mon 10:00-11:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Mathematics - Class 9A</span>
+                            <div class="time-slot">Tue 9:00-10:00</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ms. Johnson</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">Physics - Class 10A</span>
+                            <div class="time-slot">Tue 10:00-11:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">Physics - Class 9A</span>
+                            <div class="time-slot">Wed 10:00-11:00</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="teacher-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Mr. Brown</h3>
+                        <button class="edit-btn" onclick="openModal('edit-teacher')">✏️</button>
+                    </div>
+                    <ul class="subject-list">
+                        <li class="subject-item">
+                            <span class="subject-name">English - Class 10A</span>
+                            <div class="time-slot">Wed 11:00-12:00</div>
+                        </li>
+                        <li class="subject-item">
+                            <span class="subject-name">English - Class 10B</span>
+                            <div class="time-slot">Fri 11:00-12:00</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Modal -->
+        <div id="assignment-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="assignment-modal-title">Assign Teacher</h3>
+                    <button class="close-btn" onclick="closeAssignmentModal()">&times;</button>
+                </div>
+                <div id="assignment-content">
+                    <!-- Content will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Grid Modal -->
+        <div id="schedule-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="schedule-modal-title">Subject Schedule</h3>
+                    <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+                </div>
+                <div id="schedule-content">
+                    <p style="margin-bottom: 16px; color: #606060;">Click on time slots to assign periods for this subject:</p>
+                    <div class="schedule-grid-modal">
+                        <div class="day-label">Mon</div>
+                        <div class="day-label">Tue</div>
+                        <div class="day-label">Wed</div>
+                        <div class="day-label">Thu</div>
+                        <div class="day-label">Fri</div>
+                        <div class="day-label">Sat</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '9:00')">9:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Tue', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Wed', '9:00')">9:00</div>
+                        <div class="period-cell conflict" onclick="togglePeriod(this, 'Thu', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '9:00')">9:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '9:00')">9:00</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Tue', '10:00')">10:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Wed', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Thu', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '10:00')">10:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '10:00')">10:00</div>
+                        
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Mon', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Tue', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Wed', '11:00')">11:00</div>
+                        <div class="period-cell assigned" onclick="togglePeriod(this, 'Thu', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Fri', '11:00')">11:00</div>
+                        <div class="period-cell available" onclick="togglePeriod(this, 'Sat', '11:00')">11:00</div>
+                    </div>
+                    <div style="margin-top: 16px; padding: 12px; background: #F7F7F7; border-radius: 8px; font-size: 14px;">
+                        <strong>Legend:</strong>
+                        <span style="color: #7B54FA;">■ Assigned</span> |
+                        <span style="color: #28A745;">■ Available</span> |
+                        <span style="color: #DC3545;">■ Conflict</span>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="btn-secondary" onclick="closeScheduleModal()">Cancel</button>
+                        <button type="button" class="btn-primary" onclick="saveSchedule()">Save Schedule</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Assignment</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Teacher</label>
+                        <select class="form-select">
+                            <option>Dr. Smith</option>
+                            <option>Ms. Johnson</option>
+                            <option>Mr. Brown</option>
+                            <option>Dr. Wilson</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select">
+                            <option>Mathematics</option>
+                            <option>Physics</option>
+                            <option>English</option>
+                            <option>Chemistry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Class</label>
+                        <select class="form-select">
+                            <option>Class 10A</option>
+                            <option>Class 10B</option>
+                            <option>Class 9A</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Slot</label>
+                        <input type="text" class="form-input" placeholder="e.g., Mon 9:00-10:00">
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedNodes = [];
+
+        function switchView(view) {
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide content sections
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(view + '-view').classList.add('active');
+        }
+
+        function switchOption(option) {
+            // Update option tabs
+            document.querySelectorAll('.option-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide option content
+            document.querySelectorAll('.option-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(option + '-option').classList.add('active');
+        }
+
+        function selectNode(element, type, name) {
+            // Clear previous selections
+            document.querySelectorAll('.node').forEach(node => node.classList.remove('selected'));
+            
+            // Select current node
+            element.classList.add('selected');
+            
+            // Show connections based on selection
+            showConnections(type, name);
+            
+            // Show assignment options based on node type
+            if (type === 'teacher' || type === 'subject') {
+                showAssignmentOptions(type, name, element);
+            }
+        }
+
+        function showAssignmentOptions(type, name, element) {
+            // Add a small delay to show the assignment modal
+            setTimeout(() => {
+                if (type === 'teacher') {
+                    openTeacherAssignmentModal(name);
+                } else if (type === 'subject') {
+                    openSubjectAssignmentModal(name);
+                }
+            }, 300);
+        }
+
+        function openTeacherAssignmentModal(teacherName) {
+            // Find the teacher node and add inline assignment interface
+            const teacherNode = document.querySelector(`[data-teacher="${teacherName}"]`);
+            if (!teacherNode) return;
+            
+            // Remove any existing inline interfaces
+            document.querySelectorAll('.inline-assignment').forEach(el => el.remove());
+            
+            // Get teacher's current subjects
+            const teacherSubjects = {
+                'Dr. Smith': ['Mathematics'],
+                'Ms. Johnson': ['Physics'],
+                'Mr. Brown': ['English'],
+                'Dr. Wilson': ['Chemistry', 'Biology']
+            };
+            
+            const subjects = teacherSubjects[teacherName] || [];
+            
+            // Create inline assignment interface
+            const inlineInterface = document.createElement('div');
+            inlineInterface.className = 'inline-assignment';
+            inlineInterface.innerHTML = `
+                <div class="inline-assignment-content">
+                    <div class="inline-header">
+                        <h4>${teacherName} - Quick Actions</h4>
+                        <button class="close-inline-btn" onclick="closeInlineAssignment()">&times;</button>
+                    </div>
+                    <div class="inline-subjects">
+                        <label class="inline-label">Current Subjects:</label>
+                        ${subjects.map(subject => `
+                            <div class="inline-subject-item">
+                                <span>${subject}</span>
+                                <button class="inline-reassign-btn" onclick="showInlineReassign('${teacherName}', '${subject}')">Change</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="inline-add-subject">
+                        <label class="inline-label">Add Subject:</label>
+                        <div class="inline-form-row">
+                            <select class="inline-select" id="inline-subject-${teacherName.replace(/\s+/g, '')}">
+                                <option value="">Select subject...</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Physics">Physics</option>
+                                <option value="English">English</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                            </select>
+                            <button class="inline-assign-btn" onclick="assignSubjectInline('${teacherName}')">Add</button>
+                        </div>
+                    </div>
+                    <div class="inline-actions">
+                        <button class="inline-schedule-btn" onclick="openScheduleModal('${teacherName}')">View Schedule</button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert after the teacher node
+            teacherNode.parentNode.insertBefore(inlineInterface, teacherNode.nextSibling);
+            
+            // Scroll into view
+            inlineInterface.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function openSubjectAssignmentModal(subjectName) {
+            // Find the subject node and add inline assignment interface
+            const subjectNode = document.querySelector(`[data-subject="${subjectName}"]`);
+            if (!subjectNode) return;
+            
+            // Remove any existing inline interfaces
+            document.querySelectorAll('.inline-assignment').forEach(el => el.remove());
+            
+            // Get subject's current assignments
+            const subjectAssignments = {
+                'Mathematics': ['Class 10A - Dr. Smith', 'Class 10B - Dr. Smith', 'Class 9A - Dr. Smith'],
+                'Physics': ['Class 10A - Ms. Johnson', 'Class 9A - Ms. Johnson'],
+                'English': ['Class 10A - Mr. Brown', 'Class 10B - Mr. Brown'],
+                'Chemistry': ['Class 10B - Dr. Wilson']
+            };
+            
+            const assignments = subjectAssignments[subjectName] || [];
+            const unassignedClasses = ['Class 9A', 'Class 10B']; // Example unassigned classes
+            
+            // Create inline assignment interface
+            const inlineInterface = document.createElement('div');
+            inlineInterface.className = 'inline-assignment';
+            inlineInterface.innerHTML = `
+                <div class="inline-assignment-content">
+                    <div class="inline-header">
+                        <h4>${subjectName} - Manage Assignments</h4>
+                        <button class="close-inline-btn" onclick="closeInlineAssignment()">&times;</button>
+                    </div>
+                    <div class="inline-assignments">
+                        <label class="inline-label">Current Assignments:</label>
+                        ${assignments.map(assignment => `
+                            <div class="inline-assignment-item">
+                                <span>${assignment}</span>
+                                <button class="inline-reassign-btn" onclick="showInlineTeacherChange('${subjectName}', '${assignment}')">Change</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${unassignedClasses.length > 0 ? `
+                    <div class="inline-unassigned">
+                        <label class="inline-label">Quick Assign to Classes:</label>
+                        ${unassignedClasses.map(className => `
+                            <div class="inline-unassigned-item">
+                                <span>${className}</span>
+                                <div class="inline-form-row">
+                                    <select class="inline-select" id="teacher-for-${className.replace(/\s+/g, '')}-${subjectName.replace(/\s+/g, '')}">
+                                        <option value="">Select teacher...</option>
+                                        <option value="Dr. Smith">Dr. Smith</option>
+                                        <option value="Ms. Johnson">Ms. Johnson</option>
+                                        <option value="Mr. Brown">Mr. Brown</option>
+                                        <option value="Dr. Wilson">Dr. Wilson (Overloaded)</option>
+                                    </select>
+                                    <button class="inline-assign-btn" onclick="quickAssignInline('${subjectName}', '${className}')">Assign</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                    <div class="inline-actions">
+                        <button class="inline-schedule-btn" onclick="openScheduleModal('${subjectName}')">View Schedule Grid</button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert after the subject node
+            subjectNode.parentNode.insertBefore(inlineInterface, subjectNode.nextSibling);
+            
+            // Scroll into view
+            inlineInterface.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function openScheduleModal(name) {
+            const modal = document.getElementById('schedule-modal');
+            const title = document.getElementById('schedule-modal-title');
+            
+            title.textContent = `${name} - Schedule Grid`;
+            modal.classList.add('active');
+        }
+
+        function closeAssignmentModal() {
+            document.getElementById('assignment-modal').classList.remove('active');
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('active');
+        }
+
+        function togglePeriod(cell, day, time) {
+            if (cell.classList.contains('conflict')) {
+                alert(`Conflict detected for ${day} ${time}. Please resolve conflicts first.`);
+                return;
+            }
+            
+            if (cell.classList.contains('assigned')) {
+                cell.classList.remove('assigned');
+                cell.classList.add('available');
+            } else if (cell.classList.contains('available')) {
+                cell.classList.remove('available');
+                cell.classList.add('assigned');
+            }
+        }
+
+        function saveSchedule() {
+            alert('Schedule saved successfully!');
+            closeScheduleModal();
+        }
+
+        function assignSubjectToTeacher(teacherName) {
+            const select = document.getElementById('new-subject-select');
+            const subject = select.value;
+            
+            if (subject) {
+                alert(`${subject} assigned to ${teacherName}!`);
+                closeAssignmentModal();
+                // In real app, update the data and refresh the view
+            } else {
+                alert('Please select a subject first.');
+            }
+        }
+
+        function closeInlineAssignment() {
+            document.querySelectorAll('.inline-assignment').forEach(el => {
+                el.style.animation = 'slideOutUp 0.2s ease-in';
+                setTimeout(() => el.remove(), 200);
+            });
+        }
+
+        function assignSubjectInline(teacherName) {
+            const selectId = `inline-subject-${teacherName.replace(/\s+/g, '')}`;
+            const select = document.getElementById(selectId);
+            const subject = select.value;
+            
+            if (subject) {
+                alert(`${subject} assigned to ${teacherName}!`);
+                closeInlineAssignment();
+                // In real app, update the data and refresh the view
+            } else {
+                alert('Please select a subject first.');
+            }
+        }
+
+        function quickAssignInline(subjectName, className) {
+            const selectId = `teacher-for-${className.replace(/\s+/g, '')}-${subjectName.replace(/\s+/g, '')}`;
+            const select = document.getElementById(selectId);
+            const teacher = select.value;
+            
+            if (teacher) {
+                alert(`${subjectName} assigned to ${className} with ${teacher}!`);
+                closeInlineAssignment();
+                // In real app, update the data and refresh the view
+            } else {
+                alert('Please select a teacher first.');
+            }
+        }
+
+        function showInlineReassign(teacherName, subject) {
+            alert(`Reassigning ${subject} from ${teacherName}. Select new teacher.`);
+            // In real app, show inline teacher selection
+        }
+
+        function showInlineTeacherChange(subjectName, assignment) {
+            alert(`Changing teacher for ${assignment}. Select new teacher.`);
+            // In real app, show inline teacher selection
+        }
+
+        function reassignSubject(teacherName, subject) {
+            alert(`Reassigning ${subject} from ${teacherName}. Select new teacher.`);
+            // In real app, show teacher selection modal
+        }
+
+        function reassignClass(subject, assignment) {
+            alert(`Reassigning ${assignment}. Select new teacher.`);
+            // In real app, show teacher selection modal
+        }
+
+        function quickAssignClass(subject, className) {
+            alert(`Quick assigning ${subject} to ${className}. Selecting best available teacher.`);
+            closeAssignmentModal();
+            // In real app, use algorithm to find best teacher and assign
+        }
+
+        function assignSubject(className) {
+            alert(`Assigning new subject to ${className}. Select subject and teacher.`);
+            // In real app, show subject selection modal
+        }
+
+        function updateTeacherOptions(subjectSelect) {
+            const subject = subjectSelect.value;
+            const teacherSelect = subjectSelect.parentElement.querySelector('[id*="teacher-select"]');
+            const assistantSelect = subjectSelect.parentElement.querySelector('[id*="assistant-select"]');
+            
+            // Clear previous options
+            teacherSelect.innerHTML = '<option value="">Select Teacher...</option>';
+            assistantSelect.innerHTML = '<option value="">Assistant...</option>';
+            
+            if (subject) {
+                teacherSelect.disabled = false;
+                assistantSelect.disabled = false;
+                
+                // Sample teacher data based on subject
+                const teacherOptions = {
+                    'Chemistry': [
+                        { value: 'Dr. Wilson', text: 'Dr. Wilson (OVERLOADED +2)', class: 'overloaded' },
+                        { value: 'Ms. Johnson', text: 'Ms. Johnson (Available)', class: 'available' }
+                    ],
+                    'Biology': [
+                        { value: 'Dr. Wilson', text: 'Dr. Wilson (OVERLOADED +2)', class: 'overloaded' },
+                        { value: 'Mr. Green', text: 'Mr. Green (Available)', class: 'available' }
+                    ],
+                    'History': [
+                        { value: 'Ms. White', text: 'Ms. White (Available)', class: 'available' },
+                        { value: 'Mr. Black', text: 'Mr. Black (Available)', class: 'available' }
+                    ]
+                };
+                
+                const assistantOptions = [
+                    { value: 'Ms. Davis', text: 'Ms. Davis (Math Assistant)' },
+                    { value: 'Mr. Taylor', text: 'Mr. Taylor (Science Assistant)' },
+                    { value: 'Ms. Lee', text: 'Ms. Lee (Language Assistant)' }
+                ];
+                
+                // Populate teacher options
+                if (teacherOptions[subject]) {
+                    teacherOptions[subject].forEach(teacher => {
+                        const option = document.createElement('option');
+                        option.value = teacher.value;
+                        option.textContent = teacher.text;
+                        if (teacher.class === 'overloaded') {
+                            option.style.color = '#DC3545';
+                            option.title = 'This teacher is overloaded';
+                        }
+                        teacherSelect.appendChild(option);
+                    });
+                }
+                
+                // Populate assistant options
+                assistantOptions.forEach(assistant => {
+                    const option = document.createElement('option');
+                    option.value = assistant.value;
+                    option.textContent = assistant.text;
+                    assistantSelect.appendChild(option);
+                });
+            } else {
+                teacherSelect.disabled = true;
+                assistantSelect.disabled = true;
+            }
+        }
+
+        // Contextual Grid View Functions
+        let currentGridView = 'class';
+        let currentSelection = 'Class 10A';
+
+        function switchGridView(viewType) {
+            // Update toggle buttons
+            document.querySelectorAll('.view-type-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Hide all selection lists
+            document.querySelectorAll('.selection-list').forEach(list => list.classList.remove('active'));
+            
+            // Show selected list
+            document.getElementById(viewType + '-selection').classList.add('active');
+            
+            currentGridView = viewType;
+            
+            // Update context based on first item in the new view
+            const firstItem = document.querySelector(`#${viewType}-selection .selection-item`);
+            if (firstItem) {
+                // Clear previous selections
+                document.querySelectorAll('.selection-item').forEach(item => item.classList.remove('active'));
+                firstItem.classList.add('active');
+                
+                // Get the selection name
+                const selectionName = firstItem.querySelector('.item-title').textContent.trim();
+                currentSelection = selectionName;
+                updateContextColumns(viewType, selectionName);
+            }
+        }
+
+        function selectGridItem(type, name, element) {
+            // Clear previous selections in this list
+            element.parentNode.querySelectorAll('.selection-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            currentSelection = name;
+            updateContextColumns(type, name);
+        }
+
+        function updateContextColumns(type, selection) {
+            const col2Title = document.getElementById('context-2-title');
+            const col2Content = document.getElementById('context-2-content');
+            const col3Title = document.getElementById('context-3-title');
+            const col3Content = document.getElementById('context-3-content');
+            const col4Title = document.getElementById('context-4-title');
+            const col4Content = document.getElementById('context-4-content');
+            const col5Title = document.getElementById('context-5-title');
+            const col5Content = document.getElementById('context-5-content');
+
+            if (type === 'class') {
+                updateClassView(selection, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content);
+            } else if (type === 'subject') {
+                updateSubjectView(selection, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content);
+            } else if (type === 'teacher') {
+                updateTeacherView(selection, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content);
+            }
+        }
+
+        function updateClassView(className, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content) {
+            col2Title.textContent = `Subjects for ${className}`;
+            col3Title.textContent = `${className} Schedule`;
+            col4Title.textContent = 'Primary Teachers';
+            col5Title.textContent = 'Assistant Teachers';
+
+            // Sample data for Class 10A
+            const classData = {
+                'Class 10A': {
+                    subjects: [
+                        { name: 'Mathematics', teacher: 'Dr. Smith', assistant: 'Ms. Davis', time: 'Mon 9:00-10:00', status: 'assigned' },
+                        { name: 'Physics', teacher: 'Ms. Johnson', assistant: 'Mr. Taylor', time: 'Tue 10:00-11:00', status: 'assigned' },
+                        { name: 'English', teacher: 'Mr. Brown', assistant: null, time: 'Wed 11:00-12:00', status: 'assigned' }
+                    ],
+                    schedule: [
+                        ['M', 'T', 'W', 'T', 'F'],
+                        ['Math', '', 'Eng', '', 'Phy'],
+                        ['', 'Phy', '', '', ''],
+                        ['', '', 'Math', '', '']
+                    ]
+                },
+                'Class 10B': {
+                    subjects: [
+                        { name: 'Mathematics', teacher: 'Dr. Smith', assistant: 'Ms. Davis', time: 'Mon 10:00-11:00', status: 'assigned' },
+                        { name: 'Chemistry', teacher: 'Dr. Wilson', assistant: null, time: 'Thu 9:00-10:00', status: 'overloaded' },
+                        { name: 'English', teacher: 'Mr. Brown', assistant: 'Ms. Lee', time: 'Fri 11:00-12:00', status: 'assigned' }
+                    ],
+                    schedule: [
+                        ['M', 'T', 'W', 'T', 'F'],
+                        ['', '', '', 'Chem', ''],
+                        ['Math', '', '', '', 'Eng'],
+                        ['', '', '', '', '']
+                    ]
+                },
+                'Class 9A': {
+                    subjects: [
+                        { name: 'Mathematics', teacher: 'Dr. Smith', assistant: 'Ms. Davis', time: 'Tue 9:00-10:00', status: 'assigned' },
+                        { name: 'Physics', teacher: 'Ms. Johnson', assistant: 'Mr. Taylor', time: 'Wed 10:00-11:00', status: 'assigned' }
+                    ],
+                    schedule: [
+                        ['M', 'T', 'W', 'T', 'F'],
+                        ['', 'Math', '', '', ''],
+                        ['', '', 'Phy', '', ''],
+                        ['', '', '', '', '']
+                    ]
+                }
+            };
+
+            const data = classData[className] || classData['Class 10A'];
+
+            // Column 2: Subjects
+            col2Content.innerHTML = data.subjects.map(subject => `
+                <div class="context-item ${subject.status === 'overloaded' ? 'warning' : ''}">
+                    <div class="context-item-title">
+                        ${subject.name}
+                        <span class="context-badge ${subject.status}">${subject.status === 'overloaded' ? 'Overloaded' : 'Assigned'}</span>
+                    </div>
+                    <div class="context-item-subtitle">${subject.teacher}${subject.assistant ? ' + ' + subject.assistant : ''}</div>
+                    <div class="context-item-meta">
+                        <span style="font-size: 11px; color: #7B54FA;">${subject.time}</span>
+                    </div>
+                </div>
+            `).join('') + (className === 'Class 9A' ? `
+                <div class="context-item" style="border: 2px dashed #FFC107; background: #FFF9E6;">
+                    <div class="context-item-title">Add Subject</div>
+                    <div class="context-item-subtitle">Click to assign new subject</div>
+                </div>
+            ` : '');
+
+            // Column 3: Schedule Grid
+            col3Content.innerHTML = `
+                <div class="mini-schedule" style="grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 16px;">
+                    ${data.schedule.flat().map((cell, index) => {
+                        if (index < 5) return `<div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">${cell}</div>`;
+                        return `<div class="mini-schedule-cell ${cell ? 'assigned' : 'available'}" style="width: 100%; height: 24px; font-size: 10px;">${cell || ''}</div>`;
+                    }).join('')}
+                </div>
+                <div style="font-size: 12px; color: #606060; margin-top: 12px;">
+                    <strong>Legend:</strong> 
+                    <span style="color: #7B54FA;">■ Assigned</span> | 
+                    <span style="color: #E0E0E0;">□ Available</span>
+                </div>
+            `;
+
+            // Column 4: Primary Teachers
+            const teachers = [...new Set(data.subjects.map(s => s.teacher))];
+            col4Content.innerHTML = teachers.map(teacher => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${teacher}
+                        <span class="teacher-badge pt">PT</span>
+                    </div>
+                    <div class="context-item-subtitle">${data.subjects.filter(s => s.teacher === teacher).map(s => s.name).join(', ')}</div>
+                    <div class="context-item-meta">
+                        <span class="context-badge ${teacher === 'Dr. Wilson' ? 'overloaded' : 'assigned'}">${teacher === 'Dr. Wilson' ? 'Overloaded' : 'Active'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Column 5: Assistant Teachers
+            const assistants = data.subjects.filter(s => s.assistant).map(s => s.assistant);
+            const uniqueAssistants = [...new Set(assistants)];
+            col5Content.innerHTML = uniqueAssistants.map(assistant => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${assistant}
+                        <span class="teacher-badge at">AT</span>
+                    </div>
+                    <div class="context-item-subtitle">${data.subjects.filter(s => s.assistant === assistant).map(s => s.name).join(', ')}</div>
+                    <div class="context-item-meta">
+                        <span class="context-badge assigned">Active</span>
+                    </div>
+                </div>
+            `).join('') + (uniqueAssistants.length < 3 ? `
+                <div class="context-item" style="border: 2px dashed #28A745; background: #E8F5E8;">
+                    <div class="context-item-title">Available Assistants</div>
+                    <div class="context-item-subtitle">Ms. Lee, Mr. Taylor available</div>
+                </div>
+            ` : '');
+        }
+
+        function updateSubjectView(subjectName, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content) {
+            col2Title.textContent = `Classes for ${subjectName}`;
+            col3Title.textContent = `${subjectName} Schedule Grid`;
+            col4Title.textContent = 'Primary Teacher';
+            col5Title.textContent = 'Available Teachers';
+
+            const subjectData = {
+                'Mathematics': {
+                    classes: [
+                        { name: 'Class 10A', students: 30, teacher: 'Dr. Smith', time: 'Mon 9:00-10:00' },
+                        { name: 'Class 10B', students: 28, teacher: 'Dr. Smith', time: 'Mon 10:00-11:00' },
+                        { name: 'Class 9A', students: 32, teacher: 'Dr. Smith', time: 'Tue 9:00-10:00' }
+                    ],
+                    primaryTeacher: 'Dr. Smith',
+                    availableTeachers: ['Ms. Johnson', 'Mr. Brown']
+                },
+                'Physics': {
+                    classes: [
+                        { name: 'Class 10A', students: 30, teacher: 'Ms. Johnson', time: 'Tue 10:00-11:00' },
+                        { name: 'Class 9A', students: 32, teacher: 'Ms. Johnson', time: 'Wed 10:00-11:00' }
+                    ],
+                    primaryTeacher: 'Ms. Johnson',
+                    availableTeachers: ['Dr. Wilson', 'Mr. Taylor']
+                }
+            };
+
+            const data = subjectData[subjectName] || subjectData['Mathematics'];
+
+            // Column 2: Classes
+            col2Content.innerHTML = data.classes.map(cls => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${cls.name}
+                        <span class="context-badge assigned">Assigned</span>
+                    </div>
+                    <div class="context-item-subtitle">${cls.students} students • ${cls.teacher}</div>
+                    <div class="context-item-meta">
+                        <span style="font-size: 11px; color: #7B54FA;">${cls.time}</span>
+                    </div>
+                </div>
+            `).join('') + `
+                <div class="context-item" style="border: 2px dashed #FFC107; background: #FFF9E6;">
+                    <div class="context-item-title">Assign to Class</div>
+                    <div class="context-item-subtitle">Class 10B available</div>
+                </div>
+            `;
+
+            // Column 3: Schedule Grid
+            col3Content.innerHTML = `
+                <div class="mini-schedule" style="grid-template-columns: repeat(5, 1fr); gap: 4px;">
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">M</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">T</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">W</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">T</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">F</div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">10A</div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">9A</div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">10B</div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">9A</div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                </div>
+            `;
+
+            // Column 4: Primary Teacher
+            col4Content.innerHTML = `
+                <div class="context-item selected">
+                    <div class="context-item-title">
+                        ${data.primaryTeacher}
+                        <span class="teacher-badge pt">PT</span>
+                    </div>
+                    <div class="context-item-subtitle">${data.classes.length} classes assigned</div>
+                    <div class="context-item-meta">
+                        <span class="context-badge assigned">Primary</span>
+                    </div>
+                </div>
+            `;
+
+            // Column 5: Available Teachers
+            col5Content.innerHTML = data.availableTeachers.map(teacher => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${teacher}
+                        <span class="teacher-badge pt">PT</span>
+                    </div>
+                    <div class="context-item-subtitle">Available for assignment</div>
+                    <div class="context-item-meta">
+                        <span class="context-badge available">Available</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTeacherView(teacherName, col2Title, col2Content, col3Title, col3Content, col4Title, col4Content, col5Title, col5Content) {
+            const isAssistant = teacherName.includes('Ms. Davis') || teacherName.includes('Mr. Taylor');
+            
+            col2Title.textContent = `Classes for ${teacherName}`;
+            col3Title.textContent = `${teacherName} Schedule`;
+            col4Title.textContent = 'Subjects';
+            col5Title.textContent = isAssistant ? 'Primary Teachers' : 'Assistant Teachers';
+
+            const teacherData = {
+                'Dr. Smith': {
+                    classes: [
+                        { name: 'Class 10A', subject: 'Mathematics', time: 'Mon 9:00-10:00' },
+                        { name: 'Class 10B', subject: 'Mathematics', time: 'Mon 10:00-11:00' },
+                        { name: 'Class 9A', subject: 'Mathematics', time: 'Tue 9:00-10:00' }
+                    ],
+                    subjects: ['Mathematics'],
+                    counterparts: [
+                        { name: 'Ms. Davis', role: 'Math Assistant', type: 'assistant' }
+                    ]
+                },
+                'Ms. Davis': {
+                    classes: [
+                        { name: 'Class 10A', subject: 'Mathematics', time: 'Mon 9:00-10:00' },
+                        { name: 'Class 10B', subject: 'Mathematics', time: 'Mon 10:00-11:00' }
+                    ],
+                    subjects: ['Mathematics'],
+                    counterparts: [
+                        { name: 'Dr. Smith', role: 'Primary Math Teacher', type: 'primary' }
+                    ]
+                }
+            };
+
+            const data = teacherData[teacherName] || teacherData['Dr. Smith'];
+
+            // Column 2: Classes
+            col2Content.innerHTML = data.classes.map(cls => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${cls.name}
+                        <span class="context-badge assigned">Assigned</span>
+                    </div>
+                    <div class="context-item-subtitle">${cls.subject}</div>
+                    <div class="context-item-meta">
+                        <span style="font-size: 11px; color: #7B54FA;">${cls.time}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Column 3: Schedule Grid
+            col3Content.innerHTML = `
+                <div class="mini-schedule" style="grid-template-columns: repeat(5, 1fr); gap: 4px;">
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">M</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">T</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">W</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">T</div>
+                    <div style="font-size: 10px; font-weight: 600; text-align: center; padding: 4px;">F</div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">10A</div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">9A</div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell assigned" style="width: 100%; height: 24px;">10B</div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                    <div class="mini-schedule-cell available" style="width: 100%; height: 24px;"></div>
+                </div>
+            `;
+
+            // Column 4: Subjects
+            col4Content.innerHTML = data.subjects.map(subject => `
+                <div class="context-item">
+                    <div class="context-item-title">
+                        ${subject}
+                        <span class="context-badge assigned">Teaching</span>
+                    </div>
+                    <div class="context-item-subtitle">${data.classes.length} classes</div>
+                </div>
+            `).join('');
+
+            // Column 5: Counterparts
+            col5Content.innerHTML = data.counterparts.map(counterpart => `
+                <div class="counterpart-info">
+                    <div class="counterpart-avatar ${counterpart.type === 'assistant' ? 'assistant' : ''}">
+                        ${counterpart.type === 'assistant' ? 'AT' : 'PT'}
+                    </div>
+                    <div class="counterpart-details">
+                        <div class="counterpart-name">${counterpart.name}</div>
+                        <div class="counterpart-role">${counterpart.role}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleScheduleGrid() {
+            const toggle = document.getElementById('schedule-grid-toggle');
+            const scheduleColumn = document.getElementById('schedule-grid-column');
+            const scheduleNodes = document.querySelectorAll('.schedule-grid-node');
+            
+            if (toggle.checked) {
+                // Show schedule grid
+                scheduleColumn.classList.remove('hidden');
+                scheduleNodes.forEach(node => node.classList.add('expanded'));
+            } else {
+                // Hide schedule grid
+                scheduleColumn.classList.add('hidden');
+                scheduleNodes.forEach(node => node.classList.remove('expanded'));
+            }
+        }
+
+        function assignInline(className) {
+            const row = event.target.closest('.assignment-row');
+            const selects = row.querySelectorAll('select');
+            const subjectSelect = selects[0];
+            const teacherSelect = selects[1];
+            const assistantSelect = selects[2];
+            
+            const subject = subjectSelect.value;
+            const teacher = teacherSelect.value;
+            const assistant = assistantSelect.value;
+            
+            if (!subject || !teacher) {
+                alert('Please select both subject and teacher');
+                return;
+            }
+            
+            const assistantText = assistant ? ` + ${assistant} (Assistant)` : '';
+            alert(`Successfully assigned ${subject} with ${teacher}${assistantText} to ${className}!`);
+            
+            // In real app, this would update the data and refresh the view
+            // For demo, we'll replace the assignment row with a regular subject item
+            const newSubjectItem = document.createElement('li');
+            newSubjectItem.className = 'subject-item';
+            newSubjectItem.innerHTML = `
+                <div class="subject-left">
+                    <div class="subject-name">${subject}</div>
+                    <div class="subject-meta">
+                        <div class="time-slot">To be scheduled</div>
+                    </div>
+                </div>
+                <div class="teacher-info">
+                    <span class="teacher-name${teacher.includes('OVERLOADED') ? ' overloaded' : ''}">${teacher.split(' (')[0]}</span>
+                    ${assistant ? `<span class="assistant-name">${assistant.split(' (')[0]}</span>` : '<span class="assistant-name unassigned">No Assistant</span>'}
+                </div>
+            `;
+            
+            row.parentNode.replaceChild(newSubjectItem, row);
+        }
+
+        // Initialize contextual grid view
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('context-2-content')) {
+                updateContextColumns('class', 'Class 10A');
+            }
+        });
+
+        function assignToEmptyCell(cell, day, time) {
+            const modal = document.getElementById('assignment-modal');
+            const title = document.getElementById('assignment-modal-title');
+            const content = document.getElementById('assignment-content');
+            
+            title.textContent = `Assign ${day} ${time}`;
+            
+            content.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <select class="form-select" id="assign-subject">
+                        <option value="">Select subject...</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="English">English</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Teacher</label>
+                    <select class="form-select" id="assign-teacher">
+                        <option value="">Select teacher...</option>
+                        <option value="Dr. Smith">Dr. Smith (Mathematics)</option>
+                        <option value="Ms. Johnson">Ms. Johnson (Physics)</option>
+                        <option value="Mr. Brown">Mr. Brown (English)</option>
+                        <option value="Dr. Wilson">Dr. Wilson (Chemistry) - OVERLOADED</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Assistant Teacher (Optional)</label>
+                    <select class="form-select" id="assign-assistant">
+                        <option value="">No assistant</option>
+                        <option value="Ms. Davis">Ms. Davis (Math Assistant)</option>
+                        <option value="Mr. Taylor">Mr. Taylor (Science Assistant)</option>
+                        <option value="Ms. Lee">Ms. Lee (Language Assistant)</option>
+                    </select>
+                </div>
+                <div class="assignment-actions">
+                    <button class="btn-primary" onclick="confirmAssignment('${day}', '${time}')">Assign Period</button>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function confirmAssignment(day, time) {
+            const subject = document.getElementById('assign-subject').value;
+            const teacher = document.getElementById('assign-teacher').value;
+            const assistant = document.getElementById('assign-assistant').value;
+            
+            if (subject && teacher) {
+                const assistantText = assistant ? ` + ${assistant}` : '';
+                alert(`Assigned ${subject} with ${teacher}${assistantText} for ${day} ${time}!`);
+                closeAssignmentModal();
+                // In real app, update the schedule and refresh the view
+            } else {
+                alert('Please select both subject and teacher.');
+            }
+        }
+
+        function showConnections(type, name) {
+            // Clear existing connection lines
+            document.querySelectorAll('.connection-line').forEach(line => line.remove());
+            
+            // Highlight related nodes based on the selection
+            if (type === 'class') {
+                // Highlight subjects and teachers for this class
+                highlightRelatedNodes(name);
+            }
+        }
+
+        function highlightRelatedNodes(className) {
+            // Sample data mapping - in real app, this would come from your data source
+            const classSubjects = {
+                'Class 10A': ['Mathematics', 'Physics', 'English'],
+                'Class 10B': ['Mathematics', 'Chemistry', 'English'],
+                'Class 9A': ['Mathematics', 'Physics']
+            };
+
+            const subjectTeachers = {
+                'Mathematics': 'Dr. Smith',
+                'Physics': 'Ms. Johnson',
+                'English': 'Mr. Brown',
+                'Chemistry': 'Dr. Wilson'
+            };
+
+            // Highlight subjects
+            document.querySelectorAll('.subject-node').forEach(node => {
+                const subject = node.dataset.subject;
+                if (classSubjects[className] && classSubjects[className].includes(subject)) {
+                    node.style.borderColor = '#7B54FA';
+                    node.style.backgroundColor = '#F7F7F7';
+                } else {
+                    node.style.borderColor = '#E0E0E0';
+                    node.style.backgroundColor = 'white';
+                }
+            });
+
+            // Highlight teachers
+            document.querySelectorAll('.teacher-node').forEach(node => {
+                const teacher = node.dataset.teacher;
+                const isAssigned = classSubjects[className] && 
+                    classSubjects[className].some(subject => subjectTeachers[subject] === teacher);
+                
+                if (isAssigned) {
+                    node.style.borderColor = '#7B54FA';
+                    node.style.backgroundColor = '#F7F7F7';
+                } else {
+                    node.style.borderColor = '#E0E0E0';
+                    node.style.backgroundColor = 'white';
+                }
+            });
+        }
+
+        function openModal(type) {
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        function editScheduleCell(cell) {
+            if (cell.classList.contains('occupied')) {
+                openModal('edit-schedule');
+            } else {
+                openModal('add-schedule');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('edit-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('assignment-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAssignmentModal();
+            }
+        });
+
+        document.getElementById('schedule-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeScheduleModal();
+            }
+        });
+
+        // Initialize with Class 10A selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstClassNode = document.querySelector('.node');
+            if (firstClassNode) {
+                selectNode(firstClassNode, 'class', 'Class 10A');
+            }
+        });
+
+        // Close inline assignment when clicking outside
+        document.addEventListener('click', function(e) {
+            const inlineAssignment = document.querySelector('.inline-assignment');
+            if (inlineAssignment && !inlineAssignment.contains(e.target) && !e.target.closest('.node')) {
+                closeInlineAssignment();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7837350a117a2',t:'MTc1NDQwOTY5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
