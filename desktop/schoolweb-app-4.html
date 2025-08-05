@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP - Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        'primary-dark': '#4F46E5',
+                        'text-primary': '#1F2937',
+                        'text-secondary': '#6B7280',
+                        'bg-light': '#F9FAFB',
+                        'border-light': '#E5E7EB'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Main Layout -->
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-white shadow-sm border-r border-border-light flex-shrink-0">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-text-primary">SchoolERP</h1>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="space-y-1">
+                    <button onclick="switchModule('dashboard')" id="dashboard-nav" class="nav-button w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-home mr-3 text-base w-5"></i>
+                        Dashboard
+                    </button>
+
+                    <button onclick="switchModule('allocations')" id="allocations-nav" class="nav-button active w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-users mr-3 text-base w-5"></i>
+                        Allocations
+                    </button>
+                    <button onclick="switchModule('attendance')" id="attendance-nav" class="nav-button w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-calendar-check mr-3 text-base w-5"></i>
+                        Attendance
+                    </button>
+                    <button onclick="switchModule('calendar')" id="calendar-nav" class="nav-button w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-calendar-alt mr-3 text-base w-5"></i>
+                        Calendar Management
+                    </button>
+                    <button onclick="switchModule('fees')" id="fees-nav" class="nav-button w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-money-bill-wave mr-3 text-base w-5"></i>
+                        Fee Management
+                    </button>
+                    <button onclick="switchModule('settings')" id="settings-nav" class="nav-button w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium">
+                        <i class="fas fa-cog mr-3 text-base w-5"></i>
+                        Settings
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Right Content Area -->
+        <div class="flex-1 overflow-auto">
+            <div class="p-6">
+                <!-- Allocations Module -->
+                <div id="allocations-content" class="module-content">
+                    <!-- Header Section -->
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Allocations</h1>
+                        <p class="text-text-secondary text-sm">Manage teacher assignments and class allocations</p>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="mb-6">
+                        <div class="flex space-x-1 bg-white p-1 rounded-lg shadow-sm border border-border-light w-fit">
+                            <button onclick="switchAllocationsTab('subject-teacher')" id="subject-teacher-tab" class="allocation-tab active px-4 py-2 rounded-md text-sm font-medium transition-all">
+                                Subject & Class Teacher
+                            </button>
+                            <button onclick="switchAllocationsTab('primary-secondary')" id="primary-secondary-tab" class="allocation-tab px-4 py-2 rounded-md text-sm font-medium transition-all">
+                                Primary & Secondary Teacher
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subject & Class Teacher Tab -->
+                    <div id="subject-teacher-content" class="allocation-tab-content">
+                        <!-- Filters Section -->
+                        <div class="bg-white rounded-lg shadow-sm border border-border-light p-6 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Academic Year</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>2023-2024</option>
+                                        <option>2022-2023</option>
+                                        <option>2021-2022</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>All Classes</option>
+                                        <option>Class 1-A</option>
+                                        <option>Class 1-B</option>
+                                        <option>Class 2-A</option>
+                                        <option>Class 2-B</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Subject</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>All Subjects</option>
+                                        <option>Mathematics</option>
+                                        <option>English</option>
+                                        <option>Science</option>
+                                        <option>Social Studies</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Teacher</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>All Teachers</option>
+                                        <option>Ms. Sarah Johnson</option>
+                                        <option>Mr. David Smith</option>
+                                        <option>Ms. Emily Brown</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <button class="bg-text-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Search
+                                </button>
+                                <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="bg-white rounded-lg shadow-sm border border-border-light overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-bg-light border-b border-border-light">
+                                        <tr>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Class</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Subject</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Teacher</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Academic Year</th>
+                                            <th class="text-center py-3 px-4 font-semibold text-text-primary text-sm">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 1-A</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Mathematics</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Ms. Sarah Johnson</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 1-B</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">English</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Mr. David Smith</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 2-A</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Science</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Ms. Emily Brown</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 2-B</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Social Studies</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Mr. Michael Davis</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Primary & Secondary Teacher Tab -->
+                    <div id="primary-secondary-content" class="allocation-tab-content hidden">
+                        <!-- Filters Section -->
+                        <div class="bg-white rounded-lg shadow-sm border border-border-light p-6 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Academic Year</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>2023-2024</option>
+                                        <option>2022-2023</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>All Classes</option>
+                                        <option>Class 1-A</option>
+                                        <option>Class 1-B</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-text-primary mb-2">Teacher Role</label>
+                                    <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        <option>All Roles</option>
+                                        <option>Primary Teacher</option>
+                                        <option>Secondary Teacher</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <button class="bg-text-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Search
+                                </button>
+                                <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Export
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="bg-white rounded-lg shadow-sm border border-border-light overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-bg-light border-b border-border-light">
+                                        <tr>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Class</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Primary Teacher</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Secondary Teacher</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Academic Year</th>
+                                            <th class="text-center py-3 px-4 font-semibold text-text-primary text-sm">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 1-A</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Ms. Sarah Johnson</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Ms. Emily Brown</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-b border-border-light hover:bg-bg-light">
+                                            <td class="py-3 px-4 text-sm text-text-primary font-medium">Class 1-B</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Mr. David Smith</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">Ms. Lisa Wilson</td>
+                                            <td class="py-3 px-4 text-sm text-text-secondary">2023-2024</td>
+                                            <td class="py-3 px-4 text-center">
+                                                <div class="flex justify-center space-x-2">
+                                                    <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-edit text-xs"></i>
+                                                    </button>
+                                                    <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                        <i class="fas fa-trash text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Module -->
+                <div id="attendance-content" class="module-content hidden">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Attendance</h1>
+                        <p class="text-text-secondary text-sm">Track and manage student attendance records</p>
+                    </div>
+
+                    <!-- Filters Section -->
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light p-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-2">Date</label>
+                                <input type="date" class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm" value="2024-01-15">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                                <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                    <option>All Classes</option>
+                                    <option>Class 1-A</option>
+                                    <option>Class 1-B</option>
+                                    <option>Class 2-A</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-2">Status</label>
+                                <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                    <option>All Status</option>
+                                    <option>Present</option>
+                                    <option>Absent</option>
+                                    <option>Late</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-primary mb-2">Student</label>
+                                <select class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                    <option>All Students</option>
+                                    <option>Alice Johnson</option>
+                                    <option>Bob Smith</option>
+                                    <option>Carol Davis</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <button class="bg-text-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                <i class="fas fa-search mr-2"></i>
+                                Search
+                            </button>
+                            <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                                <i class="fas fa-download mr-2"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-bg-light border-b border-border-light">
+                                    <tr>
+                                        <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Student Name</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Class</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Date</th>
+                                        <th class="text-center py-3 px-4 font-semibold text-text-primary text-sm">Status</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-text-primary text-sm">Time</th>
+                                        <th class="text-center py-3 px-4 font-semibold text-text-primary text-sm">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-border-light hover:bg-bg-light">
+                                        <td class="py-3 px-4 text-sm text-text-primary font-medium">Alice Johnson</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">Class 1-A</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">2024-01-15</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Present</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">08:30 AM</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <div class="flex justify-center space-x-2">
+                                                <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-border-light hover:bg-bg-light">
+                                        <td class="py-3 px-4 text-sm text-text-primary font-medium">Bob Smith</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">Class 1-A</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">2024-01-15</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Absent</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">-</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <div class="flex justify-center space-x-2">
+                                                <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-border-light hover:bg-bg-light">
+                                        <td class="py-3 px-4 text-sm text-text-primary font-medium">Carol Davis</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">Class 1-B</td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">2024-01-15</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Late</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-sm text-text-secondary">09:15 AM</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <div class="flex justify-center space-x-2">
+                                                <button class="w-8 h-8 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-edit text-xs"></i>
+                                                </button>
+                                                <button class="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center transition-colors">
+                                                    <i class="fas fa-trash text-xs"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Modules (Placeholder) -->
+                <div id="dashboard-content" class="module-content hidden">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Dashboard</h1>
+                        <p class="text-text-secondary text-sm">Overview of school management system</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light p-8 text-center">
+                        <i class="fas fa-home text-4xl text-text-secondary mb-4"></i>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">Dashboard Module</h3>
+                        <p class="text-text-secondary">Dashboard content will be displayed here</p>
+                    </div>
+                </div>
+
+
+
+                <div id="calendar-content" class="module-content hidden">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Calendar Management</h1>
+                        <p class="text-text-secondary text-sm">Manage academic calendar and events</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light p-8 text-center">
+                        <i class="fas fa-calendar-alt text-4xl text-text-secondary mb-4"></i>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">Calendar Module</h3>
+                        <p class="text-text-secondary">Calendar management content will be displayed here</p>
+                    </div>
+                </div>
+
+                <div id="fees-content" class="module-content hidden">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Fee Management</h1>
+                        <p class="text-text-secondary text-sm">Manage student fees and payments</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light p-8 text-center">
+                        <i class="fas fa-money-bill-wave text-4xl text-text-secondary mb-4"></i>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">Fee Management Module</h3>
+                        <p class="text-text-secondary">Fee management content will be displayed here</p>
+                    </div>
+                </div>
+
+                <div id="settings-content" class="module-content hidden">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-text-primary mb-1">Settings</h1>
+                        <p class="text-text-secondary text-sm">Configure system settings and preferences</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border border-border-light p-8 text-center">
+                        <i class="fas fa-cog text-4xl text-text-secondary mb-4"></i>
+                        <h3 class="text-lg font-semibold text-text-primary mb-2">Settings Module</h3>
+                        <p class="text-text-secondary">Settings content will be displayed here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchModule(moduleName) {
+            // Hide all module contents
+            document.querySelectorAll('.module-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected module content
+            document.getElementById(moduleName + '-content').classList.remove('hidden');
+            
+            // Add active class to selected nav button
+            document.getElementById(moduleName + '-nav').classList.add('active');
+        }
+
+        function switchAllocationsTab(tabName) {
+            // Hide all allocation tab contents
+            document.querySelectorAll('.allocation-tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all allocation tabs
+            document.querySelectorAll('.allocation-tab').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            
+            // Add active class to selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+    </script>
+
+    <style>
+        .nav-button.active {
+            background-color: #6366F1;
+            color: white;
+        }
+        
+        .nav-button:not(.active) {
+            color: #6B7280;
+            background-color: transparent;
+        }
+        
+        .nav-button:not(.active):hover {
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+
+        .allocation-tab.active {
+            background-color: #6366F1;
+            color: white;
+        }
+        
+        .allocation-tab:not(.active) {
+            color: #6B7280;
+            background-color: transparent;
+        }
+        
+        .allocation-tab:not(.active):hover {
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+    </style>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a575e4e1923486',t:'MTc1NDM4ODE2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
