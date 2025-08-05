@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School ERP - React with Tailwind & shadcn/ui</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(262.1 83.3% 57.8%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 84% 4.9%)",
+                        primary: {
+                            DEFAULT: "hsl(262.1 83.3% 57.8%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 84.2% 60.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        popover: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    keyframes: {
+                        "accordion-down": {
+                            from: { height: 0 },
+                            to: { height: "var(--radix-accordion-content-height)" },
+                        },
+                        "accordion-up": {
+                            from: { height: "var(--radix-accordion-content-height)" },
+                            to: { height: 0 },
+                        },
+                        slideInDown: {
+                            from: { opacity: 0, transform: 'translateY(-10px)' },
+                            to: { opacity: 1, transform: 'translateY(0)' }
+                        },
+                        slideOutUp: {
+                            from: { opacity: 1, transform: 'translateY(0)' },
+                            to: { opacity: 0, transform: 'translateY(-10px)' }
+                        }
+                    },
+                    animation: {
+                        "accordion-down": "accordion-down 0.2s ease-out",
+                        "accordion-up": "accordion-up 0.2s ease-out",
+                        slideInDown: "slideInDown 0.3s ease-out",
+                        slideOutUp: "slideOutUp 0.2s ease-in"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --radius: 0.5rem;
+        }
+        
+        .mini-schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+        }
+        
+        .mini-cell {
+            width: 20px;
+            height: 16px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            gap: 1px;
+            background: hsl(214.3 31.8% 91.4%);
+        }
+        
+        .teacher-schedule-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(5, 1fr) 80px;
+            gap: 1px;
+            background: hsl(214.3 31.8% 91.4%);
+        }
+        
+        @media (max-width: 768px) {
+            .schedule-grid {
+                grid-template-columns: 80px repeat(5, 1fr);
+                font-size: 12px;
+            }
+            
+            .teacher-schedule-grid {
+                grid-template-columns: 120px repeat(3, 1fr) 60px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // shadcn/ui inspired components
+        const Button = ({ children, variant = "default", size = "default", className = "", onClick, disabled, ...props }) => {
+            const baseClasses = "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+            
+            const variants = {
+                default: "bg-primary text-primary-foreground hover:bg-primary/90",
+                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+                outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                ghost: "hover:bg-accent hover:text-accent-foreground",
+                link: "text-primary underline-offset-4 hover:underline",
+            };
+            
+            const sizes = {
+                default: "h-10 px-4 py-2",
+                sm: "h-9 rounded-md px-3",
+                lg: "h-11 rounded-md px-8",
+                icon: "h-10 w-10",
+            };
+            
+            return (
+                <button
+                    className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
+                    onClick={onClick}
+                    disabled={disabled}
+                    {...props}
+                >
+                    {children}
+                </button>
+            );
+        };
+
+        const Card = ({ children, className = "" }) => (
+            <div className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}>
+                {children}
+            </div>
+        );
+
+        const CardHeader = ({ children, className = "" }) => (
+            <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>
+                {children}
+            </div>
+        );
+
+        const CardTitle = ({ children, className = "" }) => (
+            <h3 className={`text-2xl font-semibold leading-none tracking-tight ${className}`}>
+                {children}
+            </h3>
+        );
+
+        const CardContent = ({ children, className = "" }) => (
+            <div className={`p-6 pt-0 ${className}`}>
+                {children}
+            </div>
+        );
+
+        const Badge = ({ children, variant = "default", className = "" }) => {
+            const variants = {
+                default: "bg-primary text-primary-foreground hover:bg-primary/80",
+                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/80",
+                outline: "text-foreground border border-input",
+                success: "bg-green-500 text-white hover:bg-green-600",
+                warning: "bg-yellow-500 text-white hover:bg-yellow-600",
+            };
+            
+            return (
+                <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${variants[variant]} ${className}`}>
+                    {children}
+                </div>
+            );
+        };
+
+        const Select = ({ children, value, onValueChange, className = "" }) => {
+            return (
+                <select 
+                    value={value} 
+                    onChange={(e) => onValueChange(e.target.value)}
+                    className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+                >
+                    {children}
+                </select>
+            );
+        };
+
+        const Dialog = ({ open, onOpenChange, children }) => {
+            if (!open) return null;
+            
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div 
+                        className="fixed inset-0 bg-black/50" 
+                        onClick={() => onOpenChange(false)}
+                    />
+                    <div className="relative bg-background rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+
+        const DialogHeader = ({ children, className = "" }) => (
+            <div className={`flex flex-col space-y-1.5 text-center sm:text-left p-6 pb-2 ${className}`}>
+                {children}
+            </div>
+        );
+
+        const DialogTitle = ({ children, className = "" }) => (
+            <h2 className={`text-lg font-semibold leading-none tracking-tight ${className}`}>
+                {children}
+            </h2>
+        );
+
+        const DialogContent = ({ children, className = "" }) => (
+            <div className={`px-6 pb-6 ${className}`}>
+                {children}
+            </div>
+        );
+
+        // Sample data
+        const initialData = {
+            classes: [
+                { id: '10a', name: 'Class 10A', students: 30, subjects: ['Mathematics', 'Physics', 'English'] },
+                { id: '10b', name: 'Class 10B', students: 28, subjects: ['Mathematics', 'Chemistry', 'English'] },
+                { id: '9a', name: 'Class 9A', students: 32, subjects: ['Mathematics', 'Physics'] }
+            ],
+            subjects: [
+                { id: 'math', name: 'Mathematics', classes: ['10a', '10b', '9a'], teacher: 'Dr. Smith', status: 'optimal' },
+                { id: 'physics', name: 'Physics', classes: ['10a', '9a'], teacher: 'Ms. Johnson', status: 'warning' },
+                { id: 'english', name: 'English', classes: ['10a', '10b'], teacher: 'Mr. Brown', status: 'warning' },
+                { id: 'chemistry', name: 'Chemistry', classes: ['10b'], teacher: 'Dr. Wilson', status: 'critical' }
+            ],
+            teachers: [
+                { id: 'smith', name: 'Dr. Smith', subject: 'Mathematics', classes: 3, hours: 15, status: 'optimal' },
+                { id: 'johnson', name: 'Ms. Johnson', subject: 'Physics', classes: 2, hours: 10, status: 'underloaded' },
+                { id: 'brown', name: 'Mr. Brown', subject: 'English', classes: 2, hours: 10, status: 'underloaded' },
+                { id: 'wilson', name: 'Dr. Wilson', subject: 'Chemistry', classes: 5, hours: 25, status: 'overloaded' }
+            ],
+            assistants: [
+                { id: 'davis', name: 'Ms. Davis', subject: 'Mathematics', classes: 2, hours: 8, status: 'active' },
+                { id: 'taylor', name: 'Mr. Taylor', subject: 'Science', classes: 1, hours: 4, status: 'underloaded' },
+                { id: 'lee', name: 'Ms. Lee', subject: 'Language', classes: 0, hours: 0, status: 'unassigned' }
+            ]
+        };
+
+        // Network Node Component
+        const NetworkNode = ({ title, subtitle, info, status, indicator, onClick, selected, className = "" }) => {
+            const statusClasses = {
+                optimal: "border-green-500 bg-green-50",
+                warning: "border-yellow-500 bg-yellow-50",
+                critical: "border-red-500 bg-red-50",
+                underloaded: "border-yellow-500 bg-yellow-50",
+                overloaded: "border-red-500 bg-red-50",
+                unassigned: "border-yellow-500 bg-yellow-50"
+            };
+
+            const indicatorClasses = {
+                warning: "bg-yellow-500",
+                error: "bg-red-500",
+                success: "bg-green-500"
+            };
+
+            return (
+                <div 
+                    className={`
+                        relative bg-white border-2 rounded-xl p-4 m-2 cursor-pointer transition-all duration-300 
+                        hover:border-primary hover:-translate-y-1 hover:shadow-lg min-w-[140px] text-center
+                        ${selected ? 'border-primary bg-primary text-primary-foreground' : 'border-border'}
+                        ${status ? statusClasses[status] : ''}
+                        ${className}
+                    `}
+                    onClick={onClick}
+                >
+                    {indicator && (
+                        <div className={`absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white ${indicatorClasses[indicator.type]}`}>
+                            {indicator.text}
+                        </div>
+                    )}
+                    <div className={`font-semibold text-sm mb-1 ${selected ? 'text-primary-foreground' : 'text-foreground'}`}>
+                        {title}
+                    </div>
+                    <div className={`text-xs mb-1 ${selected ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                        {subtitle}
+                    </div>
+                    <div className={`text-xs font-medium ${selected ? 'text-primary-foreground/90' : 'text-primary'}`}>
+                        {info}
+                    </div>
+                </div>
+            );
+        };
+
+        // Mini Schedule Grid Component
+        const MiniScheduleGrid = ({ subject, onClick }) => {
+            const scheduleData = {
+                'Mathematics': [
+                    ['M', 'T', 'W', 'T', 'F'],
+                    ['assigned', 'assigned', 'assigned', 'available', 'available'],
+                    ['assigned', 'available', 'available', 'available', 'available']
+                ],
+                'Physics': [
+                    ['M', 'T', 'W', 'T', 'F'],
+                    ['available', 'assigned', 'assigned', 'available', 'assigned'],
+                    ['available', 'available', 'available', 'available', 'available']
+                ],
+                'English': [
+                    ['M', 'T', 'W', 'T', 'F'],
+                    ['assigned', 'available', 'assigned', 'available', 'assigned'],
+                    ['available', 'available', 'available', 'available', 'available']
+                ],
+                'Chemistry': [
+                    ['M', 'T', 'W', 'T', 'F'],
+                    ['available', 'available', 'available', 'conflict', 'available'],
+                    ['available', 'available', 'available', 'available', 'available']
+                ]
+            };
+
+            const data = scheduleData[subject] || scheduleData['Mathematics'];
+            const cellClasses = {
+                assigned: 'bg-primary text-primary-foreground',
+                available: 'bg-muted text-muted-foreground',
+                conflict: 'bg-destructive text-destructive-foreground'
+            };
+
+            return (
+                <div className="mini-schedule-grid my-2" onClick={onClick}>
+                    {data.slice(1).map((row, rowIndex) => 
+                        row.map((cell, cellIndex) => (
+                            <div 
+                                key={`${rowIndex}-${cellIndex}`}
+                                className={`mini-cell ${cellClasses[cell] || cellClasses.available}`}
+                                title={`${data[0][cellIndex]} - ${cell}`}
+                            >
+                                {cell === 'assigned' ? data[0][cellIndex] : ''}
+                            </div>
+                        ))
+                    )}
+                </div>
+            );
+        };
+
+        // Network View Component
+        const NetworkView = ({ data, selectedNode, onNodeSelect, showScheduleGrid }) => {
+            return (
+                <div className="bg-muted/30 rounded-xl p-8 mb-8">
+                    <div className="flex justify-between items-start min-h-[400px]">
+                        {/* Classes */}
+                        <div className="flex flex-col items-center flex-1">
+                            <h3 className="text-xl font-semibold mb-6 text-primary">Classes</h3>
+                            {data.classes.map(cls => (
+                                <NetworkNode
+                                    key={cls.id}
+                                    title={cls.name}
+                                    subtitle={`${cls.students} Students`}
+                                    info={`${cls.subjects.length} subjects assigned`}
+                                    status={cls.subjects.length < 3 ? 'warning' : 'optimal'}
+                                    indicator={cls.subjects.length < 3 ? { type: 'warning', text: '!' } : null}
+                                    selected={selectedNode?.type === 'class' && selectedNode?.id === cls.id}
+                                    onClick={() => onNodeSelect('class', cls)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Subjects */}
+                        <div className="flex flex-col items-center flex-1">
+                            <h3 className="text-xl font-semibold mb-6 text-primary">Subjects</h3>
+                            {data.subjects.map(subject => (
+                                <NetworkNode
+                                    key={subject.id}
+                                    title={subject.name}
+                                    subtitle="Core Subject"
+                                    info={`${subject.classes.length} classes assigned`}
+                                    status={subject.status}
+                                    indicator={subject.status !== 'optimal' ? { 
+                                        type: subject.status === 'critical' ? 'error' : 'warning', 
+                                        text: subject.status === 'critical' ? '⚠' : '!' 
+                                    } : null}
+                                    selected={selectedNode?.type === 'subject' && selectedNode?.id === subject.id}
+                                    onClick={() => onNodeSelect('subject', subject)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Teachers */}
+                        <div className="flex flex-col items-center flex-1">
+                            <h3 className="text-xl font-semibold mb-6 text-primary">Teachers</h3>
+                            {data.teachers.map(teacher => (
+                                <NetworkNode
+                                    key={teacher.id}
+                                    title={teacher.name}
+                                    subtitle={teacher.subject}
+                                    info={`${teacher.classes} classes, ${teacher.hours} hrs/week`}
+                                    status={teacher.status}
+                                    indicator={teacher.status !== 'optimal' ? { 
+                                        type: teacher.status === 'overloaded' ? 'error' : 'warning', 
+                                        text: teacher.status === 'overloaded' ? '⚠' : '!' 
+                                    } : null}
+                                    selected={selectedNode?.type === 'teacher' && selectedNode?.id === teacher.id}
+                                    onClick={() => onNodeSelect('teacher', teacher)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Assistant Teachers */}
+                        <div className="flex flex-col items-center flex-1">
+                            <h3 className="text-xl font-semibold mb-6 text-primary">Assistant Teachers</h3>
+                            {data.assistants.map(assistant => (
+                                <NetworkNode
+                                    key={assistant.id}
+                                    title={assistant.name}
+                                    subtitle={`${assistant.subject} Assistant`}
+                                    info={`${assistant.classes} classes, ${assistant.hours} hrs/week`}
+                                    status={assistant.status}
+                                    indicator={assistant.status === 'unassigned' ? { type: 'error', text: '⚠' } : 
+                                              assistant.status === 'underloaded' ? { type: 'warning', text: '!' } : null}
+                                    selected={selectedNode?.type === 'assistant' && selectedNode?.id === assistant.id}
+                                    onClick={() => onNodeSelect('assistant', assistant)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Schedule Grid */}
+                        {showScheduleGrid && (
+                            <div className={`flex flex-col items-center flex-1 transition-all duration-300 ${showScheduleGrid ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'}`}>
+                                <h3 className="text-xl font-semibold mb-6 text-primary">Schedule Grid</h3>
+                                {data.subjects.map(subject => (
+                                    <NetworkNode
+                                        key={`schedule-${subject.id}`}
+                                        title={subject.name}
+                                        subtitle={<MiniScheduleGrid subject={subject.name} />}
+                                        info={`${subject.classes.length} classes assigned`}
+                                        status={subject.status}
+                                        indicator={subject.status !== 'optimal' ? { 
+                                            type: subject.status === 'critical' ? 'error' : 'warning', 
+                                            text: subject.status === 'critical' ? '⚠' : '!' 
+                                        } : null}
+                                        className="min-w-[180px]"
+                                        onClick={() => onNodeSelect('schedule', subject)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Class Card Component
+        const ClassCard = ({ classData, subjects, teachers }) => {
+            const getSubjectDetails = (subjectName) => {
+                const subject = subjects.find(s => s.name === subjectName);
+                const teacher = teachers.find(t => t.name === subject?.teacher);
+                return { subject, teacher };
+            };
+
+            return (
+                <Card className="hover:border-primary transition-colors">
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle className="text-xl">{classData.name}</CardTitle>
+                        <Button variant="ghost" size="icon">
+                            ✏️
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-3">
+                            {classData.subjects.map(subjectName => {
+                                const { subject, teacher } = getSubjectDetails(subjectName);
+                                return (
+                                    <div key={subjectName} className={`p-4 rounded-lg border transition-colors hover:bg-muted/50 ${teacher?.status === 'overloaded' ? 'border-destructive bg-destructive/5' : 'border-border bg-muted/20'}`}>
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1">
+                                                <div className="font-semibold flex items-center gap-2">
+                                                    {subjectName}
+                                                    {teacher?.status === 'overloaded' && (
+                                                        <Badge variant="destructive" className="text-xs">+2</Badge>
+                                                    )}
+                                                </div>
+                                                <div className="text-sm text-primary font-medium mt-1">
+                                                    Mon 9:00-10:00
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <Badge variant={teacher?.status === 'overloaded' ? 'destructive' : 'secondary'} className="mb-1">
+                                                    {teacher?.name || 'No Teacher'}
+                                                </Badge>
+                                                <div>
+                                                    <Badge variant="outline" className="text-xs">
+                                                        Ms. Davis
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            {classData.subjects.length < 3 && (
+                                <div className="p-4 rounded-lg border-2 border-dashed border-yellow-500 bg-yellow-50 cursor-pointer hover:bg-yellow-100 transition-colors">
+                                    <div className="text-center">
+                                        <div className="font-semibold text-yellow-700 mb-2">+ Add Subject</div>
+                                        <div className="text-sm text-yellow-600">Click to assign new subject</div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+            );
+        };
+
+        // Schedule Grid Component
+        const ScheduleGrid = ({ classData }) => {
+            const timeSlots = ['9:00', '10:00', '11:00'];
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            
+            const scheduleData = {
+                'Class 10A': {
+                    'Mon-9:00': { subject: 'Math', teacher: 'Dr. Smith', status: 'occupied' },
+                    'Wed-9:00': { subject: 'English', teacher: 'Mr. Brown', status: 'occupied' },
+                    'Fri-9:00': { subject: 'Physics', teacher: 'Ms. Johnson', status: 'occupied' },
+                    'Tue-10:00': { subject: 'Physics', teacher: 'Ms. Johnson', status: 'occupied' },
+                    'Thu-10:00': { subject: 'Chemistry', teacher: 'Dr. Wilson', status: 'error' },
+                    'Mon-11:00': { subject: 'English', teacher: 'Mr. Brown', status: 'occupied' },
+                    'Wed-11:00': { subject: 'Math', teacher: 'Dr. Smith', status: 'occupied' }
+                }
+            };
+
+            const getScheduleCell = (day, time) => {
+                const key = `${day}-${time}`;
+                return scheduleData[classData.name]?.[key] || { status: 'available' };
+            };
+
+            const cellClasses = {
+                occupied: 'bg-primary text-primary-foreground',
+                available: 'bg-background border-2 border-dashed border-muted-foreground/30 hover:border-primary',
+                error: 'bg-destructive text-destructive-foreground border-2 border-destructive'
+            };
+
+            return (
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>{classData.name} - Weekly Schedule</CardTitle>
+                        <Button>Add Period</Button>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="schedule-grid rounded-lg overflow-hidden">
+                            <div className="bg-muted p-3 font-semibold text-center text-muted-foreground">Time</div>
+                            {days.map(day => (
+                                <div key={day} className="bg-muted p-3 font-semibold text-center text-muted-foreground">
+                                    {day}
+                                </div>
+                            ))}
+                            
+                            {timeSlots.map(time => (
+                                <React.Fragment key={time}>
+                                    <div className="bg-muted p-3 font-semibold text-center text-muted-foreground">
+                                        {time}
+                                    </div>
+                                    {days.map(day => {
+                                        const cell = getScheduleCell(day, time);
+                                        return (
+                                            <div 
+                                                key={`${day}-${time}`}
+                                                className={`p-2 min-h-[60px] flex flex-col justify-center items-center cursor-pointer transition-colors ${cellClasses[cell.status]}`}
+                                                title={cell.subject ? `${cell.subject} - ${cell.teacher}` : 'Click to assign'}
+                                            >
+                                                {cell.subject && (
+                                                    <>
+                                                        <div className="text-xs font-semibold">{cell.subject}</div>
+                                                        <div className="text-xs opacity-80">{cell.teacher?.split(' ')[1]}</div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            );
+        };
+
+        // Teacher Cards Component
+        const TeacherCards = ({ teachers }) => {
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {teachers.map(teacher => (
+                        <Card key={teacher.id} className={`hover:border-primary transition-colors ${teacher.status === 'overloaded' ? 'border-destructive' : ''}`}>
+                            <CardHeader className="flex flex-row items-center justify-between">
+                                <CardTitle className="flex items-center gap-2">
+                                    {teacher.name}
+                                    {teacher.status === 'overloaded' && (
+                                        <Badge variant="destructive">+2</Badge>
+                                    )}
+                                </CardTitle>
+                                <Button variant="ghost" size="icon">
+                                    ✏️
+                                </Button>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-3">
+                                    <div className="p-3 rounded-lg bg-muted/50">
+                                        <div className="font-medium">{teacher.subject} - Class 10A</div>
+                                        <div className="text-sm text-primary">Mon 9:00-10:00</div>
+                                    </div>
+                                    <div className="p-3 rounded-lg bg-muted/50">
+                                        <div className="font-medium">{teacher.subject} - Class 10B</div>
+                                        <div className="text-sm text-primary">Mon 10:00-11:00</div>
+                                    </div>
+                                    {teacher.status === 'overloaded' && (
+                                        <div className="p-3 rounded-lg bg-destructive/10 border border-destructive">
+                                            <div className="font-medium text-destructive">{teacher.subject} - Class 9A</div>
+                                            <div className="text-sm text-destructive">Tue 9:00-10:00</div>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            );
+        };
+
+        // Teacher Schedule Grid Component
+        const TeacherScheduleGrid = ({ teachers }) => {
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            
+            return (
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>All Teachers - Weekly Schedule Overview</CardTitle>
+                        <div className="flex gap-2">
+                            <Button variant="outline">Export</Button>
+                            <Button>Optimize All</Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="teacher-schedule-grid rounded-lg overflow-hidden">
+                            <div className="bg-muted p-3 font-semibold text-muted-foreground">Teacher</div>
+                            {days.map(day => (
+                                <div key={day} className="bg-muted p-3 font-semibold text-center text-muted-foreground">
+                                    {day}
+                                </div>
+                            ))}
+                            <div className="bg-muted p-3 font-semibold text-center text-muted-foreground">Load</div>
+                            
+                            {teachers.map(teacher => (
+                                <React.Fragment key={teacher.id}>
+                                    <div className={`p-3 flex flex-col justify-center ${teacher.status === 'overloaded' ? 'bg-destructive/10 border-l-4 border-destructive' : 'bg-background'}`}>
+                                        <div className="font-semibold text-sm">{teacher.name}</div>
+                                        <div className="text-xs text-muted-foreground">{teacher.subject}</div>
+                                    </div>
+                                    {days.map(day => (
+                                        <div key={`${teacher.id}-${day}`} className={`p-2 min-h-[80px] flex flex-col gap-1 ${teacher.status === 'overloaded' && day === 'Mon' ? 'bg-destructive/10 border-l-4 border-destructive' : 'bg-background'}`}>
+                                            {teacher.id === 'smith' && day === 'Mon' && (
+                                                <>
+                                                    <div className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded text-center">9:00 - 10A Math</div>
+                                                    <div className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded text-center">10:00 - 10B Math</div>
+                                                </>
+                                            )}
+                                            {teacher.id === 'smith' && day === 'Tue' && (
+                                                <div className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded text-center">9:00 - 9A Math</div>
+                                            )}
+                                            {teacher.id === 'wilson' && day === 'Thu' && (
+                                                <>
+                                                    <div className="text-xs bg-destructive text-destructive-foreground px-2 py-1 rounded text-center">9:00 - 10B Chem</div>
+                                                    <div className="text-xs bg-destructive text-destructive-foreground px-2 py-1 rounded text-center">10:00 - 11E Bio</div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <div className={`p-3 flex flex-col items-center justify-center ${
+                                        teacher.status === 'optimal' ? 'bg-green-50 text-green-700' :
+                                        teacher.status === 'underloaded' ? 'bg-yellow-50 text-yellow-700' :
+                                        teacher.status === 'overloaded' ? 'bg-red-50 text-red-700' : 'bg-background'
+                                    }`}>
+                                        <div className="font-semibold">{teacher.hours}h</div>
+                                        <div className="text-xs uppercase">
+                                            {teacher.status === 'optimal' ? 'Optimal' :
+                                             teacher.status === 'underloaded' ? 'Under' :
+                                             teacher.status === 'overloaded' ? 'Over +2' : 'Normal'}
+                                        </div>
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            );
+        };
+
+        // Workload Analysis Component
+        const WorkloadAnalysis = ({ teachers }) => {
+            const optimalTeachers = teachers.filter(t => t.status === 'optimal');
+            const underloadedTeachers = teachers.filter(t => t.status === 'underloaded');
+            const overloadedTeachers = teachers.filter(t => t.status === 'overloaded');
+
+            return (
+                <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Card className="border-green-200 bg-green-50">
+                            <CardContent className="p-6 text-center">
+                                <div className="text-4xl font-bold text-green-600 mb-2">{optimalTeachers.length}</div>
+                                <div className="font-semibold mb-2">Optimal Load</div>
+                                <div className="text-sm text-muted-foreground">
+                                    {optimalTeachers.map(t => t.name).join(', ')}
+                                </div>
+                            </CardContent>
+                        </Card>
+                        
+                        <Card className="border-yellow-200 bg-yellow-50">
+                            <CardContent className="p-6 text-center">
+                                <div className="text-4xl font-bold text-yellow-600 mb-2">{underloadedTeachers.length}</div>
+                                <div className="font-semibold mb-2">Underloaded</div>
+                                <div className="text-sm text-muted-foreground">
+                                    {underloadedTeachers.map(t => t.name).join(', ')}
+                                </div>
+                            </CardContent>
+                        </Card>
+                        
+                        <Card className="border-red-200 bg-red-50">
+                            <CardContent className="p-6 text-center">
+                                <div className="text-4xl font-bold text-red-600 mb-2">{overloadedTeachers.length}</div>
+                                <div className="font-semibold mb-2">Overloaded</div>
+                                <div className="text-sm text-muted-foreground">
+                                    {overloadedTeachers.map(t => t.name).join(', ')}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Weekly Hours Distribution</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex justify-around items-end h-48">
+                                    {teachers.map(teacher => (
+                                        <div key={teacher.id} className="flex flex-col items-center w-16">
+                                            <div 
+                                                className={`w-full rounded-t mb-2 ${
+                                                    teacher.status === 'optimal' ? 'bg-green-500' :
+                                                    teacher.status === 'underloaded' ? 'bg-yellow-500' :
+                                                    'bg-red-500'
+                                                }`}
+                                                style={{ height: `${(teacher.hours / 25) * 100}%` }}
+                                            />
+                                            <div className="text-xs text-center">
+                                                <div className="font-medium">{teacher.name.split(' ')[1]}</div>
+                                                <div>{teacher.hours}h</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Efficiency Metrics</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="flex justify-between items-center py-3 border-b">
+                                    <span className="text-muted-foreground">Average Workload:</span>
+                                    <span className="font-semibold">15 hours/week</span>
+                                </div>
+                                <div className="flex justify-between items-center py-3 border-b">
+                                    <span className="text-muted-foreground">Workload Variance:</span>
+                                    <Badge variant="warning">High (±7.5h)</Badge>
+                                </div>
+                                <div className="flex justify-between items-center py-3 border-b">
+                                    <span className="text-muted-foreground">Schedule Efficiency:</span>
+                                    <span className="font-semibold">72%</span>
+                                </div>
+                                <div className="flex justify-between items-center py-3">
+                                    <span className="text-muted-foreground">Optimization Potential:</span>
+                                    <Badge variant="success">+28%</Badge>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            );
+        };
+
+        // Subject Overview Component
+        const SubjectOverview = ({ subjects, teachers }) => {
+            const getTeacherForSubject = (subjectName) => {
+                return teachers.find(t => t.subject === subjectName);
+            };
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {subjects.map(subject => {
+                        const teacher = getTeacherForSubject(subject.name);
+                        return (
+                            <Card key={subject.id} className={`
+                                ${subject.status === 'optimal' ? 'border-green-200 bg-gradient-to-br from-green-50 to-white' :
+                                  subject.status === 'warning' ? 'border-yellow-200 bg-gradient-to-br from-yellow-50 to-white' :
+                                  'border-red-200 bg-gradient-to-br from-red-50 to-white'}
+                            `}>
+                                <CardHeader className="flex flex-row items-center justify-between">
+                                    <CardTitle>{subject.name}</CardTitle>
+                                    <Badge variant={
+                                        subject.status === 'optimal' ? 'success' :
+                                        subject.status === 'warning' ? 'warning' :
+                                        'destructive'
+                                    }>
+                                        {subject.status === 'optimal' ? 'Fully Assigned' :
+                                         subject.status === 'warning' ? 'Needs 1 Class' :
+                                         'Critical Issue'}
+                                    </Badge>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex justify-around mb-6">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-primary">{subject.classes.length}</div>
+                                            <div className="text-xs uppercase text-muted-foreground">Classes</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-primary">
+                                                {subject.classes.length * 30}
+                                            </div>
+                                            <div className="text-xs uppercase text-muted-foreground">Students</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-primary">
+                                                {subject.classes.length * 5}
+                                            </div>
+                                            <div className="text-xs uppercase text-muted-foreground">Hours/Week</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center pt-4 border-t">
+                                        <div className="flex items-center gap-2">
+                                            <Badge className="bg-primary text-primary-foreground">PT</Badge>
+                                            <span className={teacher?.status === 'overloaded' ? 'text-destructive' : ''}>
+                                                {subject.teacher}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant="outline" className="bg-green-500 text-white">AT</Badge>
+                                            <span className="text-sm">Ms. Davis</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
+                </div>
+            );
+        };
+
+        // Main App Component
+        const SchoolERP = () => {
+            const [currentView, setCurrentView] = useState('class');
+            const [currentOption, setCurrentOption] = useState('network');
+            const [selectedNode, setSelectedNode] = useState(null);
+            const [showScheduleGrid, setShowScheduleGrid] = useState(true);
+            const [data, setData] = useState(initialData);
+            const [modalOpen, setModalOpen] = useState(false);
+            const [modalContent, setModalContent] = useState(null);
+
+            const handleNodeSelect = useCallback((type, nodeData) => {
+                setSelectedNode({ type, id: nodeData.id, data: nodeData });
+            }, []);
+
+            const openScheduleModal = useCallback((subject) => {
+                setModalContent({
+                    type: 'schedule',
+                    title: `${subject} - Schedule Grid`,
+                    subject
+                });
+                setModalOpen(true);
+            }, []);
+
+            const renderCurrentView = () => {
+                switch (currentView) {
+                    case 'class':
+                        return renderClassView();
+                    case 'teacher':
+                        return renderTeacherView();
+                    case 'subject':
+                        return renderSubjectView();
+                    default:
+                        return renderClassView();
+                }
+            };
+
+            const renderClassView = () => {
+                switch (currentOption) {
+                    case 'network':
+                        return (
+                            <NetworkView 
+                                data={data}
+                                selectedNode={selectedNode}
+                                onNodeSelect={handleNodeSelect}
+                                showScheduleGrid={showScheduleGrid}
+                            />
+                        );
+                    case 'cards':
+                        return (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {data.classes.map(cls => (
+                                    <ClassCard 
+                                        key={cls.id}
+                                        classData={cls}
+                                        subjects={data.subjects}
+                                        teachers={data.teachers}
+                                    />
+                                ))}
+                            </div>
+                        );
+                    case 'schedule':
+                        return (
+                            <div className="space-y-6">
+                                {data.classes.map(cls => (
+                                    <ScheduleGrid key={cls.id} classData={cls} />
+                                ))}
+                            </div>
+                        );
+                    case 'graph':
+                        return (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Class Management - Graph Analytics</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="h-96 flex items-center justify-center bg-muted/30 rounded-lg">
+                                        <div className="text-center">
+                                            <div className="text-6xl mb-4">📊</div>
+                                            <div className="text-xl font-semibold mb-2">Analytics Dashboard</div>
+                                            <div className="text-muted-foreground">Interactive charts and insights would be displayed here</div>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    default:
+                        return null;
+                }
+            };
+
+            const renderTeacherView = () => {
+                switch (currentOption) {
+                    case 'cards':
+                        return <TeacherCards teachers={data.teachers} />;
+                    case 'schedule':
+                        return <TeacherScheduleGrid teachers={data.teachers} />;
+                    case 'workload':
+                        return <WorkloadAnalysis teachers={data.teachers} />;
+                    default:
+                        return <TeacherCards teachers={data.teachers} />;
+                }
+            };
+
+            const renderSubjectView = () => {
+                switch (currentOption) {
+                    case 'overview':
+                        return <SubjectOverview subjects={data.subjects} teachers={data.teachers} />;
+                    case 'coverage':
+                        return (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Subject-Class Coverage Matrix</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full border-collapse">
+                                            <thead>
+                                                <tr>
+                                                    <th className="border p-3 bg-muted text-left">Subject</th>
+                                                    <th className="border p-3 bg-muted text-center">Class 10A</th>
+                                                    <th className="border p-3 bg-muted text-center">Class 10B</th>
+                                                    <th className="border p-3 bg-muted text-center">Class 9A</th>
+                                                    <th className="border p-3 bg-muted text-center">Coverage %</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {data.subjects.map(subject => (
+                                                    <tr key={subject.id}>
+                                                        <td className="border p-3 font-medium">{subject.name}</td>
+                                                        <td className="border p-3 text-center">
+                                                            {subject.classes.includes('10a') ? (
+                                                                <Badge variant="success">✓ {subject.teacher}</Badge>
+                                                            ) : (
+                                                                <Badge variant="outline">⚠ Unassigned</Badge>
+                                                            )}
+                                                        </td>
+                                                        <td className="border p-3 text-center">
+                                                            {subject.classes.includes('10b') ? (
+                                                                <Badge variant="success">✓ {subject.teacher}</Badge>
+                                                            ) : (
+                                                                <Badge variant="outline">⚠ Unassigned</Badge>
+                                                            )}
+                                                        </td>
+                                                        <td className="border p-3 text-center">
+                                                            {subject.classes.includes('9a') ? (
+                                                                <Badge variant="success">✓ {subject.teacher}</Badge>
+                                                            ) : (
+                                                                <Badge variant="outline">⚠ Unassigned</Badge>
+                                                            )}
+                                                        </td>
+                                                        <td className="border p-3 text-center">
+                                                            <Badge variant={
+                                                                subject.status === 'optimal' ? 'success' :
+                                                                subject.status === 'warning' ? 'warning' :
+                                                                'destructive'
+                                                            }>
+                                                                {subject.status === 'optimal' ? '100%' :
+                                                                 subject.status === 'warning' ? '67%' : '33%'}
+                                                            </Badge>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    case 'analytics':
+                        return (
+                            <div className="space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <Card>
+                                        <CardContent className="p-6 text-center">
+                                            <div className="text-4xl font-bold text-primary mb-2">67%</div>
+                                            <div className="font-semibold mb-2">Overall Coverage</div>
+                                            <div className="text-sm text-yellow-600">↓ 8% from target</div>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardContent className="p-6 text-center">
+                                            <div className="text-4xl font-bold text-primary mb-2">2.3</div>
+                                            <div className="font-semibold mb-2">Avg Classes/Subject</div>
+                                            <div className="text-sm text-muted-foreground">→ Stable</div>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardContent className="p-6 text-center">
+                                            <div className="text-4xl font-bold text-primary mb-2">1</div>
+                                            <div className="font-semibold mb-2">Critical Issues</div>
+                                            <div className="text-sm text-red-600">↑ Needs attention</div>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                                
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Subject Performance Overview</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="space-y-4">
+                                            {data.subjects.map(subject => (
+                                                <div key={subject.id} className="flex items-center gap-4">
+                                                    <div className="w-24 text-sm font-medium">{subject.name}</div>
+                                                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                                        <div 
+                                                            className={`h-full ${
+                                                                subject.status === 'optimal' ? 'bg-green-500' :
+                                                                subject.status === 'warning' ? 'bg-yellow-500' :
+                                                                'bg-red-500'
+                                                            }`}
+                                                            style={{ 
+                                                                width: subject.status === 'optimal' ? '100%' :
+                                                                       subject.status === 'warning' ? '67%' : '33%'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="w-12 text-sm font-semibold text-right">
+                                                        {subject.status === 'optimal' ? '100%' :
+                                                         subject.status === 'warning' ? '67%' : '33%'}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        );
+                    default:
+                        return <SubjectOverview subjects={data.subjects} teachers={data.teachers} />;
+                }
+            };
+
+            const getViewOptions = () => {
+                switch (currentView) {
+                    case 'class':
+                        return [
+                            { id: 'network', label: 'Network View' },
+                            { id: 'cards', label: 'Card Grid' },
+                            { id: 'schedule', label: 'Schedule View' },
+                            { id: 'graph', label: 'Graph Analytics' }
+                        ];
+                    case 'teacher':
+                        return [
+                            { id: 'cards', label: 'Teacher Cards' },
+                            { id: 'schedule', label: 'Schedule View' },
+                            { id: 'workload', label: 'Workload Analysis' }
+                        ];
+                    case 'subject':
+                        return [
+                            { id: 'overview', label: 'Subject Overview' },
+                            { id: 'coverage', label: 'Class Coverage' },
+                            { id: 'analytics', label: 'Analytics' }
+                        ];
+                    default:
+                        return [];
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-background font-sans">
+                    <div className="max-w-7xl mx-auto p-6">
+                        {/* Header */}
+                        <div className="flex justify-between items-center mb-8 pb-6 border-b">
+                            <div className="text-2xl font-bold text-primary">Simflo ERP</div>
+                            <div className="flex bg-muted rounded-lg p-1">
+                                {[
+                                    { id: 'class', label: 'Class View' },
+                                    { id: 'teacher', label: 'Teacher View' },
+                                    { id: 'subject', label: 'Subject View' }
+                                ].map(view => (
+                                    <Button
+                                        key={view.id}
+                                        variant={currentView === view.id ? "default" : "ghost"}
+                                        size="sm"
+                                        onClick={() => {
+                                            setCurrentView(view.id);
+                                            setCurrentOption(getViewOptions()[0]?.id || 'network');
+                                        }}
+                                    >
+                                        {view.label}
+                                    </Button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Section Title */}
+                        <h2 className="text-2xl font-bold mb-8">
+                            {currentView === 'class' && 'Class Management - Multiple UI Options'}
+                            {currentView === 'teacher' && 'Teacher Management'}
+                            {currentView === 'subject' && 'Subject Management'}
+                        </h2>
+
+                        {/* Options Navigation */}
+                        <div className="flex items-center justify-between mb-8 border-b">
+                            <div className="flex gap-4">
+                                {getViewOptions().map(option => (
+                                    <button
+                                        key={option.id}
+                                        className={`pb-3 px-1 border-b-2 font-medium transition-colors ${
+                                            currentOption === option.id
+                                                ? 'border-primary text-primary'
+                                                : 'border-transparent text-muted-foreground hover:text-foreground'
+                                        }`}
+                                        onClick={() => setCurrentOption(option.id)}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
+                            </div>
+                            
+                            {currentView === 'class' && currentOption === 'network' && (
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        id="schedule-grid-toggle"
+                                        checked={showScheduleGrid}
+                                        onChange={(e) => setShowScheduleGrid(e.target.checked)}
+                                        className="rounded"
+                                    />
+                                    <label htmlFor="schedule-grid-toggle" className="text-sm text-muted-foreground">
+                                        Show Schedule Grid
+                                    </label>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Main Content */}
+                        {renderCurrentView()}
+
+                        {/* Modal */}
+                        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+                            {modalContent && (
+                                <>
+                                    <DialogHeader>
+                                        <DialogTitle>{modalContent.title}</DialogTitle>
+                                    </DialogHeader>
+                                    <DialogContent>
+                                        {modalContent.type === 'schedule' && (
+                                            <div>
+                                                <p className="mb-4 text-muted-foreground">
+                                                    Click on time slots to assign periods for this subject:
+                                                </p>
+                                                <div className="grid grid-cols-6 gap-2 mb-4">
+                                                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                                                        <div key={day} className="text-center font-semibold text-xs p-2">
+                                                            {day}
+                                                        </div>
+                                                    ))}
+                                                    {['9:00', '10:00', '11:00'].map(time => 
+                                                        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                                                            <Button
+                                                                key={`${day}-${time}`}
+                                                                variant={
+                                                                    (day === 'Tue' && time === '9:00') || 
+                                                                    (day === 'Wed' && time === '10:00') || 
+                                                                    (day === 'Thu' && time === '11:00') ? 'default' :
+                                                                    (day === 'Thu' && time === '9:00') ? 'destructive' : 'outline'
+                                                                }
+                                                                size="sm"
+                                                                className="h-8 text-xs"
+                                                            >
+                                                                {time}
+                                                            </Button>
+                                                        ))
+                                                    )}
+                                                </div>
+                                                <div className="mb-4 p-3 bg-muted rounded-lg text-sm">
+                                                    <strong>Legend:</strong>
+                                                    <span className="ml-2 text-primary">■ Assigned</span>
+                                                    <span className="ml-2 text-green-600">■ Available</span>
+                                                    <span className="ml-2 text-red-600">■ Conflict</span>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <Button variant="outline" onClick={() => setModalOpen(false)}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button onClick={() => setModalOpen(false)}>
+                                                        Save Schedule
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </DialogContent>
+                                </>
+                            )}
+                        </Dialog>
+                    </div>
+                </div>
+            );
+        };
+
+        // Render the app
+        ReactDOM.render(<SchoolERP />, document.getElementById('root'));
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7b8b2f3627eb0',t:'MTc1NDQxMTg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
