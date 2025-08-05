@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject & Class Teacher Allocation - School ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1f2937',
+                        'primary-light': '#374151',
+                        'bg-light': '#f8fafc',
+                        'card-bg': '#ffffff',
+                        'text-primary': '#111827',
+                        'text-secondary': '#6b7280',
+                        'border-light': '#e5e7eb',
+                        'sidebar-bg': '#f1f5f9'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-bg-light font-sans">
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-sidebar-bg border-r border-border-light flex-shrink-0">
+            <div class="p-6">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-text-primary">SchoolERP</h1>
+                </div>
+                
+                <!-- Navigation Sections -->
+                <nav class="space-y-2">
+                    <!-- Allocations Section -->
+                    <button class="w-full flex items-center px-3 py-2.5 text-left rounded-lg bg-white shadow-sm border border-border-light text-sm font-medium text-text-primary">
+                        <i class="fas fa-chalkboard-teacher mr-3 text-base w-5"></i>
+                        Allocations
+                    </button>
+
+                    <!-- Attendance Section -->
+                    <button class="w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium text-text-secondary hover:bg-white hover:shadow-sm">
+                        <i class="fas fa-calendar-check mr-3 text-base w-5"></i>
+                        Attendance
+                    </button>
+
+                    <!-- Calendar Management Section -->
+                    <button class="w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium text-text-secondary hover:bg-white hover:shadow-sm">
+                        <i class="fas fa-calendar-alt mr-3 text-base w-5"></i>
+                        Calendar Management
+                    </button>
+
+                    <!-- Fee Management Section -->
+                    <button class="w-full flex items-center px-3 py-2.5 text-left rounded-lg transition-all text-sm font-medium text-text-secondary hover:bg-white hover:shadow-sm">
+                        <i class="fas fa-money-bill-wave mr-3 text-base w-5"></i>
+                        Fee Management
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <div class="p-8">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-text-primary mb-2">Subject & Class Teacher Allocation</h1>
+                    <p class="text-text-secondary">Assign subject & class teacher to a class for the academic year 2025</p>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="bg-card-bg rounded-lg shadow-sm border border-border-light p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Academic Year</label>
+                            <select class="w-full px-3 py-2.5 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-white">
+                                <option>2025</option>
+                                <option>2024</option>
+                                <option>2023</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                            <select class="w-full px-3 py-2.5 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-white">
+                                <option>Select Class</option>
+                                <option>Grade 1A</option>
+                                <option>Grade 1B</option>
+                                <option>Grade 2A</option>
+                                <option>Grade 2B</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Subject</label>
+                            <select class="w-full px-3 py-2.5 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-white">
+                                <option>Select Subject</option>
+                                <option>Mathematics</option>
+                                <option>English</option>
+                                <option>Science</option>
+                                <option>Social Studies</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-primary mb-2">Class Teacher</label>
+                            <select class="w-full px-3 py-2.5 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-white">
+                                <option>Select Teacher</option>
+                                <option>Dr. Sarah Wilson</option>
+                                <option>Mr. John Davis</option>
+                                <option>Ms. Emily Brown</option>
+                                <option>Mrs. Lisa Johnson</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="w-full bg-primary hover:bg-primary-light text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center">
+                                <i class="fas fa-search mr-2"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Allocations Section -->
+                <div class="bg-card-bg rounded-lg shadow-sm border border-border-light">
+                    <!-- Section Header -->
+                    <div class="px-6 py-4 border-b border-border-light">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-semibold text-text-primary">Current Allocations</h2>
+                            <div class="flex space-x-3">
+                                <button class="px-4 py-2 border border-border-light rounded-lg text-sm font-medium text-text-secondary hover:bg-gray-50 transition-colors flex items-center">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Export
+                                </button>
+                                <button class="px-4 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-medium transition-colors flex items-center">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Bulk Subject Assign
+                                </button>
+                                <button class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm font-medium cursor-not-allowed flex items-center">
+                                    <i class="fas fa-trash mr-2"></i>
+                                    Bulk Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-border-light">
+                                <tr>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm w-12">
+                                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" id="selectAll" onchange="toggleAllCheckboxes()">
+                                    </th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Class</th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Subjects</th>
+                                    <th class="text-left py-4 px-6 font-semibold text-text-primary text-sm">Class Teacher</th>
+                                    <th class="text-center py-4 px-6 font-semibold text-text-primary text-sm">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allocationTableBody">
+                                <tr class="border-b border-border-light hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary row-checkbox" onchange="updateBulkRemoveButton()">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Grade 1A</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center" onclick="openAllocationModal('Grade 1A')">
+                                            <i class="fas fa-plus mr-2"></i>
+                                            Add Allocation
+                                        </button>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm text-text-secondary">Not Assigned</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="flex justify-center space-x-2">
+                                            <button class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-full flex items-center justify-center transition-colors" onclick="deleteAllocation('Grade 1A')">
+                                                <i class="fas fa-trash text-xs"></i>
+                                            </button>
+                                            <button class="w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-colors" onclick="editAllocation('Grade 1A')">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-border-light hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary row-checkbox" onchange="updateBulkRemoveButton()">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Grade 1B</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Mathematics</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">English</span>
+                                            <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors" onclick="openAllocationModal('Grade 1B')">
+                                                <i class="fas fa-plus mr-1"></i>
+                                                Add More
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Dr. Sarah Wilson</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="flex justify-center space-x-2">
+                                            <button class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-full flex items-center justify-center transition-colors" onclick="deleteAllocation('Grade 1B')">
+                                                <i class="fas fa-trash text-xs"></i>
+                                            </button>
+                                            <button class="w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-colors" onclick="editAllocation('Grade 1B')">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-border-light hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary row-checkbox" onchange="updateBulkRemoveButton()">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Grade 2A</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Science</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Social Studies</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Art</span>
+                                            <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors" onclick="openAllocationModal('Grade 2A')">
+                                                <i class="fas fa-plus mr-1"></i>
+                                                Add More
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Mr. John Davis</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="flex justify-center space-x-2">
+                                            <button class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-full flex items-center justify-center transition-colors" onclick="deleteAllocation('Grade 2A')">
+                                                <i class="fas fa-trash text-xs"></i>
+                                            </button>
+                                            <button class="w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-colors" onclick="editAllocation('Grade 2A')">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-border-light hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary row-checkbox" onchange="updateBulkRemoveButton()">
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm font-medium text-text-primary">Grade 2B</span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center" onclick="openAllocationModal('Grade 2B')">
+                                            <i class="fas fa-plus mr-2"></i>
+                                            Add Allocation
+                                        </button>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="text-sm text-text-secondary">Not Assigned</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="flex justify-center space-x-2">
+                                            <button class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-full flex items-center justify-center transition-colors" onclick="deleteAllocation('Grade 2B')">
+                                                <i class="fas fa-trash text-xs"></i>
+                                            </button>
+                                            <button class="w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-colors" onclick="editAllocation('Grade 2B')">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Allocation Modal -->
+    <div id="allocationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="px-6 py-4 border-b border-border-light">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-text-primary" id="modalTitle">Add Allocation</h3>
+                    <button onclick="closeAllocationModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Class</label>
+                        <input type="text" id="modalClass" class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm bg-gray-50" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Subject</label>
+                        <select id="modalSubject" class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                            <option>Select Subject</option>
+                            <option>Mathematics</option>
+                            <option>English</option>
+                            <option>Science</option>
+                            <option>Social Studies</option>
+                            <option>Art</option>
+                            <option>Physical Education</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-primary mb-2">Class Teacher</label>
+                        <select id="modalTeacher" class="w-full px-3 py-2 border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                            <option>Select Teacher</option>
+                            <option>Dr. Sarah Wilson</option>
+                            <option>Mr. John Davis</option>
+                            <option>Ms. Emily Brown</option>
+                            <option>Mrs. Lisa Johnson</option>
+                            <option>Mr. Michael Chen</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-border-light flex justify-end space-x-3">
+                <button onclick="closeAllocationModal()" class="px-4 py-2 border border-border-light rounded-lg text-sm font-medium text-text-secondary hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="saveAllocation()" class="px-4 py-2 bg-primary hover:bg-primary-light text-white rounded-lg text-sm font-medium transition-colors">
+                    Save Allocation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentClass = '';
+        let allocations = {
+            'Grade 1A': { subjects: [], teacher: '' },
+            'Grade 1B': { subjects: ['Mathematics', 'English'], teacher: 'Dr. Sarah Wilson' },
+            'Grade 2A': { subjects: ['Science', 'Social Studies', 'Art'], teacher: 'Mr. John Davis' },
+            'Grade 2B': { subjects: [], teacher: '' }
+        };
+
+        function toggleAllCheckboxes() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            
+            updateBulkRemoveButton();
+        }
+
+        function updateBulkRemoveButton() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const bulkRemoveBtn = document.querySelector('button:has(.fa-trash)');
+            
+            if (checkedBoxes.length > 0) {
+                bulkRemoveBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                bulkRemoveBtn.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white', 'cursor-pointer');
+                bulkRemoveBtn.disabled = false;
+            } else {
+                bulkRemoveBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                bulkRemoveBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white', 'cursor-pointer');
+                bulkRemoveBtn.disabled = true;
+            }
+        }
+
+        function openAllocationModal(className) {
+            currentClass = className;
+            document.getElementById('modalClass').value = className;
+            document.getElementById('modalTitle').textContent = `Add Allocation - ${className}`;
+            document.getElementById('allocationModal').classList.remove('hidden');
+            
+            // Set current teacher if exists
+            if (allocations[className].teacher) {
+                document.getElementById('modalTeacher').value = allocations[className].teacher;
+            }
+        }
+
+        function closeAllocationModal() {
+            document.getElementById('allocationModal').classList.add('hidden');
+            document.getElementById('modalSubject').value = 'Select Subject';
+            document.getElementById('modalTeacher').value = 'Select Teacher';
+            currentClass = '';
+        }
+
+        function saveAllocation() {
+            const subject = document.getElementById('modalSubject').value;
+            const teacher = document.getElementById('modalTeacher').value;
+            
+            if (subject === 'Select Subject' || teacher === 'Select Teacher') {
+                alert('Please select both subject and teacher');
+                return;
+            }
+            
+            // Add subject if not already exists
+            if (!allocations[currentClass].subjects.includes(subject)) {
+                allocations[currentClass].subjects.push(subject);
+            }
+            
+            // Set teacher
+            allocations[currentClass].teacher = teacher;
+            
+            // Update the table
+            updateTable();
+            closeAllocationModal();
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('allocationTableBody');
+            tbody.innerHTML = '';
+            
+            Object.keys(allocations).forEach(className => {
+                const allocation = allocations[className];
+                const row = document.createElement('tr');
+                row.className = 'border-b border-border-light hover:bg-gray-50 transition-colors';
+                
+                let subjectsHtml = '';
+                if (allocation.subjects.length > 0) {
+                    subjectsHtml = `
+                        <div class="flex flex-wrap gap-2">
+                            ${allocation.subjects.map(subject => 
+                                `<span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">${subject}</span>`
+                            ).join('')}
+                            <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs font-medium transition-colors" onclick="openAllocationModal('${className}')">
+                                <i class="fas fa-plus mr-1"></i>
+                                Add More
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    subjectsHtml = `
+                        <button class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center" onclick="openAllocationModal('${className}')">
+                            <i class="fas fa-plus mr-2"></i>
+                            Add Allocation
+                        </button>
+                    `;
+                }
+                
+                const teacherHtml = allocation.teacher ? 
+                    `<span class="text-sm font-medium text-text-primary">${allocation.teacher}</span>` :
+                    `<span class="text-sm text-text-secondary">Not Assigned</span>`;
+                
+                row.innerHTML = `
+                    <td class="py-4 px-6">
+                        <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary row-checkbox" onchange="updateBulkRemoveButton()">
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="text-sm font-medium text-text-primary">${className}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        ${subjectsHtml}
+                    </td>
+                    <td class="py-4 px-6">
+                        ${teacherHtml}
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <div class="flex justify-center space-x-2">
+                            <button class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-600 rounded-full flex items-center justify-center transition-colors" onclick="deleteAllocation('${className}')">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                            <button class="w-8 h-8 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-colors" onclick="editAllocation('${className}')">
+                                <i class="fas fa-edit text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function deleteAllocation(className) {
+            if (confirm(`Are you sure you want to delete all allocations for ${className}?`)) {
+                allocations[className] = { subjects: [], teacher: '' };
+                updateTable();
+            }
+        }
+
+        function editAllocation(className) {
+            openAllocationModal(className);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBulkRemoveButton();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a5c4a581c659a9',t:'MTc1NDM5MTM4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
