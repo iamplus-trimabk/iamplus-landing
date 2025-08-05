@@ -1635,8 +1635,13 @@
             // Select current node
             element.classList.add('selected');
             
-            // Show connections based on selection
-            showConnections(type, name);
+            // If subject is selected, reorganize the entire network view
+            if (type === 'subject') {
+                reorganizeNetworkForSubject(name);
+            } else {
+                // Show connections based on selection
+                showConnections(type, name);
+            }
             
             // Show assignment options based on node type
             if (type === 'teacher' || type === 'subject') {
@@ -2564,6 +2569,242 @@
             }
         }
 
+        function reorganizeNetworkForSubject(subjectName) {
+            const networkView = document.querySelector('.network-view');
+            
+            // Subject data for reorganization
+            const subjectData = {
+                'Mathematics': {
+                    assignedClasses: ['Class 10A', 'Class 10B', 'Class 9A'],
+                    unassignedClasses: [],
+                    primaryTeacher: 'Dr. Smith',
+                    availableTeachers: ['Ms. Johnson', 'Mr. Brown'],
+                    assistants: ['Ms. Davis'],
+                    availableAssistants: ['Mr. Taylor', 'Ms. Lee']
+                },
+                'Physics': {
+                    assignedClasses: ['Class 10A', 'Class 9A'],
+                    unassignedClasses: ['Class 10B'],
+                    primaryTeacher: 'Ms. Johnson',
+                    availableTeachers: ['Dr. Wilson', 'Mr. Brown'],
+                    assistants: ['Mr. Taylor'],
+                    availableAssistants: ['Ms. Davis', 'Ms. Lee']
+                },
+                'English': {
+                    assignedClasses: ['Class 10A', 'Class 10B'],
+                    unassignedClasses: ['Class 9A'],
+                    primaryTeacher: 'Mr. Brown',
+                    availableTeachers: ['Ms. Johnson', 'Dr. Wilson'],
+                    assistants: ['Ms. Lee'],
+                    availableAssistants: ['Ms. Davis', 'Mr. Taylor']
+                },
+                'Chemistry': {
+                    assignedClasses: ['Class 10B'],
+                    unassignedClasses: ['Class 10A', 'Class 9A'],
+                    primaryTeacher: 'Dr. Wilson',
+                    availableTeachers: ['Ms. Johnson'],
+                    assistants: [],
+                    availableAssistants: ['Ms. Davis', 'Mr. Taylor', 'Ms. Lee']
+                }
+            };
+
+            const data = subjectData[subjectName] || subjectData['Mathematics'];
+            
+            // Create new network layout focused on the subject
+            networkView.innerHTML = `
+                <!-- Column 1: Selected Subject -->
+                <div class="node-group">
+                    <h3>Selected Subject</h3>
+                    <div class="node selected subject-node" data-subject="${subjectName}">
+                        <div class="node-title">${subjectName}</div>
+                        <div class="node-subtitle">${data.assignedClasses.length} classes assigned</div>
+                        <div class="node-info">${data.unassignedClasses.length > 0 ? `${data.unassignedClasses.length} more needed` : 'Fully assigned'}</div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Assigned Classes -->
+                <div class="node-group">
+                    <h3>Assigned Classes</h3>
+                    ${data.assignedClasses.map(className => `
+                        <div class="node" onclick="selectNode(this, 'class', '${className}')">
+                            <div class="node-title">${className}</div>
+                            <div class="node-subtitle">${className === 'Class 10A' ? '30' : className === 'Class 10B' ? '28' : '32'} Students</div>
+                            <div class="node-info">Assigned</div>
+                        </div>
+                    `).join('')}
+                    ${data.unassignedClasses.map(className => `
+                        <div class="node unassigned" onclick="quickAssignSubjectToClass('${subjectName}', '${className}')" style="position: relative;" title="Click to assign ${subjectName} to ${className}">
+                            <div class="warning-indicator">+</div>
+                            <div class="node-title">${className}</div>
+                            <div class="node-subtitle">${className === 'Class 10A' ? '30' : className === 'Class 10B' ? '28' : '32'} Students</div>
+                            <div class="node-info">Click to assign</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Column 3: Schedule Grid for Subject -->
+                <div class="node-group schedule-grid-column" id="subject-schedule-grid">
+                    <h3>${subjectName} Schedule</h3>
+                    <div class="node schedule-grid-node expanded" onclick="openScheduleModal('${subjectName}')" style="cursor: pointer;">
+                        <div class="node-title">Weekly Schedule</div>
+                        <div class="mini-schedule-grid">
+                            ${getSubjectScheduleGrid(subjectName)}
+                        </div>
+                        <div class="node-info">${data.assignedClasses.length} periods/week</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <button class="quick-assign-btn" onclick="openScheduleModal('${subjectName}')" style="width: 100%;">Manage Schedule</button>
+                    </div>
+                </div>
+
+                <!-- Column 4: Primary Teacher -->
+                <div class="node-group">
+                    <h3>Primary Teacher</h3>
+                    <div class="node teacher-node selected" data-teacher="${data.primaryTeacher}" onclick="selectNode(this, 'teacher', '${data.primaryTeacher}')">
+                        <div class="node-title">${data.primaryTeacher}</div>
+                        <div class="node-subtitle">${subjectName} Teacher</div>
+                        <div class="node-info">${data.assignedClasses.length} classes</div>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 12px; font-weight: 600; color: #606060; margin-bottom: 8px;">Available Teachers:</div>
+                        ${data.availableTeachers.map(teacher => `
+                            <div class="node teacher-node underloaded" data-teacher="${teacher}" onclick="reassignSubjectTeacher('${subjectName}', '${teacher}')" style="position: relative; margin-bottom: 8px; cursor: pointer;" title="Click to assign ${teacher} to ${subjectName}">
+                                <div class="warning-indicator">↔</div>
+                                <div class="node-title" style="font-size: 12px;">${teacher}</div>
+                                <div class="node-subtitle" style="font-size: 10px;">Available</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Column 5: Assistant Teachers -->
+                <div class="node-group">
+                    <h3>Assistant Teachers</h3>
+                    ${data.assistants.map(assistant => `
+                        <div class="node teacher-node" data-teacher="${assistant}" onclick="selectNode(this, 'assistant', '${assistant}')">
+                            <div class="node-title">${assistant}</div>
+                            <div class="node-subtitle">${subjectName} Assistant</div>
+                            <div class="node-info">Assigned</div>
+                        </div>
+                    `).join('')}
+                    ${data.assistants.length === 0 ? `
+                        <div class="node unassigned" style="position: relative;">
+                            <div class="warning-indicator">!</div>
+                            <div class="node-title">No Assistant</div>
+                            <div class="node-subtitle">Needs assignment</div>
+                            <div class="node-info">Critical</div>
+                        </div>
+                    ` : ''}
+                    <div style="margin-top: 16px;">
+                        <div style="font-size: 12px; font-weight: 600; color: #606060; margin-bottom: 8px;">Available Assistants:</div>
+                        ${data.availableAssistants.map(assistant => `
+                            <div class="node teacher-node underloaded" data-teacher="${assistant}" onclick="assignAssistantToSubject('${subjectName}', '${assistant}')" style="position: relative; margin-bottom: 8px; cursor: pointer;" title="Click to assign ${assistant} as assistant for ${subjectName}">
+                                <div class="warning-indicator">+</div>
+                                <div class="node-title" style="font-size: 12px;">${assistant}</div>
+                                <div class="node-subtitle" style="font-size: 10px;">Available</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Column 6: Quick Actions -->
+                <div class="node-group">
+                    <h3>Quick Actions</h3>
+                    <div class="node" onclick="bulkAssignSubject('${subjectName}')" style="cursor: pointer; background: #E8F5E8; border-color: #28A745;">
+                        <div class="node-title">Bulk Assign</div>
+                        <div class="node-subtitle">All Classes</div>
+                        <div class="node-info">Auto-assign</div>
+                    </div>
+                    <div class="node" onclick="optimizeSubjectSchedule('${subjectName}')" style="cursor: pointer; background: #F0EBFF; border-color: #7B54FA;">
+                        <div class="node-title">Optimize</div>
+                        <div class="node-subtitle">Schedule</div>
+                        <div class="node-info">AI Suggest</div>
+                    </div>
+                    <div class="node" onclick="generateSubjectReport('${subjectName}')" style="cursor: pointer; background: #FFF9E6; border-color: #FFC107;">
+                        <div class="node-title">Generate</div>
+                        <div class="node-subtitle">Report</div>
+                        <div class="node-info">Analytics</div>
+                    </div>
+                    <div class="node" onclick="resetSubjectView()" style="cursor: pointer; background: #F7F7F7; border-color: #606060;">
+                        <div class="node-title">Reset View</div>
+                        <div class="node-subtitle">Back to Default</div>
+                        <div class="node-info">↺ Reset</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getSubjectScheduleGrid(subjectName) {
+            const schedules = {
+                'Mathematics': `
+                    <div class="mini-grid-row">
+                        <div class="mini-cell assigned" title="Mon 9:00 - Class 10A">M</div>
+                        <div class="mini-cell assigned" title="Tue 9:00 - Class 9A">T</div>
+                        <div class="mini-cell assigned" title="Wed 11:00 - Class 10A">W</div>
+                        <div class="mini-cell available" title="Thu - Available">T</div>
+                        <div class="mini-cell available" title="Fri - Available">F</div>
+                    </div>
+                    <div class="mini-grid-row">
+                        <div class="mini-cell assigned" title="Mon 10:00 - Class 10B">M</div>
+                        <div class="mini-cell available" title="Tue 10:00 - Available">T</div>
+                        <div class="mini-cell available" title="Wed 10:00 - Available">W</div>
+                        <div class="mini-cell available" title="Thu 10:00 - Available">T</div>
+                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
+                    </div>
+                `,
+                'Physics': `
+                    <div class="mini-grid-row">
+                        <div class="mini-cell available" title="Mon - Available">M</div>
+                        <div class="mini-cell assigned" title="Tue 10:00 - Class 10A">T</div>
+                        <div class="mini-cell assigned" title="Wed 10:00 - Class 9A">W</div>
+                        <div class="mini-cell available" title="Thu - Available">T</div>
+                        <div class="mini-cell assigned" title="Fri 9:00 - Class 10A">F</div>
+                    </div>
+                    <div class="mini-grid-row">
+                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
+                    </div>
+                `,
+                'English': `
+                    <div class="mini-grid-row">
+                        <div class="mini-cell assigned" title="Mon 11:00 - Class 10A">M</div>
+                        <div class="mini-cell available" title="Tue - Available">T</div>
+                        <div class="mini-cell assigned" title="Wed 9:00 - Class 10A">W</div>
+                        <div class="mini-cell available" title="Thu - Available">T</div>
+                        <div class="mini-cell assigned" title="Fri 11:00 - Class 10B">F</div>
+                    </div>
+                    <div class="mini-grid-row">
+                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
+                    </div>
+                `,
+                'Chemistry': `
+                    <div class="mini-grid-row">
+                        <div class="mini-cell available" title="Mon - Available">M</div>
+                        <div class="mini-cell available" title="Tue - Available">T</div>
+                        <div class="mini-cell available" title="Wed - Available">W</div>
+                        <div class="mini-cell conflict" title="Thu 10:00 - Class 10B (Dr. Wilson overloaded)">T</div>
+                        <div class="mini-cell available" title="Fri - Available">F</div>
+                    </div>
+                    <div class="mini-grid-row">
+                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
+                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
+                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
+                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
+                    </div>
+                `
+            };
+            
+            return schedules[subjectName] || schedules['Mathematics'];
+        }
+
         function showConnections(type, name) {
             // Clear existing connection lines
             document.querySelectorAll('.connection-line').forEach(line => line.remove());
@@ -2653,6 +2894,62 @@
             }
         });
 
+        // Subject-focused action functions
+        function quickAssignSubjectToClass(subjectName, className) {
+            alert(`Quick assigning ${subjectName} to ${className}. Auto-selecting best available teacher and time slot.`);
+            // In real app, this would use algorithm to find best teacher and time slot
+            setTimeout(() => {
+                alert(`✅ Successfully assigned ${subjectName} to ${className}!\n\nAuto-assigned:\n• Teacher: Best available\n• Time: Optimal slot\n• Assistant: If needed`);
+                // Refresh the subject view
+                reorganizeNetworkForSubject(subjectName);
+            }, 1000);
+        }
+
+        function reassignSubjectTeacher(subjectName, newTeacher) {
+            alert(`Reassigning ${subjectName} from current teacher to ${newTeacher}. This will update all classes.`);
+            // In real app, this would update all class assignments for this subject
+            setTimeout(() => {
+                alert(`✅ Successfully reassigned ${subjectName} to ${newTeacher}!\n\nUpdated all class assignments automatically.`);
+                reorganizeNetworkForSubject(subjectName);
+            }, 1000);
+        }
+
+        function assignAssistantToSubject(subjectName, assistant) {
+            alert(`Assigning ${assistant} as assistant teacher for ${subjectName}. This will apply to all classes.`);
+            setTimeout(() => {
+                alert(`✅ Successfully assigned ${assistant} as assistant for ${subjectName}!\n\nNow assisting in all ${subjectName} classes.`);
+                reorganizeNetworkForSubject(subjectName);
+            }, 1000);
+        }
+
+        function bulkAssignSubject(subjectName) {
+            alert(`🤖 AI Bulk Assignment for ${subjectName}\n\nAnalyzing:\n• Available classes\n• Teacher workloads\n• Schedule conflicts\n• Student requirements\n\nProcessing...`);
+            setTimeout(() => {
+                alert(`✅ Bulk assignment complete for ${subjectName}!\n\n• Assigned to all required classes\n• Optimized teacher allocation\n• Resolved schedule conflicts\n• Added assistants where needed`);
+                reorganizeNetworkForSubject(subjectName);
+            }, 2000);
+        }
+
+        function optimizeSubjectSchedule(subjectName) {
+            alert(`🧠 AI Schedule Optimization for ${subjectName}\n\nAnalyzing:\n• Current time slots\n• Teacher availability\n• Student preferences\n• Room availability\n\nOptimizing...`);
+            setTimeout(() => {
+                alert(`✅ Schedule optimized for ${subjectName}!\n\n• Reduced conflicts by 80%\n• Improved teacher efficiency\n• Better time distribution\n• Enhanced student experience`);
+                openScheduleModal(subjectName);
+            }, 2000);
+        }
+
+        function generateSubjectReport(subjectName) {
+            alert(`📊 Generating comprehensive report for ${subjectName}...\n\nIncluding:\n• Assignment status\n• Teacher workload analysis\n• Schedule efficiency\n• Student coverage\n• Recommendations`);
+            setTimeout(() => {
+                alert(`✅ Report generated for ${subjectName}!\n\n📈 Key Insights:\n• 85% assignment efficiency\n• 2 optimization opportunities\n• 1 critical issue resolved\n• 3 improvement suggestions\n\n(In real app, this would open a detailed report)`);
+            }, 1500);
+        }
+
+        function resetSubjectView() {
+            // Reset to the original network view
+            location.reload(); // Simple reset - in real app, would restore original layout
+        }
+
         // Initialize with Class 10A selected
         document.addEventListener('DOMContentLoaded', function() {
             const firstClassNode = document.querySelector('.node');
@@ -2675,5 +2972,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7884dd79406a8',t:'MTc1NDQwOTg4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7917ca6f8913b',t:'MTc1NDQxMDI2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
