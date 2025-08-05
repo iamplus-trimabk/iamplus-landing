@@ -1843,96 +1843,6 @@
 
                         <div class="node-group">
                             <h3>Teachers</h3>
-                            <div class="node schedule-grid-node" onclick="openScheduleModal('Mathematics')" style="cursor: pointer;" title="Mathematics schedule across all classes - Click to manage">
-                                <div class="node-title">Mathematics</div>
-                                <div class="mini-schedule-grid">
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell assigned" title="Mon 9:00 - Class 10A">M</div>
-                                        <div class="mini-cell assigned" title="Tue 9:00 - Class 9A">T</div>
-                                        <div class="mini-cell assigned" title="Wed 11:00 - Class 10A">W</div>
-                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
-                                        <div class="mini-cell available" title="Fri - Available for assignment">F</div>
-                                    </div>
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell assigned" title="Mon 10:00 - Class 10B">M</div>
-                                        <div class="mini-cell available" title="Tue 10:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Wed 10:00 - Available">W</div>
-                                        <div class="mini-cell available" title="Thu 10:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
-                                    </div>
-                                </div>
-                                <div class="node-info">3 classes assigned</div>
-                            </div>
-                            
-                            <div class="node schedule-grid-node underloaded" onclick="openScheduleModal('Physics')" style="cursor: pointer; position: relative;" title="Physics needs 1 more class assignment - Click to manage">
-                                <div class="warning-indicator" title="Physics is underloaded - needs 1 more class">!</div>
-                                <div class="node-title">Physics</div>
-                                <div class="mini-schedule-grid">
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell available" title="Mon - Available for assignment">M</div>
-                                        <div class="mini-cell assigned" title="Tue 10:00 - Class 10A">T</div>
-                                        <div class="mini-cell assigned" title="Wed 10:00 - Class 9A">W</div>
-                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
-                                        <div class="mini-cell assigned" title="Fri 9:00 - Class 10A">F</div>
-                                    </div>
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
-                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
-                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
-                                    </div>
-                                </div>
-                                <div class="node-info">2 classes (-1 needed)</div>
-                            </div>
-                            
-                            <div class="node schedule-grid-node underloaded" onclick="openScheduleModal('English')" style="cursor: pointer; position: relative;" title="English needs 1 more class assignment - Click to manage">
-                                <div class="warning-indicator" title="English is underloaded - needs 1 more class">!</div>
-                                <div class="node-title">English</div>
-                                <div class="mini-schedule-grid">
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell assigned" title="Mon 11:00 - Class 10A">M</div>
-                                        <div class="mini-cell available" title="Tue - Available for assignment">T</div>
-                                        <div class="mini-cell assigned" title="Wed 9:00 - Class 10A">W</div>
-                                        <div class="mini-cell available" title="Thu - Available for assignment">T</div>
-                                        <div class="mini-cell assigned" title="Fri 11:00 - Class 10B">F</div>
-                                    </div>
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
-                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
-                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Fri 10:00 - Available">F</div>
-                                    </div>
-                                </div>
-                                <div class="node-info">2 classes (-1 needed)</div>
-                            </div>
-                            
-                            <div class="node schedule-grid-node unassigned" onclick="openScheduleModal('Chemistry')" style="cursor: pointer; position: relative;" title="Chemistry critically understaffed - Dr. Wilson overloaded">
-                                <div class="error-indicator" title="Chemistry has critical staffing issues">⚠</div>
-                                <div class="node-title">Chemistry</div>
-                                <div class="mini-schedule-grid">
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell available" title="Mon - Available for assignment">M</div>
-                                        <div class="mini-cell available" title="Tue - Available for assignment">T</div>
-                                        <div class="mini-cell available" title="Wed - Available for assignment">W</div>
-                                        <div class="mini-cell conflict" title="Thu 10:00 - Class 10B (Dr. Wilson overloaded)">T</div>
-                                        <div class="mini-cell available" title="Fri - Available for assignment">F</div>
-                                    </div>
-                                    <div class="mini-grid-row">
-                                        <div class="mini-cell available" title="Mon 10:00 - Available">M</div>
-                                        <div class="mini-cell available" title="Tue 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Wed 11:00 - Available">W</div>
-                                        <div class="mini-cell available" title="Thu 11:00 - Available">T</div>
-                                        <div class="mini-cell available" title="Fri 11:00 - Available">F</div>
-                                    </div>
-                                </div>
-                                <div class="node-info">1 class (teacher overloaded)</div>
-                            </div>
-                        </div>
-
-                        <div class="node-group">
-                            <h3>Teachers</h3>
                             <div class="node teacher-node" data-teacher="Dr. Smith" onclick="selectNode(this, 'teacher', 'Dr. Smith')">
                                 <div class="node-title">Dr. Smith</div>
                                 <div class="node-subtitle">Mathematics</div>
@@ -4591,5 +4501,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7a934b5a36091',t:'MTc1NDQxMTIzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a7aeb0a5577fd1',t:'MTc1NDQxMTQ2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
