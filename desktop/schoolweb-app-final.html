@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simflo School ERP - Sidebar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'purple-soft': '#8b5cf6',
+                        'purple-light': '#f3f4f6',
+                        'purple-bg': '#faf5ff',
+                        'text-primary': '#1f2937',
+                        'text-secondary': '#6b7280',
+                        'bg-light': '#f9fafb',
+                        'border-light': '#e5e7eb'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-bg-light font-sans">
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <div class="w-60 bg-white border-r border-gray-200 flex-shrink-0 fixed h-full overflow-y-auto">
+            <div class="p-6">
+                <!-- Sidebar Header -->
+                <div class="flex items-center space-x-3 mb-10">
+                    <div class="w-9 h-9 bg-purple-soft rounded-lg flex items-center justify-center">
+                        <span class="text-white text-base font-medium">S</span>
+                    </div>
+                    <h1 class="text-lg font-medium text-gray-900">School ERP</h1>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <nav class="space-y-1">
+                    <!-- Dashboard -->
+                    <a href="#" class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors group">
+                        <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        <span class="text-sm">Dashboard</span>
+                    </a>
+
+                    <!-- Allocation - Active State -->
+                    <a href="#" class="nav-item active flex items-center px-3 py-2.5 text-purple-soft bg-purple-50 rounded-md">
+                        <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Allocation</span>
+                    </a>
+
+                    <!-- Attendance -->
+                    <a href="#" class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors group">
+                        <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-sm">Attendance</span>
+                    </a>
+
+                    <!-- Calendar Management -->
+                    <a href="#" class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors group">
+                        <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-sm">Calendar Management</span>
+                    </a>
+
+                    <!-- Fee Management -->
+                    <a href="#" class="nav-item flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors group">
+                        <svg class="w-4 h-4 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span class="text-sm">Fee Management</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content Area - Subject & Class Teacher Allocation -->
+        <div class="ml-60 flex-1 p-8 bg-gray-50">
+            <div class="max-w-6xl mx-auto">
+                <!-- Page Title -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Subject & Class Teacher Allocation</h1>
+                    <p class="text-gray-600">Assign subject & class teacher to a class for the academic year 2025</p>
+                </div>
+
+                <!-- Toggle Tabs -->
+                <div class="mb-8">
+                    <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                        <button id="tab1" class="tab-button px-6 py-2.5 rounded-md text-sm font-medium transition-all text-gray-600 hover:text-gray-900">
+                            Subject & Class Teacher
+                        </button>
+                        <button id="tab2" class="tab-button active px-6 py-2.5 rounded-md text-sm font-medium transition-all bg-white text-gray-900 shadow-sm">
+                            Primary and Secondary Teacher
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Box -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                        <!-- Academic Year -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
+                            <div class="relative">
+                                <button id="yearDropdown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm bg-white text-left flex items-center justify-between">
+                                    <span id="yearDisplay">2025-2026</span>
+                                    <svg class="w-5 h-5 text-gray-500 transition-transform" id="yearChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Dropdown Menu -->
+                                <div id="yearMenu" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto">
+                                    <div class="p-2">
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="radio" name="academic-year" value="2025-2026" class="year-radio mr-3 text-purple-600 focus:ring-purple-500" checked>
+                                            <span class="text-sm">2025-2026</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="radio" name="academic-year" value="2024-2025" class="year-radio mr-3 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">2024-2025</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="radio" name="academic-year" value="2023-2024" class="year-radio mr-3 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">2023-2024</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Class -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                            <div class="relative">
+                                <button id="classDropdown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm bg-white text-left flex items-center justify-between">
+                                    <span id="classDisplay">All Classes</span>
+                                    <svg class="w-5 h-5 text-gray-500 transition-transform" id="classChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Dropdown Menu -->
+                                <div id="classMenu" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto">
+                                    <div class="p-2">
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="all" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500" checked>
+                                            <span class="text-sm">All Classes</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-10-a" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 10-A</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-10-b" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 10-B</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-9-a" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 9-A</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-9-b" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 9-B</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-8-a" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 8-A</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="class-8-b" class="class-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Class 8-B</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                            <div class="relative">
+                                <button id="subjectDropdown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm bg-white text-left flex items-center justify-between">
+                                    <span id="subjectDisplay">All Subjects</span>
+                                    <svg class="w-5 h-5 text-gray-500 transition-transform" id="subjectChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Dropdown Menu -->
+                                <div id="subjectMenu" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto">
+                                    <div class="p-2">
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="all" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500" checked>
+                                            <span class="text-sm">All Subjects</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="mathematics" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Mathematics</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="english" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">English</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="science" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Science</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="history" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">History</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="geography" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Geography</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="physics" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Physics</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="chemistry" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Chemistry</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="biology" class="subject-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Biology</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Class Teacher -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class Teacher</label>
+                            <div class="relative">
+                                <button id="teacherDropdown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm bg-white text-left flex items-center justify-between">
+                                    <span id="teacherDisplay">All Class Teachers</span>
+                                    <svg class="w-5 h-5 text-gray-500 transition-transform" id="teacherChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <!-- Dropdown Menu -->
+                                <div id="teacherMenu" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto">
+                                    <div class="p-2">
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="all" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500" checked>
+                                            <span class="text-sm">All Class Teachers</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="mrs-sharma" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Mrs. Sharma</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="mr-kumar" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Mr. Kumar</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="ms-patel" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Ms. Patel</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="dr-singh" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Dr. Singh</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="mrs-gupta" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Mrs. Gupta</span>
+                                        </label>
+                                        <label class="flex items-center px-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="mr-verma" class="teacher-checkbox mr-3 rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-sm">Mr. Verma</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="flex justify-end mt-6">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-sm font-medium transition-all flex items-center space-x-2 shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Allocations Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+                    <!-- Section Header -->
+                    <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-900">Current Allocations</h2>
+                        <div class="flex items-center space-x-3">
+                            <button class="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all text-sm font-medium">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span>Export</span>
+                            </button>
+                            <button class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all text-sm font-medium">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                <span>Bulk Subject Assign</span>
+                            </button>
+                            <button class="flex items-center space-x-2 px-4 py-2 text-gray-400 bg-gray-100 rounded-lg text-sm font-medium cursor-not-allowed" disabled>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                <span>Bulk Remove</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="w-12 px-6 py-4 text-left">
+                                        <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </th>
+                                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Class</th>
+                                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Subjects</th>
+                                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Class Teacher</th>
+                                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-700">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-medium text-gray-900">Grade 10-A</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-wrap gap-2 items-center">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Mathematics</span>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">English</span>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Science</span>
+                                            <button class="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium">
+                                                + Add More
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm text-gray-900">Mrs. Sharma</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-medium text-gray-900">Grade 10-B</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-wrap gap-2 items-center">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Physics</span>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-pink-100 text-pink-800">Chemistry</span>
+                                            <button class="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium">
+                                                + Add More
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm text-gray-500">Not Assigned</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-medium text-gray-900">Grade 9-A</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-wrap gap-2 items-center">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">History</span>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Geography</span>
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800">Biology</span>
+                                            <button class="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium">
+                                                + Add More
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm text-gray-900">Mr. Kumar</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm font-medium text-gray-900">Grade 8-A</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-wrap gap-2 items-center">
+                                            <button class="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 font-medium">
+                                                + Add Allocation
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-sm text-gray-900">Ms. Patel</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add click functionality to navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active', 'text-purple-soft', 'bg-purple-50');
+                    nav.classList.add('text-gray-600');
+                    const span = nav.querySelector('span');
+                    span.classList.remove('font-medium');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active', 'text-purple-soft', 'bg-purple-50');
+                this.classList.remove('text-gray-600');
+                const span = this.querySelector('span');
+                span.classList.add('font-medium');
+                
+                // Log the clicked item for demo purposes
+                const itemName = this.querySelector('span').textContent;
+                console.log(`Navigated to: ${itemName}`);
+            });
+        });
+
+        // Add click functionality to tab buttons
+        document.querySelectorAll('.tab-button').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab-button').forEach(t => {
+                    t.classList.remove('active', 'bg-white', 'text-gray-900', 'shadow-sm');
+                    t.classList.add('text-gray-600');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active', 'bg-white', 'text-gray-900', 'shadow-sm');
+                this.classList.remove('text-gray-600');
+                
+                // Log the clicked tab for demo purposes
+                const tabName = this.textContent.trim();
+                console.log(`Switched to tab: ${tabName}`);
+            });
+        });
+
+        // Multi-select dropdown functionality
+        function setupMultiSelectDropdown(dropdownId, menuId, displayId, chevronId, checkboxClass, allText, selectText) {
+            const dropdown = document.getElementById(dropdownId);
+            const menu = document.getElementById(menuId);
+            const display = document.getElementById(displayId);
+            const chevron = document.getElementById(chevronId);
+            const checkboxes = document.querySelectorAll(`.${checkboxClass}`);
+
+            // Toggle dropdown
+            dropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                menu.classList.toggle('hidden');
+                chevron.classList.toggle('rotate-180');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    chevron.classList.remove('rotate-180');
+                }
+            });
+
+            // Handle checkbox changes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateDisplay();
+                    
+                    // Handle "All" logic
+                    if (this.value === 'all') {
+                        if (this.checked) {
+                            // Uncheck all other checkboxes
+                            checkboxes.forEach(cb => {
+                                if (cb.value !== 'all') {
+                                    cb.checked = false;
+                                }
+                            });
+                        }
+                    } else {
+                        // If any specific item is checked, uncheck "All"
+                        if (this.checked) {
+                            document.querySelector(`.${checkboxClass}[value="all"]`).checked = false;
+                        }
+                        
+                        // If no specific items are checked, check "All"
+                        const specificItems = Array.from(checkboxes).filter(cb => cb.value !== 'all');
+                        const anyChecked = specificItems.some(cb => cb.checked);
+                        if (!anyChecked) {
+                            document.querySelector(`.${checkboxClass}[value="all"]`).checked = true;
+                        }
+                    }
+                });
+            });
+
+            function updateDisplay() {
+                const allCheckbox = document.querySelector(`.${checkboxClass}[value="all"]`);
+                const specificItems = Array.from(checkboxes).filter(cb => cb.value !== 'all' && cb.checked);
+                
+                if (allCheckbox.checked) {
+                    display.textContent = allText;
+                } else if (specificItems.length === 0) {
+                    display.textContent = selectText;
+                } else if (specificItems.length === 1) {
+                    const itemName = specificItems[0].nextElementSibling.textContent;
+                    display.textContent = itemName;
+                } else {
+                    display.textContent = `${specificItems.length} Selected`;
+                }
+            }
+        }
+
+        // Academic Year dropdown functionality
+        function setupSingleSelectDropdown(dropdownId, menuId, displayId, chevronId, radioClass) {
+            const dropdown = document.getElementById(dropdownId);
+            const menu = document.getElementById(menuId);
+            const display = document.getElementById(displayId);
+            const chevron = document.getElementById(chevronId);
+            const radios = document.querySelectorAll(`.${radioClass}`);
+
+            // Toggle dropdown
+            dropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                menu.classList.toggle('hidden');
+                chevron.classList.toggle('rotate-180');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    chevron.classList.remove('rotate-180');
+                }
+            });
+
+            // Handle radio button changes
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        display.textContent = this.value;
+                        menu.classList.add('hidden');
+                        chevron.classList.remove('rotate-180');
+                    }
+                });
+            });
+        }
+
+        // Initialize all dropdowns
+        setupSingleSelectDropdown('yearDropdown', 'yearMenu', 'yearDisplay', 'yearChevron', 'year-radio');
+        setupMultiSelectDropdown('subjectDropdown', 'subjectMenu', 'subjectDisplay', 'subjectChevron', 'subject-checkbox', 'All Subjects', 'Select Subjects');
+        setupMultiSelectDropdown('classDropdown', 'classMenu', 'classDisplay', 'classChevron', 'class-checkbox', 'All Classes', 'Select Classes');
+        setupMultiSelectDropdown('teacherDropdown', 'teacherMenu', 'teacherDisplay', 'teacherChevron', 'teacher-checkbox', 'All Class Teachers', 'Select Teachers');
+
+        // Table functionality
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+
+        // Select all functionality
+        selectAllCheckbox.addEventListener('change', function() {
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateBulkRemoveButton();
+        });
+
+        // Individual row checkbox functionality
+        rowCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+                selectAllCheckbox.checked = checkedBoxes.length === rowCheckboxes.length;
+                selectAllCheckbox.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < rowCheckboxes.length;
+                updateBulkRemoveButton();
+            });
+        });
+
+        function updateBulkRemoveButton() {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const bulkRemoveBtn = document.querySelector('button[disabled]');
+            
+            if (checkedBoxes.length > 0) {
+                bulkRemoveBtn.disabled = false;
+                bulkRemoveBtn.classList.remove('text-gray-400', 'bg-gray-100', 'cursor-not-allowed');
+                bulkRemoveBtn.classList.add('text-white', 'bg-red-600', 'hover:bg-red-700', 'cursor-pointer');
+            } else {
+                bulkRemoveBtn.disabled = true;
+                bulkRemoveBtn.classList.add('text-gray-400', 'bg-gray-100', 'cursor-not-allowed');
+                bulkRemoveBtn.classList.remove('text-white', 'bg-red-600', 'hover:bg-red-700', 'cursor-pointer');
+            }
+        }
+
+        // Action button functionality
+        document.querySelectorAll('button[title="Edit"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const className = row.querySelector('td:nth-child(2) span').textContent;
+                console.log(`Edit allocation for ${className}`);
+            });
+        });
+
+        document.querySelectorAll('button[title="Delete"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const className = row.querySelector('td:nth-child(2) span').textContent;
+                if (confirm(`Are you sure you want to delete the allocation for ${className}?`)) {
+                    row.remove();
+                    console.log(`Deleted allocation for ${className}`);
+                }
+            });
+        });
+
+        // Add More/Add Allocation button functionality
+        document.querySelectorAll('button:contains("+ Add")').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const className = row.querySelector('td:nth-child(2) span').textContent;
+                console.log(`Add subjects for ${className}`);
+            });
+        });
+
+        // Header button functionality
+        document.querySelector('button:contains("Export")').addEventListener('click', function() {
+            console.log('Export allocations');
+        });
+
+        document.querySelector('button:contains("Bulk Subject Assign")').addEventListener('click', function() {
+            console.log('Bulk subject assign');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ae67f7c48a41b6',t:'MTc1NDQ4MTk2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
