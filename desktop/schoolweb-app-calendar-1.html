@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timetable Configuration - School ERP</title>
+    <title>Event Registration - School ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -49,12 +49,12 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="block px-3 py-2 text-sm font-medium text-primary-dark bg-sidebar-selected border-l-3 border-primary-dark rounded-md">
+                                <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
                                     Timetable Configuration
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
+                                <a href="#" class="block px-3 py-2 text-sm font-medium text-primary-dark bg-sidebar-selected border-l-3 border-primary-dark rounded-md">
                                     Event Registration
                                 </a>
                             </li>
@@ -68,218 +68,237 @@
         <div class="flex-1 p-8 bg-white overflow-auto">
             <!-- Page Header -->
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-primary-dark mb-2">Timetable Configuration</h1>
-                <p class="text-text-muted">Add Periods to classes.</p>
+                <h1 class="text-2xl font-bold text-primary-dark mb-2">Event Registration</h1>
+                <p class="text-text-muted">Manage school events and registration</p>
             </div>
 
-            <!-- Filter Section -->
-            <div class="bg-white border border-border-light rounded-lg p-6 mb-6">
-                <div class="flex items-end gap-4">
-                    <!-- Academic Year -->
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                            <option>2024-2025</option>
-                            <option>2023-2024</option>
-                            <option>2025-2026</option>
-                        </select>
+            <!-- Create New Event Section -->
+            <div class="bg-white border border-border-light rounded-lg p-6 mb-8">
+                <h2 class="text-lg font-semibold text-primary-dark mb-6">Create New Event</h2>
+                
+                <form id="createEventForm" class="space-y-6">
+                    <!-- Two-column layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Event Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Name</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter event name">
+                        </div>
+
+                        <!-- Event Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                <option value="">Select event type</option>
+                                <option value="academic">Academic</option>
+                                <option value="sports">Sports</option>
+                                <option value="cultural">Cultural</option>
+                                <option value="competition">Competition</option>
+                                <option value="workshop">Workshop</option>
+                            </select>
+                        </div>
+
+                        <!-- Event Description -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Description</label>
+                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter event description"></textarea>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                        </div>
+
+                        <!-- End Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                        </div>
+
+                        <!-- Registration Fee (Internal) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Fee (Internal)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-500 text-sm">Rs.</span>
+                                <input type="number" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="0">
+                            </div>
+                        </div>
+
+                        <!-- Registration Fee (External with GST) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Fee (External with GST)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-500 text-sm">Rs.</span>
+                                <input type="number" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="0">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Class -->
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                            <option>Grade 1A</option>
-                            <option>Grade 1B</option>
-                            <option>Grade 2A</option>
-                            <option>Grade 2B</option>
-                        </select>
-                    </div>
-
-                    <!-- Load Table Button -->
-                    <div class="flex-shrink-0">
-                        <button id="loadTableBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors">
-                            Load Table
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-end space-x-3 pt-4">
+                        <button type="button" class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                            Save
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
 
-            <!-- Timetable Section -->
-            <div class="bg-white border border-border-light rounded-lg">
-                <!-- Table Header -->
-                <div class="flex items-center justify-between p-6 border-b border-border-light">
-                    <h2 class="text-lg font-semibold text-primary-dark">Grade 1A</h2>
-                    <button id="addPeriodsBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        <span>Add Periods</span>
-                    </button>
-                </div>
+            <!-- Active Events Section -->
+            <div class="bg-white border border-border-light rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-primary-dark mb-6">Active Events</h2>
+                
+                <div class="space-y-6">
+                    <!-- Event Card 1 -->
+                    <div class="border border-gray-200 rounded-lg p-6 relative">
+                        <!-- Edit Button -->
+                        <button class="absolute top-4 right-4 p-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors edit-event-btn" title="Edit Event">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </button>
 
-                <!-- Timetable Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Time</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Monday</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Tuesday</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Wednesday</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Thursday</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Friday</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Period 1 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">08:00 - 08:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">English</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Mathematics</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Science</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">English</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Drawing</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <div class="flex items-center space-x-3">
-                                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <!-- Event Header -->
+                        <div class="mb-4 pr-12">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">Science Fair 2025</h3>
+                            <p class="text-sm text-gray-600">Annual science exhibition showcasing student projects and innovations</p>
+                        </div>
 
-                            <!-- Period 2 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">08:45 - 09:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Mathematics</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">English</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Mathematics</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Science</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">English</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <div class="flex items-center space-x-3">
-                                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <!-- Event Details Row -->
+                        <div class="flex items-center space-x-6 mb-6">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                March 15-17, 2025
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">
+                                Rs. 200
+                            </div>
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Internal</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">External</span>
+                            </div>
+                        </div>
 
-                            <!-- Break -->
-                            <tr class="bg-gray-100">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">09:30 - 09:45</td>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center font-medium border-r border-gray-200">Break</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                            </tr>
+                        <!-- Registration Options -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Internal Registration -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Select Class (Internal)</label>
+                                <div class="relative">
+                                    <select class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                        <option value="">Select class</option>
+                                        <option value="grade-8a" selected>Grade 8A</option>
+                                        <option value="grade-8b">Grade 8B</option>
+                                        <option value="grade-9a">Grade 9A</option>
+                                        <option value="grade-9b">Grade 9B</option>
+                                    </select>
+                                    <button class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 transition-colors copy-btn" title="Copy">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
 
-                            <!-- Period 3 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">09:45 - 10:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Science</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Drawing</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">English</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Mathematics</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Science</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <div class="flex items-center space-x-3">
-                                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <!-- External Registration -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Registration Link (External)</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" value="https://school.edu/register/science-fair-2025" readonly>
+                                    <button class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 transition-colors copy-btn" title="Copy">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                            <!-- Period 4 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">10:30 - 11:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Drawing</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Science</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Drawing</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Drawing</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">Mathematics</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <div class="flex items-center space-x-3">
-                                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                    <!-- Event Card 2 -->
+                    <div class="border border-gray-200 rounded-lg p-6 relative">
+                        <!-- Edit Button -->
+                        <button class="absolute top-4 right-4 p-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors edit-event-btn" title="Edit Event">
+                            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </button>
 
-                            <!-- Lunch Break -->
-                            <tr class="bg-gray-100">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">11:15 - 12:00</td>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center font-medium border-r border-gray-200">Lunch Break</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                            </tr>
+                        <!-- Event Header -->
+                        <div class="mb-4 pr-12">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">Annual Sports Day</h3>
+                            <p class="text-sm text-gray-600">Inter-house sports competition with track and field events</p>
+                        </div>
 
-                            <!-- Period 5 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">12:00 - 12:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <div class="flex items-center space-x-3">
-                                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                            </svg>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <!-- Event Details Row -->
+                        <div class="flex items-center space-x-6 mb-6">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                February 28, 2025
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">
+                                Rs. 150
+                            </div>
+                            <div class="flex space-x-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Internal</span>
+                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">External</span>
+                            </div>
+                        </div>
+
+                        <!-- Registration Options -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Internal Registration -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Select Class (Internal)</label>
+                                <div class="relative">
+                                    <select class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                        <option value="">Select class</option>
+                                        <option value="grade-6a">Grade 6A</option>
+                                        <option value="grade-6b">Grade 6B</option>
+                                        <option value="grade-7a" selected>Grade 7A</option>
+                                        <option value="grade-7b">Grade 7B</option>
+                                    </select>
+                                    <button class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 transition-colors copy-btn" title="Copy">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- External Registration -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Registration Link (External)</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" value="https://school.edu/register/sports-day-2025" readonly>
+                                    <button class="absolute right-2 top-2 p-1 text-gray-400 hover:text-gray-600 transition-colors copy-btn" title="Copy">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Period Modal -->
-    <div id="editPeriodModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <!-- Edit Event Modal -->
+    <div id="editEventModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Edit Period</h3>
-                <button id="closeEditModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <h3 class="text-lg font-semibold text-gray-900">Edit Event</h3>
+                <button id="closeEditEventModal" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -288,75 +307,62 @@
 
             <!-- Modal Content -->
             <div class="p-6">
-                <form id="editPeriodForm" class="space-y-4">
-                    <!-- Time Slot -->
-                    <div class="grid grid-cols-2 gap-4">
+                <form id="editEventForm" class="space-y-6">
+                    <!-- Two-column layout -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Event Name -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
-                            <input type="time" id="editStartTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm" required>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Name</label>
+                            <input type="text" id="editEventName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
-                            <input type="time" id="editEndTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm" required>
-                        </div>
-                    </div>
 
-                    <!-- Subjects for each day -->
-                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Event Type -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Monday</label>
-                            <select id="editMonday" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Type</label>
+                            <select id="editEventType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                <option value="">Select event type</option>
+                                <option value="academic">Academic</option>
+                                <option value="sports">Sports</option>
+                                <option value="cultural">Cultural</option>
+                                <option value="competition">Competition</option>
+                                <option value="workshop">Workshop</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Tuesday</label>
-                            <select id="editTuesday" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
+
+                        <!-- Event Description -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Description</label>
+                            <textarea id="editEventDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm"></textarea>
                         </div>
+
+                        <!-- Start Date -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Wednesday</label>
-                            <select id="editWednesday" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <input type="date" id="editStartDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
                         </div>
+
+                        <!-- End Date -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Thursday</label>
-                            <select id="editThursday" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                            <input type="date" id="editEndDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
                         </div>
+
+                        <!-- Registration Fee (Internal) -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Friday</label>
-                            <select id="editFriday" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Fee (Internal)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-500 text-sm">Rs.</span>
+                                <input type="number" id="editInternalFee" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Registration Fee (External with GST) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Fee (External with GST)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-500 text-sm">Rs.</span>
+                                <input type="number" id="editExternalFee" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -364,152 +370,11 @@
 
             <!-- Modal Footer -->
             <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
-                <button id="cancelEditModal" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                <button id="cancelEditEventModal" class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
                     Cancel
                 </button>
-                <button id="saveEditPeriod" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                <button id="saveEditEvent" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
                     Save Changes
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="deletePeriodModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Delete Period</h3>
-                <button id="closeDeleteModal" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Modal Content -->
-            <div class="p-6">
-                <div class="flex items-center space-x-3 mb-4">
-                    <div class="flex-shrink-0">
-                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-900">Confirm Deletion</h4>
-                        <p class="text-sm text-gray-600 mt-1">Are you sure you want to delete the period <span id="deletePeriodTime" class="font-medium text-gray-900"></span>? This action cannot be undone.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
-                <button id="cancelDeleteModal" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
-                    Cancel
-                </button>
-                <button id="confirmDeletePeriod" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors text-sm font-medium">
-                    Delete Period
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Periods Modal -->
-    <div id="addPeriodsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Add New Period</h3>
-                <button id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Modal Content -->
-            <div class="p-6">
-                <form id="addPeriodForm" class="space-y-4">
-                    <!-- Time Slot -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
-                            <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
-                            <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm" required>
-                        </div>
-                    </div>
-
-                    <!-- Subjects for each day -->
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Monday</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Tuesday</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Wednesday</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Thursday</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Friday</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-dark focus:border-transparent text-sm">
-                                <option value="">Select Subject</option>
-                                <option value="English">English</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Science">Science</option>
-                                <option value="Drawing">Drawing</option>
-                                <option value="Physical Education">Physical Education</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
-                <button id="cancelModal" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
-                    Cancel
-                </button>
-                <button id="savePeriod" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
-                    Add Period
                 </button>
             </div>
         </div>
@@ -517,260 +382,145 @@
 
     <script>
         // Modal functionality
-        const addPeriodsModal = document.getElementById('addPeriodsModal');
-        const editPeriodModal = document.getElementById('editPeriodModal');
-        const deletePeriodModal = document.getElementById('deletePeriodModal');
-        const addPeriodsBtn = document.getElementById('addPeriodsBtn');
-        const closeModalBtn = document.getElementById('closeModal');
-        const cancelModalBtn = document.getElementById('cancelModal');
-        const savePeriodBtn = document.getElementById('savePeriod');
-        const loadTableBtn = document.getElementById('loadTableBtn');
+        const editEventModal = document.getElementById('editEventModal');
+        const closeEditEventModalBtn = document.getElementById('closeEditEventModal');
+        const cancelEditEventModalBtn = document.getElementById('cancelEditEventModal');
+        const saveEditEventBtn = document.getElementById('saveEditEvent');
         
-        // Edit modal elements
-        const closeEditModalBtn = document.getElementById('closeEditModal');
-        const cancelEditModalBtn = document.getElementById('cancelEditModal');
-        const saveEditPeriodBtn = document.getElementById('saveEditPeriod');
-        
-        // Delete modal elements
-        const closeDeleteModalBtn = document.getElementById('closeDeleteModal');
-        const cancelDeleteModalBtn = document.getElementById('cancelDeleteModal');
-        const confirmDeletePeriodBtn = document.getElementById('confirmDeletePeriod');
-        
-        let currentEditingRow = null;
-        let currentDeletingRow = null;
+        let currentEditingCard = null;
 
-        // Open modal
-        addPeriodsBtn.addEventListener('click', function() {
-            addPeriodsModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        });
-
-        // Close modal functions
-        function closeModal() {
-            addPeriodsModal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            document.getElementById('addPeriodForm').reset();
-        }
-
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-
-        // Close modal when clicking outside
-        addPeriodsModal.addEventListener('click', function(e) {
-            if (e.target === addPeriodsModal) {
-                closeModal();
+        // Open edit modal
+        function openEditEventModal(card) {
+            currentEditingCard = card;
+            
+            // Get event data from card
+            const eventName = card.querySelector('h3').textContent;
+            const eventDescription = card.querySelector('p').textContent;
+            
+            // Populate modal fields
+            document.getElementById('editEventName').value = eventName;
+            document.getElementById('editEventDescription').value = eventDescription;
+            
+            // Set sample data for other fields
+            if (eventName.includes('Science Fair')) {
+                document.getElementById('editEventType').value = 'competition';
+                document.getElementById('editStartDate').value = '2025-03-15';
+                document.getElementById('editEndDate').value = '2025-03-17';
+                document.getElementById('editInternalFee').value = '150';
+                document.getElementById('editExternalFee').value = '200';
+            } else if (eventName.includes('Sports Day')) {
+                document.getElementById('editEventType').value = 'sports';
+                document.getElementById('editStartDate').value = '2025-02-28';
+                document.getElementById('editEndDate').value = '2025-02-28';
+                document.getElementById('editInternalFee').value = '100';
+                document.getElementById('editExternalFee').value = '150';
             }
-        });
-
-        // Edit modal functions
-        function openEditModal(row) {
-            currentEditingRow = row;
-            const cells = row.querySelectorAll('td');
             
-            // Parse time from first cell (e.g., "08:00 - 08:45")
-            const timeText = cells[0].textContent.trim();
-            const [startTime, endTime] = timeText.split(' - ');
-            
-            // Set time values
-            document.getElementById('editStartTime').value = startTime;
-            document.getElementById('editEndTime').value = endTime;
-            
-            // Set subject values
-            document.getElementById('editMonday').value = cells[1].textContent.trim() === '-' ? '' : cells[1].textContent.trim();
-            document.getElementById('editTuesday').value = cells[2].textContent.trim() === '-' ? '' : cells[2].textContent.trim();
-            document.getElementById('editWednesday').value = cells[3].textContent.trim() === '-' ? '' : cells[3].textContent.trim();
-            document.getElementById('editThursday').value = cells[4].textContent.trim() === '-' ? '' : cells[4].textContent.trim();
-            document.getElementById('editFriday').value = cells[5].textContent.trim() === '-' ? '' : cells[5].textContent.trim();
-            
-            editPeriodModal.classList.remove('hidden');
+            editEventModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeEditModal() {
-            editPeriodModal.classList.add('hidden');
+        // Close edit modal
+        function closeEditEventModal() {
+            editEventModal.classList.add('hidden');
             document.body.style.overflow = 'auto';
-            currentEditingRow = null;
-            document.getElementById('editPeriodForm').reset();
+            currentEditingCard = null;
+            document.getElementById('editEventForm').reset();
         }
 
-        // Edit modal event listeners
-        closeEditModalBtn.addEventListener('click', closeEditModal);
-        cancelEditModalBtn.addEventListener('click', closeEditModal);
+        // Event listeners for modal
+        closeEditEventModalBtn.addEventListener('click', closeEditEventModal);
+        cancelEditEventModalBtn.addEventListener('click', closeEditEventModal);
 
-        editPeriodModal.addEventListener('click', function(e) {
-            if (e.target === editPeriodModal) {
-                closeEditModal();
+        editEventModal.addEventListener('click', function(e) {
+            if (e.target === editEventModal) {
+                closeEditEventModal();
             }
         });
 
         // Save edit changes
-        saveEditPeriodBtn.addEventListener('click', function() {
-            if (!currentEditingRow) return;
+        saveEditEventBtn.addEventListener('click', function() {
+            if (!currentEditingCard) return;
 
-            const startTime = document.getElementById('editStartTime').value;
-            const endTime = document.getElementById('editEndTime').value;
+            const eventName = document.getElementById('editEventName').value;
+            const eventDescription = document.getElementById('editEventDescription').value;
             
-            if (!startTime || !endTime) {
-                alert('Please fill in both start and end times.');
+            if (!eventName.trim()) {
+                alert('Please enter an event name.');
                 return;
             }
 
-            const subjects = {
-                monday: document.getElementById('editMonday').value || '-',
-                tuesday: document.getElementById('editTuesday').value || '-',
-                wednesday: document.getElementById('editWednesday').value || '-',
-                thursday: document.getElementById('editThursday').value || '-',
-                friday: document.getElementById('editFriday').value || '-'
-            };
+            // Update the card
+            currentEditingCard.querySelector('h3').textContent = eventName;
+            currentEditingCard.querySelector('p').textContent = eventDescription;
 
-            // Update the row
-            const cells = currentEditingRow.querySelectorAll('td');
-            cells[0].textContent = `${startTime} - ${endTime}`;
-            cells[1].textContent = subjects.monday;
-            cells[2].textContent = subjects.tuesday;
-            cells[3].textContent = subjects.wednesday;
-            cells[4].textContent = subjects.thursday;
-            cells[5].textContent = subjects.friday;
-
-            closeEditModal();
-            console.log('Period updated successfully');
+            closeEditEventModal();
+            console.log('Event updated successfully');
         });
 
-        // Delete modal functions
-        function openDeleteModal(row) {
-            currentDeletingRow = row;
-            const timeText = row.querySelector('td').textContent.trim();
-            document.getElementById('deletePeriodTime').textContent = timeText;
-            
-            deletePeriodModal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDeleteModal() {
-            deletePeriodModal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            currentDeletingRow = null;
-        }
-
-        // Delete modal event listeners
-        closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
-        cancelDeleteModalBtn.addEventListener('click', closeDeleteModal);
-
-        deletePeriodModal.addEventListener('click', function(e) {
-            if (e.target === deletePeriodModal) {
-                closeDeleteModal();
-            }
-        });
-
-        // Confirm delete
-        confirmDeletePeriodBtn.addEventListener('click', function() {
-            if (!currentDeletingRow) return;
-            
-            const timeText = currentDeletingRow.querySelector('td').textContent.trim();
-            currentDeletingRow.remove();
-            closeDeleteModal();
-            console.log(`Period ${timeText} deleted successfully`);
-        });
-
-        // Save period functionality
-        savePeriodBtn.addEventListener('click', function() {
-            const form = document.getElementById('addPeriodForm');
-            const formData = new FormData(form);
-            
-            // Get form values
-            const startTime = form.querySelector('input[type="time"]:first-of-type').value;
-            const endTime = form.querySelector('input[type="time"]:last-of-type').value;
-            const subjects = {
-                monday: form.querySelectorAll('select')[0].value,
-                tuesday: form.querySelectorAll('select')[1].value,
-                wednesday: form.querySelectorAll('select')[2].value,
-                thursday: form.querySelectorAll('select')[3].value,
-                friday: form.querySelectorAll('select')[4].value
-            };
-
-            if (!startTime || !endTime) {
-                alert('Please fill in both start and end times.');
-                return;
-            }
-
-            // Add new row to table
-            const tbody = document.querySelector('tbody');
-            const newRow = document.createElement('tr');
-            newRow.className = 'hover:bg-gray-50';
-            
-            newRow.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-200">${startTime} - ${endTime}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">${subjects.monday || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">${subjects.tuesday || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">${subjects.wednesday || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">${subjects.thursday || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-200">${subjects.friday || '-'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div class="flex items-center space-x-3">
-                        <button class="text-purple-600 hover:text-purple-800 transition-colors edit-btn" title="Edit">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                        </button>
-                        <button class="text-red-600 hover:text-red-800 transition-colors delete-btn" title="Delete">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-            `;
-
-            // Insert before the last row (which should be the empty period)
-            const lastRow = tbody.lastElementChild;
-            tbody.insertBefore(newRow, lastRow);
-
-            // Add event listeners to new buttons
-            addRowEventListeners(newRow);
-
-            closeModal();
-            console.log('New period added successfully');
-        });
-
-        // Add event listeners to action buttons
-        function addRowEventListeners(row) {
-            const editBtn = row.querySelector('.edit-btn');
-            const deleteBtn = row.querySelector('.delete-btn');
-
-            editBtn.addEventListener('click', function() {
-                openEditModal(row);
-            });
-
-            deleteBtn.addEventListener('click', function() {
-                openDeleteModal(row);
-            });
-        }
-
-        // Add event listeners to existing rows
+        // Add event listeners to edit buttons
         document.addEventListener('DOMContentLoaded', function() {
-            const existingRows = document.querySelectorAll('tbody tr:not(.bg-gray-100)');
-            existingRows.forEach(addRowEventListeners);
+            document.querySelectorAll('.edit-event-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const card = this.closest('.border');
+                    openEditEventModal(card);
+                });
+            });
         });
 
-        // Load table functionality
-        loadTableBtn.addEventListener('click', function() {
-            const academicYear = document.querySelector('select:first-of-type').value;
-            const selectedClass = document.querySelector('select:last-of-type').value;
+        // Copy functionality
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input, select');
+                let textToCopy = '';
+                
+                if (input.tagName === 'SELECT') {
+                    textToCopy = input.options[input.selectedIndex].text;
+                } else {
+                    textToCopy = input.value;
+                }
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // Visual feedback
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = `
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    `;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                    }, 1000);
+                    
+                    console.log('Copied to clipboard:', textToCopy);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+
+        // Create event form submission
+        document.getElementById('createEventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Update the table header
-            document.querySelector('h2').textContent = selectedClass;
+            const formData = new FormData(this);
+            const eventName = this.querySelector('input[type="text"]').value;
             
-            console.log(`Loading timetable for ${selectedClass} - ${academicYear}`);
+            if (!eventName.trim()) {
+                alert('Please enter an event name.');
+                return;
+            }
             
-            // You can add loading animation here
-            loadTableBtn.textContent = 'Loading...';
-            loadTableBtn.disabled = true;
+            console.log('Creating new event:', eventName);
             
-            setTimeout(() => {
-                loadTableBtn.textContent = 'Load Table';
-                loadTableBtn.disabled = false;
-                console.log('Table loaded successfully');
-            }, 1000);
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Event created successfully!');
         });
 
         // Navigation functionality
@@ -785,7 +535,7 @@
                 });
                 
                 // Add active class to clicked link
-                if (!this.textContent.includes('Timetable Configuration')) {
+                if (!this.textContent.includes('Event Registration')) {
                     this.classList.remove('text-gray-700');
                     this.classList.add('font-medium', 'text-primary-dark', 'bg-sidebar-selected', 'border-l-3', 'border-primary-dark');
                 }
@@ -794,5 +544,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b5c99866983d36',t:'MTc1NDU1OTM2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b5da2a321540e7',t:'MTc1NDU2MDA0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
