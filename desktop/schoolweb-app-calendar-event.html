@@ -66,15 +66,76 @@
 
         <!-- Main Content Area -->
         <div class="flex-1 p-8 bg-white overflow-auto">
-            <!-- Page Header -->
+            <!-- Page Header with Tabs -->
             <div class="mb-8">
-                <h1 class="text-2xl font-bold text-primary-dark mb-2">Event Registration</h1>
-                <p class="text-text-muted">Manage school events and registration</p>
+                <h1 class="text-2xl font-bold text-primary-dark mb-6">Calendar Management</h1>
+                
+                <!-- Horizontal Tab Toggle -->
+                <div class="flex space-x-2 bg-gray-100 p-1 rounded-lg inline-flex">
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-800" data-tab="calendar-config">
+                        Calendar Configuration
+                    </button>
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-800" data-tab="holiday-marking">
+                        Holiday Marking
+                    </button>
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-gray-800" data-tab="timetable-config">
+                        Timetable Configuration
+                    </button>
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-white text-gray-900 shadow-sm border border-gray-200 active-tab" data-tab="event-registration">
+                        Event Registration
+                    </button>
+                </div>
             </div>
 
-            <!-- Create New Event Section -->
-            <div class="bg-white border border-border-light rounded-lg p-6 mb-8">
-                <h2 class="text-lg font-semibold text-primary-dark mb-6">Create New Event</h2>
+            <!-- Tab Content Panels -->
+            
+            <!-- Calendar Configuration Panel -->
+            <div id="calendar-config-panel" class="tab-panel hidden">
+                <div class="bg-white border border-border-light rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-primary-dark mb-6">Calendar Configuration</h2>
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Calendar Configuration</h3>
+                        <p class="text-gray-600">Configure academic calendar settings and terms</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holiday Marking Panel -->
+            <div id="holiday-marking-panel" class="tab-panel hidden">
+                <div class="bg-white border border-border-light rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-primary-dark mb-6">Holiday Marking</h2>
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Holiday Marking</h3>
+                        <p class="text-gray-600">Mark holidays and special days on the calendar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timetable Configuration Panel -->
+            <div id="timetable-config-panel" class="tab-panel hidden">
+                <div class="bg-white border border-border-light rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-primary-dark mb-6">Timetable Configuration</h2>
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Timetable Configuration</h3>
+                        <p class="text-gray-600">Set up class schedules and timetables</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Registration Panel -->
+            <div id="event-registration-panel" class="tab-panel">
+                <!-- Create New Event Section -->
+                <div class="bg-white border border-border-light rounded-lg p-6 mb-8">
+                    <h2 class="text-lg font-semibold text-primary-dark mb-6">Create New Event</h2>
                 
                 <form id="createEventForm" class="space-y-6">
                     <!-- Two-column layout -->
@@ -291,6 +352,7 @@
             </div>
         </div>
     </div>
+    </div>
 
     <!-- Edit Event Modal -->
     <div id="editEventModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
@@ -458,8 +520,44 @@
             console.log('Event updated successfully');
         });
 
+        // Tab switching functionality
+        function switchTab(targetTab) {
+            // Hide all tab panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab', 'bg-white', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200');
+                btn.classList.add('text-gray-600');
+            });
+            
+            // Show target panel
+            const targetPanel = document.getElementById(targetTab + '-panel');
+            if (targetPanel) {
+                targetPanel.classList.remove('hidden');
+            }
+            
+            // Add active class to clicked tab
+            const activeTab = document.querySelector(`[data-tab="${targetTab}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active-tab', 'bg-white', 'text-gray-900', 'shadow-sm', 'border', 'border-gray-200');
+                activeTab.classList.remove('text-gray-600');
+            }
+        }
+
         // Add event listeners to edit buttons
         document.addEventListener('DOMContentLoaded', function() {
+            // Tab button event listeners
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    switchTab(targetTab);
+                });
+            });
+
+            // Edit button event listeners
             document.querySelectorAll('.edit-event-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -544,5 +642,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b5da2a321540e7',t:'MTc1NDU2MDA0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b6001ee03a3d5a',t:'MTc1NDU2MTU5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
