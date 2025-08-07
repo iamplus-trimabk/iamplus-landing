@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Management - School ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sidebar-bg': '#f8f9fa',
+                        'sidebar-selected': '#e9ecef',
+                        'primary-dark': '#212529',
+                        'text-muted': '#6c757d',
+                        'border-light': '#dee2e6'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white font-sans">
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-sidebar-bg border-r border-border-light flex-shrink-0">
+            <div class="p-6">
+                <!-- Sidebar Header -->
+                <h1 class="text-xl font-bold text-primary-dark mb-8">School ERP</h1>
+                
+                <!-- Navigation Menu -->
+                <nav>
+                    <div class="mb-6">
+                        <h3 class="text-sm font-semibold text-text-muted uppercase tracking-wide mb-3">Fee Management</h3>
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="#" class="block px-3 py-2 text-sm font-medium text-primary-dark bg-sidebar-selected border-l-3 border-primary-dark rounded-md">
+                                    Fee Structure
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
+                                    Fee Collection
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
+                                    Payment Reports
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
+                                    Outstanding Fees
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 p-8 bg-white overflow-auto">
+            <!-- Page Header with Tabs -->
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-primary-dark mb-6">Fee Management</h1>
+                
+                <!-- Horizontal Tab Toggle -->
+                <div class="flex space-x-2 bg-gray-100 p-1 rounded-lg inline-flex">
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-purple-600" data-tab="fee-head-creation">
+                        Fee Head Creation
+                    </button>
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-gray-600 hover:text-purple-600" data-tab="fees-structure-creation">
+                        Fees Structure Creation
+                    </button>
+                    <button class="tab-btn px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 bg-white text-purple-600 shadow-sm border border-purple-200 active-tab" data-tab="installment-configuration">
+                        Installment Configuration
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content Panels -->
+            
+            <!-- Fee Head Creation Panel -->
+            <div id="fee-head-creation-panel" class="tab-panel hidden">
+                <div class="bg-white border border-border-light rounded-lg p-6">
+                    <h2 class="text-lg font-semibold text-primary-dark mb-6">Fee Head Creation</h2>
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Fee Head Creation</h3>
+                        <p class="text-gray-600">Create and manage different types of fee heads</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fees Structure Creation Panel -->
+            <div id="fees-structure-creation-panel" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Panel - Create Fee Structure Form -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white border border-border-light rounded-lg p-6">
+                            <h2 class="text-lg font-semibold text-primary-dark mb-6">Create Fee Structure</h2>
+                            
+                            <form id="createFeeStructureForm" class="space-y-6">
+                                <!-- Structure Name -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Structure Name</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter structure name">
+                                </div>
+
+                                <!-- Academic Year -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                            <option value="">Select academic year</option>
+                                            <option value="2024-25" selected>2024-25</option>
+                                            <option value="2025-26">2025-26</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                            <option value="">Select class</option>
+                                            <option value="grade-1">Grade 1</option>
+                                            <option value="grade-2">Grade 2</option>
+                                            <option value="grade-3">Grade 3</option>
+                                            <option value="grade-4">Grade 4</option>
+                                            <option value="grade-5">Grade 5</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Student Type -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Student Type</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                        <option value="">Select student type</option>
+                                        <option value="regular">Regular</option>
+                                        <option value="scholarship">Scholarship</option>
+                                        <option value="staff-ward">Staff Ward</option>
+                                    </select>
+                                </div>
+
+                                <!-- Description -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                    <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter description"></textarea>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="flex items-center justify-end space-x-3 pt-4">
+                                    <button type="button" class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                                        Create Structure
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Fee Heads List -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white border border-border-light rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-lg font-semibold text-primary-dark">Fee Heads</h2>
+                                <button id="addFeeHeadBtn" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                                    + Add
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <!-- Fee Head Item -->
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-md">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Tuition Fee</h4>
+                                        <p class="text-xs text-gray-600">Monthly recurring</p>
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors edit-fee-head-btn" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-md">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Library Fee</h4>
+                                        <p class="text-xs text-gray-600">Annual</p>
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors edit-fee-head-btn" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-md">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Transport Fee</h4>
+                                        <p class="text-xs text-gray-600">Monthly</p>
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors edit-fee-head-btn" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-md">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Lab Fee</h4>
+                                        <p class="text-xs text-gray-600">Per semester</p>
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors edit-fee-head-btn" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </button>
+                                        <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section - Student Types and Fee Breakdown Table -->
+                <div class="mt-8">
+                    <div class="bg-white border border-border-light rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-semibold text-primary-dark">Fee Structure Overview</h2>
+                            <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                                + Add Student Type
+                            </button>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Student Type</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Tuition Fee</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Library Fee</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Transport Fee</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Lab Fee</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Total</th>
+                                        <th class="text-left py-3 px-4 font-medium text-gray-900">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <span class="font-medium text-gray-900">Regular</span>
+                                                <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Active</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-gray-700">₹5,000</td>
+                                        <td class="py-3 px-4 text-gray-700">₹500</td>
+                                        <td class="py-3 px-4 text-gray-700">₹1,200</td>
+                                        <td class="py-3 px-4 text-gray-700">₹800</td>
+                                        <td class="py-3 px-4 font-medium text-gray-900">₹7,500</td>
+                                        <td class="py-3 px-4">
+                                            <div class="flex space-x-2">
+                                                <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <button class="p-1 text-gray-400 hover:text-green-600 transition-colors copy-btn" title="Copy">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <span class="font-medium text-gray-900">Scholarship</span>
+                                                <span class="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Active</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-gray-700">₹2,500</td>
+                                        <td class="py-3 px-4 text-gray-700">₹250</td>
+                                        <td class="py-3 px-4 text-gray-700">₹1,200</td>
+                                        <td class="py-3 px-4 text-gray-700">₹400</td>
+                                        <td class="py-3 px-4 font-medium text-gray-900">₹4,350</td>
+                                        <td class="py-3 px-4">
+                                            <div class="flex space-x-2">
+                                                <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <button class="p-1 text-gray-400 hover:text-green-600 transition-colors copy-btn" title="Copy">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <span class="font-medium text-gray-900">Staff Ward</span>
+                                                <span class="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Active</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4 text-gray-700">₹1,000</td>
+                                        <td class="py-3 px-4 text-gray-700">₹100</td>
+                                        <td class="py-3 px-4 text-gray-700">₹600</td>
+                                        <td class="py-3 px-4 text-gray-700">₹200</td>
+                                        <td class="py-3 px-4 font-medium text-gray-900">₹1,900</td>
+                                        <td class="py-3 px-4">
+                                            <div class="flex space-x-2">
+                                                <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                </button>
+                                                <button class="p-1 text-gray-400 hover:text-green-600 transition-colors copy-btn" title="Copy">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installment Configuration Panel -->
+            <div id="installment-configuration-panel" class="tab-panel">
+                <!-- Header Section -->
+                <div class="bg-white border border-border-light rounded-lg p-6 mb-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-semibold text-primary-dark mb-2">Fees Instalment Configuration</h2>
+                            <p class="text-sm text-gray-600">Configure fee instalment amount and schedule</p>
+                        </div>
+                        <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Export
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                <option value="2024-25" selected>2024-25</option>
+                                <option value="2025-26">2025-26</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Student Type</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                <option value="">Select student type</option>
+                                <option value="regular">Regular</option>
+                                <option value="scholarship">Scholarship</option>
+                                <option value="staff-ward">Staff Ward</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fee Type</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                                <option value="">Select fee type</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="annual">Annual</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button class="w-full px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                                Load
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Fees Installment Section -->
+                <div class="bg-white border border-border-light rounded-lg p-6 mb-8">
+                    <h3 class="text-lg font-semibold text-primary-dark mb-6">Create Fees Installment</h3>
+                    
+                    <form id="createInstallmentForm" class="space-y-6">
+                        <!-- Basic Installment Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Installment Name</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter installment name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Total Amount</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2 text-gray-500 text-sm">₹</span>
+                                    <input type="number" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="0" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fee Heads Breakdown -->
+                        <div>
+                            <div class="flex items-center mb-4">
+                                <h4 class="text-md font-medium text-gray-900">Fee Heads Breakdown</h4>
+                                <button type="button" class="ml-2 text-gray-400 hover:text-gray-600" title="Configure individual amounts for each fee head">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Tuition Fee -->
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tuition Fee</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-2 text-gray-500 text-sm">₹</span>
+                                            <input type="number" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm fee-amount" placeholder="Enter amount" data-max="5000">
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 text-right">
+                                        <span class="text-xs text-gray-500">Max</span>
+                                        <div class="text-sm font-medium text-gray-900">₹5,000</div>
+                                    </div>
+                                </div>
+
+                                <!-- Exam Fee -->
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Exam Fee</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-2 text-gray-500 text-sm">₹</span>
+                                            <input type="number" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm fee-amount" placeholder="Enter amount" data-max="800">
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 text-right">
+                                        <span class="text-xs text-gray-500">Max</span>
+                                        <div class="text-sm font-medium text-gray-900">₹800</div>
+                                    </div>
+                                </div>
+
+                                <!-- Sport Fee -->
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Sport Fee</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-2 text-gray-500 text-sm">₹</span>
+                                            <input type="number" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm fee-amount" placeholder="Enter amount" data-max="600">
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 text-right">
+                                        <span class="text-xs text-gray-500">Max</span>
+                                        <div class="text-sm font-medium text-gray-900">₹600</div>
+                                    </div>
+                                </div>
+
+                                <!-- Extra-curricular Fee -->
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Extra-curricular Fee</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-2 text-gray-500 text-sm">₹</span>
+                                            <input type="number" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm fee-amount" placeholder="Enter amount" data-max="400">
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 text-right">
+                                        <span class="text-xs text-gray-500">Max</span>
+                                        <div class="text-sm font-medium text-gray-900">₹400</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="flex items-center justify-end space-x-3 pt-4">
+                            <button type="button" class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                                Create Installment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Installments Table -->
+                <div class="bg-white border border-border-light rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary-dark mb-6">Existing Installments</h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900 rounded-tl-lg">Installment Name</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900">Student Type</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900">Amount</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900">Due Date</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900">Status</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-900 rounded-tr-lg">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium text-gray-900">First Quarter</div>
+                                        <div class="text-sm text-gray-600">Q1 2024-25</div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Regular</span>
+                                    </td>
+                                    <td class="py-4 px-4 font-medium text-gray-900">₹3,200</td>
+                                    <td class="py-4 px-4 text-gray-700">15 Apr 2024</td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Active</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex space-x-2">
+                                            <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium text-gray-900">Second Quarter</div>
+                                        <div class="text-sm text-gray-600">Q2 2024-25</div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Regular</span>
+                                    </td>
+                                    <td class="py-4 px-4 font-medium text-gray-900">₹3,200</td>
+                                    <td class="py-4 px-4 text-gray-700">15 Jul 2024</td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">Pending</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex space-x-2">
+                                            <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <td class="py-4 px-4">
+                                        <div class="font-medium text-gray-900">Annual Fee</div>
+                                        <div class="text-sm text-gray-600">Scholarship Students</div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Scholarship</span>
+                                    </td>
+                                    <td class="py-4 px-4 font-medium text-gray-900">₹2,100</td>
+                                    <td class="py-4 px-4 text-gray-700">01 Jun 2024</td>
+                                    <td class="py-4 px-4">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Active</span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex space-x-2">
+                                            <button class="p-1 text-gray-400 hover:text-purple-600 transition-colors" title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Fee Head Modal -->
+    <div id="addFeeHeadModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Add Fee Head</h3>
+                <button id="closeAddFeeHeadModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6">
+                <form id="addFeeHeadForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Fee Head Name</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter fee head name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm">
+                            <option value="">Select frequency</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="annual">Annual</option>
+                            <option value="one-time">One Time</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm" placeholder="Enter description"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
+                <button id="cancelAddFeeHeadModal" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
+                    Cancel
+                </button>
+                <button id="saveFeeHead" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm font-medium">
+                    Add Fee Head
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(targetTab) {
+            // Hide all tab panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab', 'bg-white', 'text-purple-600', 'shadow-sm', 'border', 'border-purple-200');
+                btn.classList.add('text-gray-600');
+            });
+            
+            // Show target panel
+            const targetPanel = document.getElementById(targetTab + '-panel');
+            if (targetPanel) {
+                targetPanel.classList.remove('hidden');
+            }
+            
+            // Add active class to clicked tab
+            const activeTab = document.querySelector(`[data-tab="${targetTab}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active-tab', 'bg-white', 'text-purple-600', 'shadow-sm', 'border', 'border-purple-200');
+                activeTab.classList.remove('text-gray-600');
+            }
+        }
+
+        // Modal functionality
+        const addFeeHeadModal = document.getElementById('addFeeHeadModal');
+        const addFeeHeadBtn = document.getElementById('addFeeHeadBtn');
+        const closeAddFeeHeadModalBtn = document.getElementById('closeAddFeeHeadModal');
+        const cancelAddFeeHeadModalBtn = document.getElementById('cancelAddFeeHeadModal');
+        const saveFeeHeadBtn = document.getElementById('saveFeeHead');
+
+        function openAddFeeHeadModal() {
+            addFeeHeadModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddFeeHeadModal() {
+            addFeeHeadModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('addFeeHeadForm').reset();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab button event listeners
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    switchTab(targetTab);
+                });
+            });
+
+            // Modal event listeners
+            addFeeHeadBtn.addEventListener('click', openAddFeeHeadModal);
+            closeAddFeeHeadModalBtn.addEventListener('click', closeAddFeeHeadModal);
+            cancelAddFeeHeadModalBtn.addEventListener('click', closeAddFeeHeadModal);
+
+            addFeeHeadModal.addEventListener('click', function(e) {
+                if (e.target === addFeeHeadModal) {
+                    closeAddFeeHeadModal();
+                }
+            });
+
+            saveFeeHeadBtn.addEventListener('click', function() {
+                const form = document.getElementById('addFeeHeadForm');
+                const feeHeadName = form.querySelector('input[type="text"]').value;
+                
+                if (!feeHeadName.trim()) {
+                    alert('Please enter a fee head name.');
+                    return;
+                }
+                
+                console.log('Adding fee head:', feeHeadName);
+                closeAddFeeHeadModal();
+                alert('Fee head added successfully!');
+            });
+
+            // Copy functionality
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const row = this.closest('tr');
+                    const studentType = row.querySelector('td:first-child .font-medium').textContent;
+                    
+                    navigator.clipboard.writeText(`Student Type: ${studentType}`).then(() => {
+                        // Visual feedback
+                        const originalHTML = this.innerHTML;
+                        this.innerHTML = `
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        `;
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalHTML;
+                        }, 1000);
+                        
+                        console.log('Copied to clipboard:', studentType);
+                    }).catch(err => {
+                        console.error('Failed to copy:', err);
+                    });
+                });
+            });
+        });
+
+        // Create fee structure form submission
+        document.getElementById('createFeeStructureForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const structureName = this.querySelector('input[type="text"]').value;
+            
+            if (!structureName.trim()) {
+                alert('Please enter a structure name.');
+                return;
+            }
+            
+            console.log('Creating fee structure:', structureName);
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Fee structure created successfully!');
+        });
+
+        // Create installment form submission
+        document.getElementById('createInstallmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const installmentName = this.querySelector('input[type="text"]').value;
+            const totalAmount = this.querySelector('input[readonly]').value;
+            
+            if (!installmentName.trim()) {
+                alert('Please enter an installment name.');
+                return;
+            }
+            
+            if (!totalAmount || totalAmount === '0') {
+                alert('Please enter amounts for fee heads to calculate total.');
+                return;
+            }
+            
+            console.log('Creating installment:', installmentName, 'Amount:', totalAmount);
+            
+            // Reset form
+            this.reset();
+            
+            // Show success message
+            alert('Installment created successfully!');
+        });
+
+        // Auto-calculate total amount when fee amounts change
+        document.addEventListener('DOMContentLoaded', function() {
+            const feeAmountInputs = document.querySelectorAll('.fee-amount');
+            const totalAmountInput = document.querySelector('input[readonly]');
+            
+            function calculateTotal() {
+                let total = 0;
+                feeAmountInputs.forEach(input => {
+                    const value = parseFloat(input.value) || 0;
+                    const max = parseFloat(input.getAttribute('data-max')) || 0;
+                    
+                    // Validate against max amount
+                    if (value > max) {
+                        input.value = max;
+                        total += max;
+                    } else {
+                        total += value;
+                    }
+                });
+                totalAmountInput.value = total;
+            }
+            
+            feeAmountInputs.forEach(input => {
+                input.addEventListener('input', calculateTotal);
+                input.addEventListener('blur', function() {
+                    const max = parseFloat(this.getAttribute('data-max')) || 0;
+                    const value = parseFloat(this.value) || 0;
+                    
+                    if (value > max) {
+                        alert(`Amount cannot exceed maximum of ₹${max}`);
+                        this.value = max;
+                        calculateTotal();
+                    }
+                });
+            });
+        });
+
+        // Navigation functionality
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('nav a').forEach(l => {
+                    l.classList.remove('font-medium', 'text-primary-dark', 'bg-sidebar-selected', 'border-l-3', 'border-primary-dark');
+                    l.classList.add('text-gray-700');
+                });
+                
+                // Add active class to clicked link
+                if (!this.textContent.includes('Fee Structure')) {
+                    this.classList.remove('text-gray-700');
+                    this.classList.add('font-medium', 'text-primary-dark', 'bg-sidebar-selected', 'border-l-3', 'border-primary-dark');
+                }
+                
+                console.log(`Navigated to: ${this.textContent.trim()}`);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b61f4b971eff6e',t:'MTc1NDU2Mjg3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
